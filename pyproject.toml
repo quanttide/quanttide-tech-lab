@@ -1,5 +1,5 @@
 [project]
-name = "quanttide-laboratory"
+name = "quanttide-tech-lab"
 version = "0.1.0"
 description = "量潮科技实验室——实验与探索"
 requires-python = ">=3.12"

@@ -112,7 +112,7 @@ wheels = [
 ]
 
 [[package]]
-name = "quanttide-laboratory"
+name = "quanttide-tech-lab"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

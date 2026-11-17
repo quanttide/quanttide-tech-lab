@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量潮 · 页面说明与 UX 优化方案</title>
+<style>
+:root{
+  --ink:#0D1B2E; --sub:#586A80; --muted:#8C9AAB;
+  --line:#E7EDF5; --line2:#F1F5FA;
+  --bg:#F4F6FA; --card:#fff;
+  --brand:#0F5BFF; --brand2:#0A9DB0; --brand-soft:#EDF3FF;
+  --accent:#FF6B35; --ok:#12A66A; --warn:#F59E0B;
+  --shadow-s:0 1px 2px rgba(13,27,46,.05), 0 4px 12px rgba(13,27,46,.05);
+  --shadow-m:0 8px 28px rgba(13,27,46,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); font-size:14px; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+/* ---------- 顶部导航 ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50; height:60px;
+  background:rgba(255,255,255,.86); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 32px;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; letter-spacing:.02em}
+.brand .dot{
+  width:22px;height:22px;border-radius:7px;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+}
+.brand small{font-weight:500;color:var(--muted);font-size:12px;margin-left:2px}
+.topnav{display:flex;align-items:center;gap:6px}
+.topnav a{
+  color:var(--sub); text-decoration:none; font-size:13px; padding:6px 12px; border-radius:8px;
+  transition:.18s;
+}
+.topnav a:hover{background:var(--brand-soft); color:var(--brand)}
+.toggle{
+  display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);
+  padding:6px 12px;border:1px solid var(--line);border-radius:999px;cursor:pointer;user-select:none;
+  background:#fff;transition:.18s;margin-left:10px;
+}
+.toggle:hover{border-color:#C9D8EE}
+.toggle input{display:none}
+.track{width:32px;height:18px;border-radius:999px;background:#D7E0EC;position:relative;transition:.2s}
+.track::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:.2s}
+.toggle input:checked + .track{background:var(--brand)}
+.toggle input:checked + .track::after{transform:translateX(14px)}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:relative; overflow:hidden;
+  background:linear-gradient(135deg,#081428 0%,#12305C 55%,#0C4C7A 100%);
+  color:#fff; padding:64px 32px 56px;
+}
+.hero::before{
+  content:"";position:absolute;width:620px;height:620px;border-radius:50%;
+  right:-160px;top:-260px;
+  background:radial-gradient(circle,rgba(15,140,255,.34),rgba(15,140,255,0) 72%);
+}
+.hero::after{
+  content:"";position:absolute;width:480px;height:480px;border-radius:50%;
+  left:-180px;bottom:-280px;
+  background:radial-gradient(circle,rgba(10,157,176,.30),rgba(10,157,176,0) 72%);
+}
+.hero-in{position:relative;max-width:1160px;margin:0 auto}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.12em;
+  color:#9DC4FF;text-transform:uppercase;margin-bottom:18px;
+}
+.kicker::before{content:"";width:22px;height:1px;background:#9DC4FF}
+.hero h1{font-size:38px;line-height:1.28;font-weight:700;letter-spacing:.01em;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:#7FD8E8}
+.hero p.lead{color:#B9CBE0;font-size:15px;max-width:720px;line-height:1.85}
+.hero-stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.stat{
+  padding:14px 20px;border:1px solid rgba(255,255,255,.14);border-radius:14px;
+  background:rgba(255,255,255,.05);min-width:132px;
+}
+.stat b{display:block;font-size:24px;line-height:1.2;letter-spacing:.01em}
+.stat span{font-size:12px;color:#9FB4CC}
+
+/* ---------- 通用容器 ---------- */
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+.sec{padding:52px 0 8px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px;flex-wrap:wrap}
+.sec-title{font-size:13px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;font-weight:600}
+
+/* ---------- 设计原则 ---------- */
+.principles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+.pr{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;
+  box-shadow:var(--shadow-s);
+}
+.pr b{display:block;font-size:14px;margin-bottom:6px}
+.pr b i{
+  font-style:normal;display:inline-block;width:18px;height:18px;line-height:18px;text-align:center;
+  border-radius:6px;background:var(--brand-soft);color:var(--brand);font-size:11px;margin-right:6px;
+  vertical-align:1px;
+}
+.pr p{font-size:12.5px;color:var(--sub);line-height:1.65}
+
+/* ---------- 页面区块 ---------- */
+.page-head{
+  display:flex;align-items:baseline;gap:14px;margin:44px 0 8px;flex-wrap:wrap;
+  padding-top:34px;border-top:1px solid var(--line);
+}
+.page-tag{
+  font-size:11px;font-weight:700;letter-spacing:.08em;color:#fff;
+  background:linear-gradient(135deg,var(--brand),#3D82FF);
+  padding:4px 9px;border-radius:6px;
+}
+.page-head h2{font-size:22px;font-weight:700;letter-spacing:.01em}
+.page-head .goal{font-size:13px;color:var(--sub)}
+.page-head .goal b{color:var(--ink);font-weight:600}
+
+.stage{display:grid;grid-template-columns:375px minmax(0,560px);gap:56px;align-items:start;justify-content:space-between;padding:24px 0 12px}
+
+/* ---------- 手机 ---------- */
+.phone{
+  width:375px;height:800px;background:#fff;border-radius:40px;position:relative;
+  box-shadow:0 30px 70px rgba(13,27,46,.16),0 2px 8px rgba(13,27,46,.06);
+  overflow:hidden;display:flex;flex-direction:column;
+  border:1px solid rgba(13,27,46,.06);
+}
+.statusbar{
+  height:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;font-size:12px;font-weight:600;color:var(--ink);letter-spacing:.02em;
+}
+.statusbar .icons{display:flex;align-items:center;gap:5px}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 calc(100% - 34px),transparent 100%);}
+.screen::-webkit-scrollbar{display:none}
+.pad{padding:0 16px}
+
+.appbar{
+  height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;
+  position:relative;
+}
+.appbar .t{font-size:17px;font-weight:700;letter-spacing:.01em}
+.appbar .r{display:flex;align-items:center;gap:12px;color:#40536B}
+.iconbtn{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#F3F6FB;position:relative}
+.iconbtn .badge-dot{position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--accent);border:1.5px solid #fff}
+
+/* 搜索 */
+.search{
+  display:flex;align-items:center;gap:9px;height:40px;border-radius:12px;
+  background:#F3F6FB;padding:0 12px;color:var(--muted);font-size:13px;margin-top:4px;
+  border:1px solid transparent;
+}
+.search svg{flex:0 0 16px;color:#8A9BB0}
+
+/* AI 简报 */
+.brief{
+  margin-top:14px;border-radius:16px;padding:14px;
+  background:linear-gradient(160deg,#F2F7FF,#F7FBFF 60%,#F4FAFA);
+  border:1px solid #DDEBFB;position:relative;
+}
+.brief-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.brief-eyebrow{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--brand);letter-spacing:.04em}
+.brief-eyebrow .spark{
+  width:16px;height:16px;border-radius:5px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--brand),var(--brand2));
+}
+.brief-time{font-size:10.5px;color:var(--muted)}
+.brief h3{font-size:14.5px;font-weight:700;margin-bottom:9px}
+.brief ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.brief li{display:flex;gap:8px;font-size:12.5px;color:#3D5168;line-height:1.55}
+.brief li i{flex:0 0 5px;width:5px;height:5px;border-radius:50%;margin-top:7px;background:var(--brand)}
+.brief li:nth-child(1) i{background:var(--warn)}
+.brief li:nth-child(3) i{background:var(--ok)}
+.brief-acts{display:flex;gap:8px;margin-top:12px}
+.btn-mini{
+  height:28px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:600;border:none;
+  background:var(--brand);color:#fff;font-family:inherit;
+}
+.btn-mini.ghost{background:#fff;color:#3D5168;border:1px solid #DDE7F3}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;height:30px;padding:0 14px;border-radius:9px;font-size:12.5px;font-weight:600;
+  color:#57697F;background:#F3F6FB;border:1px solid transparent;display:flex;align-items:center;
+}
+.chip.on{background:var(--brand);color:#fff;box-shadow:0 4px 12px rgba(15,91,255,.25)}
+
+/* 分区标题 */
+.sec-row{display:flex;align-items:flex-end;justify-content:space-between;margin:16px 0 10px}
+.sec-row .l b{font-size:14.5px;font-weight:700}
+.sec-row .l span{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.sec-row .r{font-size:11.5px;color:var(--brand);display:flex;align-items:center;gap:2px}
+
+/* 任务卡 */
+.task{
+  border:1px solid var(--line);border-radius:16px;padding:13px;background:#fff;
+  margin-bottom:10px;box-shadow:0 1px 2px rgba(13,27,46,.03);
+}
+.task-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.corp{display:flex;align-items:center;gap:7px;font-size:11.5px;color:#5B6D82;min-width:0}
+.corp .logo{
+  width:20px;height:20px;border-radius:6px;flex:0 0 20px;display:grid;place-items:center;
+  font-size:10px;font-weight:700;color:#fff;background:linear-gradient(135deg,#2B6BE0,#3E9BE8);
+}
+.corp .logo.g{background:linear-gradient(135deg,#0E9E8A,#37C08A)}
+.corp .logo.o{background:linear-gradient(135deg,#E2703A,#F0A04B)}
+.corp .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:112px}
+.verify{font-size:9.5px;color:var(--ok);border:1px solid #CDEEDF;background:#F1FBF6;border-radius:4px;padding:0 4px;line-height:15px}
+.reward{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.01em;white-space:nowrap}
+.task-title{
+  font-size:14px;font-weight:600;line-height:1.45;margin:8px 0 9px;color:#11203A;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+.tag{
+  font-size:10.5px;line-height:18px;padding:0 7px;border-radius:5px;background:#F3F6FB;color:#5B6D82;
+  font-weight:500;
+}
+.tag.p{background:#EDF3FF;color:#2A5FC4}
+.tag.d{background:#FFF4E8;color:#A96A12}
+.task-foot{display:flex;align-items:center;gap:10px;border-top:1px dashed var(--line2);padding-top:10px}
+.meta{font-size:10.5px;color:var(--muted);display:flex;align-items:center;gap:3px}
+.meta b{color:#40536B;font-weight:600}
+.claim{
+  margin-left:auto;height:28px;padding:0 13px;border-radius:8px;border:none;font-family:inherit;
+  font-size:12px;font-weight:600;color:#fff;background:var(--brand);
+  box-shadow:0 4px 12px rgba(15,91,255,.22);
+}
+.claim.done{background:#F3F6FB;color:#4A5D73;box-shadow:none}
+
+/* 底部导航 */
+.tabbar{
+  flex:0 0 62px;height:62px;border-top:1px solid var(--line);background:rgba(255,255,255,.96);
+  display:flex;align-items:center;padding-bottom:6px;
+}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#9AA9BA;font-size:10.5px;font-weight:500}
+.tab.on{color:var(--brand);font-weight:700}
+.tab svg{width:20px;height:20px}
+
+/* ---------- 筛选页 ---------- */
+.filterbar{padding:6px 16px 0;background:#fff;position:sticky;top:0;z-index:6}
+.frow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)}
+.frow:last-child{border-bottom:none}
+.flabel{flex:0 0 56px}
+.flabel b{display:block;font-size:12px;font-weight:700;color:#26374E;line-height:1.3}
+.flabel span{display:block;font-size:9.5px;color:var(--muted);line-height:1.35;margin-top:1px;white-space:nowrap}
+.fchips{display:flex;gap:6px;flex:1;flex-wrap:wrap;align-items:center}
+
+.fchip{
+  flex:0 0 auto;height:28px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:500;
+  color:#5B6D82;background:#F5F8FC;border:1px solid transparent;display:flex;align-items:center;
+}
+.fchip.on{background:#fff;color:var(--brand);border-color:var(--brand);font-weight:700;box-shadow:0 2px 8px rgba(15,91,255,.12)}
+.resultbar{
+  display:flex;align-items:center;justify-content:space-between;padding:10px 0 8px;
+  font-size:11.5px;color:var(--muted);
+}
+.resultbar b{color:#26374E;font-weight:700}
+.sortbtn{display:flex;align-items:center;gap:4px;font-size:11.5px;color:#40536B;border:1px solid var(--line);background:#fff;border-radius:7px;padding:3px 8px;font-family:inherit}
+.filter-more{
+  width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:#fff;
+  display:grid;place-items:center;color:#40536B;flex:0 0 30px;
+}
+
+/* ---------- 个人页 ---------- */
+.profile{
+  padding:14px;border-radius:16px;border:1px solid var(--line);
+  background:linear-gradient(160deg,#F7FAFF,#fff);margin-top:6px;
+}
+.pf-top{display:flex;gap:12px;align-items:center}
+.avatar{
+  width:56px;height:56px;border-radius:18px;flex:0 0 56px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#16345C,#2E62A8);color:#fff;font-size:19px;font-weight:700;
+}
+.pf-name{font-size:16px;font-weight:700;display:flex;align-items:center;gap:6px}
+.pf-id{font-size:10.5px;color:var(--muted);margin-top:2px;display:flex;align-items:center;gap:4px}
+.pf-edit{margin-left:auto;align-self:flex-start;font-size:11px;color:var(--brand);font-weight:600;border:1px solid #D8E5FB;background:#fff;border-radius:7px;padding:3px 8px}
+.pills{display:flex;gap:6px;margin-top:11px;flex-wrap:wrap}
+.pill{
+  font-size:10.5px;color:#4A5D73;background:#F3F6FB;border-radius:7px;padding:4px 9px;
+  display:flex;align-items:center;gap:4px;
+}
+.pill.ok{background:#F1FBF6;color:#13905F}
+.stats{display:flex;margin-top:12px;border-top:1px dashed var(--line2);padding-top:11px}
+.stats div{flex:1;text-align:center;position:relative}
+.stats div + div::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:1px;background:var(--line)}
+.stats b{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.stats span{font-size:10px;color:var(--muted)}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.act{
+  border:1px solid var(--line);border-radius:14px;padding:13px;background:#fff;position:relative;
+  box-shadow:0 1px 2px rgba(13,27,46,.03);
+}
+.act .ai{width:26px;height:26px;border-radius:8px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin-bottom:8px}
+.act b{display:block;font-size:13.5px;font-weight:700}
+.act span{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.act .arrow{position:absolute;right:12px;top:13px;color:#B9C6D6}
+
+.skillwrap{margin-top:12px}
+.skillwrap .h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:7px}
+.skillwrap .h b{font-size:12.5px;font-weight:700}
+.skillwrap .h span{font-size:10px;color:var(--muted)}
+.skills{display:flex;gap:6px;flex-wrap:wrap}
+.skill{
+  font-size:11px;color:#2A5FC4;background:#EDF3FF;border-radius:999px;padding:4px 10px;font-weight:600;
+}
+.skill.gray{background:#F3F6FB;color:#8494A6;font-weight:500}
+
+.menu-wrap{position:relative}
+.menu{margin-top:12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.mrow{display:flex;align-items:center;gap:10px;padding:12px 13px;border-bottom:1px solid var(--line2);font-size:12.5px}
+.mrow:last-child{border-bottom:none}
+.mrow .mi{width:24px;height:24px;border-radius:7px;background:#F5F8FC;display:grid;place-items:center;color:#5B6D82}
+.mrow .mt{flex:1}
+.mrow .mt span{display:block;font-size:10px;color:var(--muted);margin-top:1px}
+.mrow .chev{color:#C2CEDC}
+
+/* ---------- 指南页 ---------- */
+.gsearch{display:flex;align-items:center;gap:9px;height:38px;border-radius:11px;background:#F3F6FB;padding:0 12px;color:var(--muted);font-size:12.5px;margin-top:4px}
+.steps{display:flex;gap:6px;margin-top:14px}
+.step{
+  flex:1;border-radius:12px;padding:11px 9px;background:#fff;border:1px solid var(--line);position:relative;
+}
+.step .n{
+  width:17px;height:17px;border-radius:6px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;
+  display:grid;place-items:center;margin-bottom:6px;
+}
+.step b{display:block;font-size:11.5px;font-weight:700;line-height:1.4}
+.step span{display:block;font-size:9px;color:var(--muted);line-height:1.5;margin-top:2px;letter-spacing:-.01em}
+.step::after{
+  content:"";position:absolute;right:-5px;top:50%;width:4px;height:1px;background:#D7E0EC;
+}
+.step:last-child::after{display:none}
+
+.grow{
+  display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid var(--line2);
+}
+.grow:last-child{border-bottom:none}
+.grow .gi{
+  width:32px;height:32px;border-radius:10px;flex:0 0 32px;display:grid;place-items:center;
+  background:var(--brand-soft);color:var(--brand);
+}
+.grow .gi.b{background:#EAF7F5;color:#0A8E86}
+.grow .gi.o{background:#FFF3E9;color:#C9741F}
+.grow .gi.p{background:#F2EEFF;color:#6C4BD1}
+.grow .gt{flex:1;min-width:0}
+.grow .gt b{display:block;font-size:13px;font-weight:600}
+.grow .gt span{display:block;font-size:10.5px;color:var(--muted);margin-top:1px}
+.grow .chev{color:#C2CEDC}
+
+.verbox{
+  margin-top:14px;border-radius:12px;background:#F7F9FC;border:1px solid var(--line);
+  padding:11px 13px;display:flex;align-items:center;justify-content:space-between;
+}
+.verbox .vl{font-size:11px;color:#40536B;font-weight:600}
+.verbox .vl span{display:block;font-size:9.5px;color:var(--muted);font-weight:400;margin-top:1px}
+
+/* ---------- 标注 ---------- */
+[data-a]{position:relative}
+.pin{
+  position:absolute;top:14px;left:-13px;width:17px;height:17px;border-radius:50%;
+  background:var(--brand);color:#fff;font-size:10px;font-weight:700;line-height:17px;text-align:center;
+  border:2px solid #fff;box-shadow:0 2px 6px rgba(15,91,255,.35);z-index:8;
+  opacity:0;transform:scale(.6);transition:.18s;cursor:pointer;font-family:inherit;padding:0;
+}
+.pin.tr{left:auto;right:-13px}
+.pin.pin-r{left:auto;right:-13px;top:50%;margin-top:-9px}
+.pin.pin-top{top:-17px}
+.pin.pin-corner{top:-8px;left:-8px}
+.pin.pin-corner-tr{top:-8px;right:-8px;left:auto}
+.pin.inside{top:6px;left:auto;right:6px}
+body.anno .pin{opacity:1;transform:scale(1)}
+.anno-hot{outline:2px solid var(--brand);outline-offset:2px;border-radius:16px;background-color:#FCFDFF}
+
+/* 标注列表 */
+.rail{padding-top:2px}
+.rail-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding-bottom:10px;border-bottom:2px solid var(--ink);
+}
+.rail-head b{font-size:13px;font-weight:700;letter-spacing:.02em}
+.rail-head span{font-size:11px;color:var(--muted)}
+.rail-item{
+  display:flex;gap:11px;padding:11px 8px 11px 0;border-bottom:1px dashed var(--line);
+  cursor:default;transition:.16s;border-radius:8px;
+}
+.rail-item:hover,.rail-item.active{background:#F7FAFF;padding-left:8px}
+.rail-item .num{
+  flex:0 0 19px;width:19px;height:19px;border-radius:50%;background:#EAF1FF;color:var(--brand);
+  font-size:10.5px;font-weight:700;display:grid;place-items:center;margin-top:3px;transition:.16s;
+}
+.rail-item:hover .num,.rail-item.active .num{background:var(--brand);color:#fff}
+.rail-body{min-width:0}
+.rail-lab{font-size:13px;font-weight:700;color:#132239;line-height:1.5}
+.rail-lab em{font-style:normal;font-weight:500;color:var(--muted);font-size:11px;margin-left:6px}
+.rail-desc{font-size:12.5px;color:var(--sub);line-height:1.66;margin-top:2px}
+.rail-fix{
+  font-size:11.5px;color:#8A6524;line-height:1.6;margin-top:5px;padding-left:8px;
+  border-left:2px solid #FFD08A;
+}
+.rail-fix b{color:#7A5310;font-weight:700}
+
+/* ---------- 表格 ---------- */
+.tblwrap{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-s);margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{
+  text-align:left;font-weight:600;color:#fff;background:#132239;padding:11px 16px;font-size:11.5px;
+  letter-spacing:.04em;
+}
+td{padding:11px 16px;border-bottom:1px solid var(--line2);color:var(--sub);vertical-align:top;line-height:1.6}
+td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+th{white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#FCFDFE}
+code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;background:#F3F6FB;
+  padding:1px 5px;border-radius:4px;color:#2A5FC4;
+}
+.note{
+  display:flex;gap:10px;padding:13px 15px;border-radius:12px;background:#FFF9EC;
+  border:1px solid #FBE6BE;font-size:12.5px;color:#7A5A1E;line-height:1.7;margin-top:14px;
+}
+.note b{color:#6B4C10}
+.cardgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:12px}
+.cd{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow-s)}
+.cd b{font-size:13px;display:block;margin-bottom:5px}
+.cd p{font-size:12px;color:var(--sub);line-height:1.65}
+footer{
+  margin-top:56px;padding:28px 32px 40px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:11.5px;text-align:center;line-height:1.9;
+}
+@media (max-width:1080px){
+  .principles{grid-template-columns:repeat(2,1fr)}
+  .stage{grid-template-columns:1fr;gap:28px;justify-items:center}
+  .rail{width:100%;max-width:560px}
+  .cardgrid{grid-template-columns:1fr}
+  .hero h1{font-size:28px}
+}
+@media (max-width:720px){
+  .wrap,.hero{padding-left:20px;padding-right:20px}
+  .topbar{padding:0 20px}
+  .topnav{display:none}
+  .principles{grid-template-columns:1fr}
+  .phone{width:340px;height:720px;border-radius:34px}
+  table{font-size:11.5px}
+  th,td{padding:9px 11px}
+}
+</style>
+</head>
+<body class="anno">
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span>量潮 <small>页面说明 &amp; UX 优化 · 罗析芸</small></div>
+  <div class="topnav">
+    <a href="#p1">01 任务大厅</a>
+    <a href="#p2">02 任务库</a>
+    <a href="#p3">03 个人中心</a>
+    <a href="#p4">04 指南</a>
+    <a href="#rules">文案规范</a>
+  </div>
+  <label class="toggle">
+    <input type="checkbox" id="annoToggle" checked>
+    <span class="track"></span>
+    <span>显示标注</span>
+  </label>
+</div>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-in">
+    <div class="kicker">Product · Page Spec v0.3</div>
+    <h1>量潮：把「企业出题、学生接单」<br>做成一屏就能读懂的产品</h1>
+    <p class="lead">
+      本方案基于《量潮产品定位》对 C 端四个页面（任务大厅 / 任务库 / 个人中心 / 指南）重写界面文案并重构交互。
+      核心动作只有三件：<em style="color:#7FD8E8;font-style:normal">标签自带说明</em>、<em style="color:#7FD8E8;font-style:normal">关键信息前置</em>、<em style="color:#7FD8E8;font-style:normal">每个页面只留一个主行动</em>。
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><b>4</b><span>核心页面</span></div>
+      <div class="stat"><b>27</b><span>处功能标注</span></div>
+      <div class="stat"><b>7</b><span>项关键改版</span></div>
+      <div class="stat"><b>3</b><span>类状态设计</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== 设计原则 ===== -->
+  <div class="sec">
+    <div class="sec-head">
+      <div class="sec-title">Design Principles</div>
+    </div>
+    <div class="principles">
+      <div class="pr">
+        <b><i>01</i>标签自带说明</b>
+        <p>每个可能产生疑问的标签，右侧或下方跟一句 12 字内的说明。用户不必猜「难度」「岗位」「我的接单」到底是什么。</p>
+      </div>
+      <div class="pr">
+        <b><i>02</i>决策信息优先</b>
+        <p>学生判断「接不接」只看四件事：报酬、周期、名额、截止时间。其余信息让位，浏览量和点赞量不参与决策，删掉。</p>
+      </div>
+      <div class="pr">
+        <b><i>03</i>一屏一个主行动</b>
+        <p>任务大厅主行动是「认领」，任务库是「筛选」，「个人」是「处理待办」。同屏不放两个同等权重的按钮。</p>
+      </div>
+      <div class="pr">
+        <b><i>04</i>状态先于内容</b>
+        <p>空、加载、失败三种状态与正常态一起设计。新用户第一次进来大概率看到的是空列表，而不是满屏卡片。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= P1 ================= -->
+  <div class="page-head" id="p1">
+    <span class="page-tag">P1</span>
+    <h2>任务大厅（首页）</h2>
+    <span class="goal">目标：<b>10 秒内找到「我能做、且值得做」的任务</b>　|　主行动：一键认领</span>
+  </div>
+
+  <div class="stage">
+    <!-- 手机 1 -->
+    <div class="phone">
+      <div class="statusbar">
+        <span>8:20</span>
+        <span class="icons">
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><rect x="0" y="7" width="2.6" height="4" rx="1"/><rect x="4" y="5" width="2.6" height="6" rx="1"/><rect x="8" y="2.5" width="2.6" height="8.5" rx="1"/><rect x="12" y="0" width="2.6" height="11" rx="1"/></svg>
+          <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3.6a9 9 0 0 1 12 0"/><path d="M3.4 6.1a5.6 5.6 0 0 1 7.2 0"/><circle cx="7" cy="9.2" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".6" y=".6" width="15.8" height="8.8" rx="2.4" stroke="currentColor" stroke-opacity=".45"/><rect x="2.2" y="2.2" width="11" height="5.6" rx="1.4" fill="currentColor"/><path d="M18.2 3.4v3.2c1-.3 1-2.9 0-3.2z" fill="currentColor" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="appbar">
+          <div class="t" data-a="p1-1">任务大厅<button class="pin pin-top">1</button></div>
+          <span class="r">
+            <span class="iconbtn" data-a="p1-2"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge-dot"></span><button class="pin pin-corner-tr">2</button></span>
+          </span>
+        </div>
+
+        <div class="pad">
+          <div class="search" data-a="p1-3">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span>搜索任务、技能或企业</span>
+            <button class="pin tr">3</button>
+          </div>
+
+          <div class="brief" data-a="p1-4">
+            <div class="brief-top">
+              <span class="brief-eyebrow">
+                <span class="spark"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.2 6.3L20.5 10l-6.3 2.2L12 18.5 9.8 12.2 3.5 10l6.3-1.7z"/></svg></span>
+                AI 每日简报
+              </span>
+              <span class="brief-time">08:20 自动生成</span>
+            </div>
+            <h3>早，析芸。今天有 3 件事</h3>
+            <ul>
+              <li><i></i><span>2 个任务今日需提交进度（21:00 前）</span></li>
+              <li><i></i><span>1 份产出已提交，等待企业验收</span></li>
+              <li><i></i><span>新增 5 个与你技能匹配的任务</span></li>
+            </ul>
+            <div class="brief-acts">
+              <button class="btn-mini">去打卡</button>
+              <button class="btn-mini ghost">看推荐</button>
+            </div>
+            <button class="pin">4</button>
+          </div>
+
+          <div data-a="p1-5" style="position:relative">
+            <div class="chips">
+              <span class="chip on">全部</span>
+              <span class="chip">技术</span>
+              <span class="chip">运营</span>
+              <span class="chip">产品</span>
+              <span class="chip">设计</span>
+            </div>
+            <button class="pin tr">5</button>
+          </div>
+
+          <div class="sec-row" data-a="p1-6">
+            <span class="l"><b>推荐任务</b><span>按你的技能标签与在修课程排序</span></span>
+            <span class="r">全部 48
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg>
+            </span>
+            <button class="pin pin-top">6</button>
+          </div>
+
+          <!-- 卡片 1 -->
+          <div class="task" data-a="p1-7">
+            <div class="task-top">
+              <span class="corp"><span class="logo">星</span><span class="name">星野科技</span><span class="verify">已认证</span></span>
+              <span class="reward">¥800</span>
+            </div>
+            <div class="task-title">AI 笔记类工具竞品分析报告（含功能对比矩阵）</div>
+            <div class="tags">
+              <span class="tag p">产品</span><span class="tag d">进阶</span><span class="tag">线上 · 7 天</span>
+            </div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>2</b>/5 名额</span>
+              <span class="meta">11-24 截止</span>
+              <button class="claim">一键认领</button>
+            </div>
+            <button class="pin">7</button>
+          </div>
+
+          <!-- 卡片 2 -->
+          <div class="task">
+            <div class="task-top">
+              <span class="corp"><span class="logo g">潮</span><span class="name">杭州潮玩文化</span><span class="verify">已认证</span></span>
+              <span class="reward">¥300</span>
+            </div>
+            <div class="task-title">小红书内容选题库搭建：30 条可执行选题</div>
+            <div class="tags">
+              <span class="tag">运营</span><span class="tag d">初级</span><span class="tag">线上 · 3 天</span>
+            </div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>5</b>/10 名额</span>
+              <span class="meta">11-21 截止</span>
+              <button class="claim">一键认领</button>
+            </div>
+          </div>
+
+          <!-- 卡片 3 -->
+          <div class="task">
+            <div class="task-top">
+              <span class="corp"><span class="logo o">云</span><span class="name">云图数据</span><span class="verify">已认证</span></span>
+              <span class="reward">¥1,200</span>
+            </div>
+            <div class="task-title">用户访谈提纲设计 + 8 场访谈执行</div>
+            <div class="tags">
+              <span class="tag p">产品</span><span class="tag d">进阶</span><span class="tag">线上 · 14 天</span>
+            </div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>1</b>/3 名额</span>
+              <span class="meta">12-01 截止</span>
+              <button class="claim">一键认领</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabbar" data-a="p1-8">
+        <span class="tab on">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>
+          任务
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14v15h4.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+          指南
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+          个人
+        </span>
+        <button class="pin" style="left:10px;top:18px">8</button>
+      </div>
+    </div>
+
+    <!-- 标注 1 -->
+    <div class="rail">
+      <div class="rail-head"><b>功能标注</b><span>共 8 处 · 悬停联动</span></div>
+
+      <div class="rail-item" data-t="p1-1">
+        <span class="num">1</span>
+        <div class="rail-body">
+          <div class="rail-lab">页面标题<em>任务大厅</em></div>
+          <p class="rail-desc">告诉用户「我在哪、这里能做什么」。取代原来无信息量的「首页」二字。</p>
+          <p class="rail-fix"><b>优化：</b>标题语义化，与底部 tab 的「任务」形成上下呼应，不重复「首页」这种系统词。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-2">
+        <span class="num">2</span>
+        <div class="rail-body">
+          <div class="rail-lab">消息通知<em>红点提醒</em></div>
+          <p class="rail-desc">承接验收结果、催办、企业回复三类通知，有未读才出现红点。</p>
+          <p class="rail-fix"><b>优化：</b>原首页无通知入口，验收结果只能靠群消息；现改为站内闭环。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-3">
+        <span class="num">3</span>
+        <div class="rail-body">
+          <div class="rail-lab">全局搜索<em>占位符即说明</em></div>
+          <p class="rail-desc">占位符写清可搜范围：任务、技能、企业。用户不用点开就知道能搜什么。</p>
+          <p class="rail-fix"><b>优化：</b>原占位符只有「搜索任务」，把找企业的路径堵死了；补全三类对象。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-4">
+        <span class="num">4</span>
+        <div class="rail-body">
+          <div class="rail-lab">AI 每日简报<em>结构化 3 条 + 行动</em></div>
+          <p class="rail-desc">AI 汇总昨日进度、今日待办、技能匹配任务，固定 3 条，超出折叠。</p>
+          <p class="rail-fix"><b>优化：</b>原设计是一整段 AI 自动总结文字（且带「Hi, xxx」），读完不知道要干什么。现在每条都对应一个可执行动作，并给「去打卡 / 看推荐」两个出口。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-5">
+        <span class="num">5</span>
+        <div class="rail-body">
+          <div class="rail-lab">岗位快捷筛选<em>横向滑动</em></div>
+          <p class="rail-desc">按职能一键切换，选中态填充蓝色；与任务库页的筛选条件双向同步。</p>
+          <p class="rail-fix"><b>优化：</b>原首页没有筛选入口，找技术类任务必须跳去第二个 tab，多一次跳转。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-6">
+        <span class="num">6</span>
+        <div class="rail-body">
+          <div class="rail-lab">分区标题<em>排序依据 + 总数</em></div>
+          <p class="rail-desc">「推荐任务」下加一行小字说明推荐逻辑，右侧给总数，让列表可预期。</p>
+          <p class="rail-fix"><b>优化：</b>推荐必须说明依据，否则用户会怀疑是广告位；总数让「还有多少」可见。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-7">
+        <span class="num">7</span>
+        <div class="rail-body">
+          <div class="rail-lab">任务卡片<em>5 类信息 + 1 个行动</em></div>
+          <p class="rail-desc">发布方与认证、标题（两行截断）、岗位/难度/形式标签、报酬、剩余名额与截止时间，右下角直接认领。</p>
+          <p class="rail-fix"><b>优化：</b>① 卡片内直接认领，省掉一次进出详情页；② 删掉「浏览量 / 点赞量」，换成「剩余名额 / 截止时间」——前者是社交指标，后者才是接单依据；③ 报酬用橙色独立成列，扫读时第一眼可见。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p1-8">
+        <span class="num">8</span>
+        <div class="rail-body">
+          <div class="rail-lab">底部导航<em>3 项 · 图标 + 文字</em></div>
+          <p class="rail-desc">任务 / 指南 / 个人，当前项蓝色高亮加粗，单层结构不设二级 tab。</p>
+          <p class="rail-fix"><b>优化：</b>原 tab 只有文字、无图标、无选中态，点击后不知自己在哪里；补图标 + 颜色 + 字重三重反馈。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= P2 ================= -->
+  <div class="page-head" id="p2">
+    <span class="page-tag">P2</span>
+    <h2>任务库（列表 / 筛选）</h2>
+    <span class="goal">目标：<b>用两个维度把 48 个任务收敛到「能接的 3 个」</b>　|　主行动：筛选</span>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="statusbar">
+        <span>8:24</span>
+        <span class="icons">
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><rect x="0" y="7" width="2.6" height="4" rx="1"/><rect x="4" y="5" width="2.6" height="6" rx="1"/><rect x="8" y="2.5" width="2.6" height="8.5" rx="1"/><rect x="12" y="0" width="2.6" height="11" rx="1"/></svg>
+          <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3.6a9 9 0 0 1 12 0"/><path d="M3.4 6.1a5.6 5.6 0 0 1 7.2 0"/><circle cx="7" cy="9.2" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".6" y=".6" width="15.8" height="8.8" rx="2.4" stroke="currentColor" stroke-opacity=".45"/><rect x="2.2" y="2.2" width="11" height="5.6" rx="1.4" fill="currentColor"/><path d="M18.2 3.4v3.2c1-.3 1-2.9 0-3.2z" fill="currentColor" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="appbar">
+          <div class="t" data-a="p2-1">任务库<button class="pin pin-top">1</button></div>
+          <span class="r">
+            <span class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span>
+          </span>
+        </div>
+
+        <div class="filterbar" data-a="p2-6">
+          <div class="frow">
+            <div class="flabel" data-a="p2-2"><button class="pin" style="top:-19px">2</button><b>岗位</b><span>决定做什么</span></div>
+            <div class="fchips" data-a="p2-3">
+              <button class="pin" style="top:4px">3</button>
+              <span class="fchip">全部</span>
+              <span class="fchip">技术</span>
+              <span class="fchip">运营</span>
+              <span class="fchip on">产品</span>
+            </div>
+          </div>
+          <div class="frow">
+            <div class="flabel"><b>难度</b><span>决定能不能做</span></div>
+            <div class="fchips">
+              <span class="fchip">全部</span>
+              <span class="fchip">初级</span>
+              <span class="fchip on">进阶</span>
+              <span class="fchip">大师</span>
+            </div>
+          </div>
+          <div class="frow" style="border-bottom:1px solid var(--line2)">
+            <div class="flabel"><b>更多</b><span>周期 / 报酬</span></div>
+            <div class="fchips" style="align-items:center">
+              <span class="fchip">7 天内</span>
+              <span class="fchip">¥500 以上</span>
+              <span class="fchip">线上</span>
+            </div>            <span class="filter-more" data-a="p2-4">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.1"/><circle cx="10" cy="17" r="2.1"/></svg>
+              <button class="pin pin-corner-tr" style="right:-8px">4</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="pad">
+          <div class="resultbar" data-a="p2-5">
+            <span>共 <b>12</b> 个任务 · 已选 3 个条件</span>
+            <span class="sortbtn">最新发布
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+            </span>
+            <button class="pin pin-top">5</button>
+          </div>
+
+          <div class="task">
+            <div class="task-top">
+              <span class="corp"><span class="logo">星</span><span class="name">星野科技</span><span class="verify">已认证</span></span>
+              <span class="reward">¥800</span>
+            </div>
+            <div class="task-title">AI 笔记类工具竞品分析报告（含功能对比矩阵）</div>
+            <div class="tags"><span class="tag p">产品</span><span class="tag d">进阶</span><span class="tag">线上 · 7 天</span></div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>2</b>/5 名额</span>
+              <span class="meta">11-24 截止</span>
+              <button class="claim">一键认领</button>
+            </div>
+          </div>
+
+          <div class="task">
+            <div class="task-top">
+              <span class="corp"><span class="logo o">云</span><span class="name">云图数据</span><span class="verify">已认证</span></span>
+              <span class="reward">¥1,200</span>
+            </div>
+            <div class="task-title">用户访谈提纲设计 + 8 场访谈执行</div>
+            <div class="tags"><span class="tag p">产品</span><span class="tag d">进阶</span><span class="tag">线上 · 14 天</span></div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>1</b>/3 名额</span>
+              <span class="meta">12-01 截止</span>
+              <button class="claim">一键认领</button>
+            </div>
+          </div>
+
+          <div class="task" data-a="p2-7">
+            <div class="task-top">
+              <span class="corp"><span class="logo g">潮</span><span class="name">杭州潮玩文化</span><span class="verify">已认证</span></span>
+              <span class="reward">¥600</span>
+            </div>
+            <div class="task-title">会员体系改版方案：从积分到等级</div>
+            <div class="tags"><span class="tag p">产品</span><span class="tag d">进阶</span><span class="tag">线上 · 10 天</span></div>
+            <div class="task-foot">
+              <span class="meta">剩 <b>3</b>/4 名额</span>
+              <span class="meta">11-28 截止</span>
+              <button class="claim done">已认领 · 去打卡</button>
+            </div>
+            <button class="pin">6</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabbar">
+        <span class="tab on">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>
+          任务
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14v15h4.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+          指南
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+          个人
+        </span>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="rail-head"><b>功能标注</b><span>共 6 处 · 悬停联动</span></div>
+
+      <div class="rail-item" data-t="p2-1">
+        <span class="num">1</span>
+        <div class="rail-body">
+          <div class="rail-lab">页面标题<em>任务库</em></div>
+          <p class="rail-desc">与首页「任务大厅」区分：大厅是逛，任务库是查。标题不同，心智不同。</p>
+          <p class="rail-fix"><b>优化：</b>原两个页面都叫「任务」，用户会以为掉进了同一个页面。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p2-2">
+        <span class="num">2</span>
+        <div class="rail-body">
+          <div class="rail-lab">筛选维度标签<em>标签旁写用途</em></div>
+          <p class="rail-desc">「岗位」下补一句「决定做什么」，「难度」下补「决定能不能做」，把抽象词翻译成人话。</p>
+          <p class="rail-fix"><b>优化：</b>原来只有「岗位」「难度」两个竖排字，新用户不知道这两行是筛选器还是导航。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p2-3">
+        <span class="num">3</span>
+        <div class="rail-body">
+          <div class="rail-lab">筛选芯片<em>选中态可见</em></div>
+          <p class="rail-desc">选中项用蓝字 + 蓝框 + 白底，未选为浅灰底；默认提供「全部」随时可退回。筛选区整体吸顶，下滚时仍可改条件，改完自动回到列表首条。</p>
+          <p class="rail-fix"><b>优化：</b>原设计是「技术 / 运营 / 产品」纯文字一排行，看不出哪个被选中，也无法取消选择——这是本次最严重的可用性问题。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p2-4">
+        <span class="num">4</span>
+        <div class="rail-body">
+          <div class="rail-lab">更多筛选<em>抽屉展开</em></div>
+          <p class="rail-desc">周期、报酬、线上/线下三类条件收进右侧按钮，不占首屏；已选条件在按钮上以数字角标显示。</p>
+          <p class="rail-fix"><b>优化：</b>学生真实决策还有「几天能做完」「给多少钱」，原设计只有职能和难度，筛完还是十几个任务。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p2-5">
+        <span class="num">5</span>
+        <div class="rail-body">
+          <div class="rail-lab">结果条<em>总数 + 排序</em></div>
+          <p class="rail-desc">左侧给出「共 12 个任务 · 已选 3 个条件」，右侧可切换最新 / 报酬 / 临近截止。</p>
+          <p class="rail-fix"><b>优化：</b>筛选后没有任何反馈，用户不确定是「没结果」还是「没刷新」；结果条是必要的心智锚点。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p2-6">
+        <span class="num">6</span>
+        <div class="rail-body">
+          <div class="rail-lab">卡片复用<em>同一套组件</em></div>
+          <p class="rail-desc">与首页推荐列表使用完全相同的卡片与认领按钮；已认领的任务按钮变为「已认领 · 去打卡」。</p>
+          <p class="rail-fix"><b>优化：</b>同一份数据在两处长得一样，认知成本归零；按钮文案随状态变化，避免重复认领。</p>
+        </div>
+      </div>
+    </div>
+    <!-- 补充第 7 处标注指向第三张卡：用脚本挂载 -->
+  </div>
+
+  <!-- ================= P3 ================= -->
+  <div class="page-head" id="p3">
+    <span class="page-tag">P3</span>
+    <h2>个人中心</h2>
+    <span class="goal">目标：<b>3 秒内知道「我有几件事要处理」</b>　|　主行动：进入我的接单</span>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="statusbar">
+        <span>8:31</span>
+        <span class="icons">
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><rect x="0" y="7" width="2.6" height="4" rx="1"/><rect x="4" y="5" width="2.6" height="6" rx="1"/><rect x="8" y="2.5" width="2.6" height="8.5" rx="1"/><rect x="12" y="0" width="2.6" height="11" rx="1"/></svg>
+          <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3.6a9 9 0 0 1 12 0"/><path d="M3.4 6.1a5.6 5.6 0 0 1 7.2 0"/><circle cx="7" cy="9.2" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".6" y=".6" width="15.8" height="8.8" rx="2.4" stroke="currentColor" stroke-opacity=".45"/><rect x="2.2" y="2.2" width="11" height="5.6" rx="1.4" fill="currentColor"/><path d="M18.2 3.4v3.2c1-.3 1-2.9 0-3.2z" fill="currentColor" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="appbar">
+          <div class="t">个人</div>
+          <span class="r">
+            <span class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 7a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 2.6h.1A1.6 1.6 0 0 0 8.2 1V1a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 15 2.6a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V7a1.6 1.6 0 0 0 1.5 1h.1a2 2 0 1 1 0 4H21a1.6 1.6 0 0 0-1.6 1z"/></svg></span>
+          </span>
+        </div>
+
+        <div class="pad">
+          <div class="profile" data-a="p3-1">
+            <button class="pin">1</button>
+            <div class="pf-top">
+              <div class="avatar">罗</div>
+              <div style="min-width:0">
+                <div class="pf-name">罗析芸<span class="verify">学生认证</span></div>
+                <div class="pf-id">ID 12335646475 · 长按复制</div>
+              </div>
+              <span class="pf-edit">完善资料 80%</span>
+            </div>
+
+            <div class="pills" data-a="p3-2">
+              <span class="pill ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 5.5 5.5L20 6"/></svg>学生 · 可接全部任务</span>
+              <span class="pill">浙江大学 · 计算机学院</span>
+              <span class="pill">2024 级</span>
+              <button class="pin">2</button>
+            </div>
+
+            <div class="stats" data-a="p3-3">
+              <div><b>12</b><span>累计接单</span></div>
+              <div><b>92%</b><span>按期完成率</span></div>
+              <div><b>4.8</b><span>企业评分</span></div>
+              <button class="pin">3</button>
+            </div>
+          </div>
+
+          <div class="actions">
+            <div class="act" data-a="p3-4">
+              <div class="ai"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l2 2 4-4"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>
+              <b>我的接单</b>
+              <span>进行中 3 · 待验收 1</span>
+              <span class="arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+              <button class="pin">4</button>
+            </div>
+            <div class="act" data-a="p3-5">
+              <div class="ai" style="background:#FFF3E9;color:#C9741F"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+              <b>我的发布</b>
+              <span>待处理 2 · 待验收 1</span>
+              <span class="arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+              <button class="pin tr">5</button>
+            </div>
+          </div>
+
+          <div class="skillwrap" data-a="p3-6">
+            <div class="h"><b>能力标签</b><span>来自 12 次实战 · 可写入简历</span></div>
+            <div class="skills">
+              <span class="skill">竞品分析</span>
+              <span class="skill">用户访谈</span>
+              <span class="skill">需求文档</span>
+              <span class="skill green">数据分析</span>
+              <span class="skill gray">待点亮：原型设计</span>
+            </div>
+            <button class="pin pin-top">6</button>
+          </div>
+
+          <div class="menu-wrap" data-a="p3-7">
+            <button class="pin">7</button>
+            <div class="menu">
+            <div class="mrow">
+              <span class="mi"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+              <span class="mt">消息通知<span>验收结果、任务催办</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            <div class="mrow">
+              <span class="mi"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="10" width="16" height="10" rx="2.4"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+              <span class="mt">隐私与数据<span>授权范围、数据导出</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            <div class="mrow">
+              <span class="mi"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 16v-4M12 8.5v.01"/></svg></span>
+              <span class="mt">帮助与反馈<span>问题反馈 24 小时内回复</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabbar">
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>
+          任务
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14v15h4.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+          指南
+        </span>
+        <span class="tab on">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+          个人
+        </span>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="rail-head"><b>功能标注</b><span>共 7 处 · 悬停联动</span></div>
+
+      <div class="rail-item" data-t="p3-1">
+        <span class="num">1</span>
+        <div class="rail-body">
+          <div class="rail-lab">身份区<em>头像 / 昵称 / ID</em></div>
+          <p class="rail-desc">昵称后挂「学生认证」标，ID 支持长按复制（便于企业或助教核对），右侧直给资料完整度与补全入口。</p>
+          <p class="rail-fix"><b>优化：</b>原设计只有「id」二字和一个头像，没有昵称、没有认证态；资料完整度是 B 端验收学生资质的依据，必须露出。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-2">
+        <span class="num">2</span>
+        <div class="rail-body">
+          <div class="rail-lab">身份与院校<em>决定可接任务范围</em></div>
+          <p class="rail-desc">学生 / 企业在职两种身份，决定能看到哪些任务；院校信息用于校方统计。均为可修改项。</p>
+          <p class="rail-fix"><b>优化：</b>原设计把「我的身份: 学生/企业」「我的学校:」做成两个胶囊，既没选中态也没说明用途，看起来像按钮又点不动。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-3">
+        <span class="num">3</span>
+        <div class="rail-body">
+          <div class="rail-lab">数据概览<em>接单 / 完成率 / 评分</em></div>
+          <p class="rail-desc">三项核心数据：累计接单量、按期完成率、企业评分。这是企业筛人时最先看的三行。</p>
+          <p class="rail-fix"><b>优化：</b>原页面没有任何数据，学生无法感知自己的积累，B 端也无法据此判断；数据同时是「数据变现」的产品基础。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-4">
+        <span class="num">4</span>
+        <div class="rail-body">
+          <div class="rail-lab">我的接单<em>带待办数量</em></div>
+          <p class="rail-desc">副标题直接给「进行中 3 · 待验收 1」，不用点进去就知道有几件事在手上。</p>
+          <p class="rail-fix"><b>优化：</b>原设计是两个无说明的灰色大方块，用户不知道点进去看到什么、也不知道里面有几条。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-5">
+        <span class="num">5</span>
+        <div class="rail-body">
+          <div class="rail-lab">我的发布<em>发布方视角</em></div>
+          <p class="rail-desc">面向在校内发布任务的学生团队或教师，展示待处理与待验收数量。</p>
+          <p class="rail-fix"><b>优化：</b>与「我的接单」并列同权重，形成「接单 / 发布」双向身份的对称结构。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-6">
+        <span class="num">6</span>
+        <div class="rail-body">
+          <div class="rail-lab">能力标签<em>实战数据生成</em></div>
+          <p class="rail-desc">由完成的任务反推技能标签，已点亮为蓝色，未点亮置灰并提示「待点亮」，给出成长路径。</p>
+          <p class="rail-fix"><b>优化：</b>对应产品定位里的「人才画像 / 能力雷达」，是学生留下来持续接单的核心激励，原页面完全没有。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p3-7">
+        <span class="num">7</span>
+        <div class="rail-body">
+          <div class="rail-lab">设置列表<em>按频率排序</em></div>
+          <p class="rail-desc">消息通知、隐私与数据、帮助与反馈，每项右侧一句用途说明；退出登录放在最底部弱化。</p>
+          <p class="rail-fix"><b>优化：</b>涉及学生个人信息与企业数据，隐私入口必须可达（合规要求），原设计缺失。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= P4 ================= -->
+  <div class="page-head" id="p4">
+    <span class="page-tag">P4</span>
+    <h2>指南（Site 层 · 静态门面）</h2>
+    <span class="goal">目标：<b>新用户 3 步之内知道「怎么开始第一单」</b>　|　主行动：读完新手三步</span>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="statusbar">
+        <span>8:36</span>
+        <span class="icons">
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><rect x="0" y="7" width="2.6" height="4" rx="1"/><rect x="4" y="5" width="2.6" height="6" rx="1"/><rect x="8" y="2.5" width="2.6" height="8.5" rx="1"/><rect x="12" y="0" width="2.6" height="11" rx="1"/></svg>
+          <svg width="14" height="11" viewBox="0 0 14 11" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3.6a9 9 0 0 1 12 0"/><path d="M3.4 6.1a5.6 5.6 0 0 1 7.2 0"/><circle cx="7" cy="9.2" r="1.1" fill="currentColor" stroke="none"/></svg>
+          <svg width="20" height="10" viewBox="0 0 20 10" fill="none"><rect x=".6" y=".6" width="15.8" height="8.8" rx="2.4" stroke="currentColor" stroke-opacity=".45"/><rect x="2.2" y="2.2" width="11" height="5.6" rx="1.4" fill="currentColor"/><path d="M18.2 3.4v3.2c1-.3 1-2.9 0-3.2z" fill="currentColor" fill-opacity=".5"/></svg>
+        </span>
+      </div>
+
+      <div class="screen">
+        <div class="appbar">
+          <div class="t">指南</div>
+          <span class="r">
+            <span class="iconbtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.9-.9L3 21l1.9-4.8A8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/></svg></span>
+          </span>
+        </div>
+
+        <div class="pad">
+          <div class="gsearch" data-a="p4-1">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span>搜索指南内容</span>
+            <button class="pin tr">1</button>
+          </div>
+
+          <div class="sec-row" style="margin-top:16px">
+            <span class="l"><b>新手三步</b><span>走完这三步就能接第一单</span></span>
+          </div>
+
+          <div class="steps" data-a="p4-2">
+            <div class="step">
+              <span class="n">1</span>
+              <b>注册认证</b>
+              <span>学生证认证，2 分钟</span>
+            </div>
+            <div class="step">
+              <span class="n">2</span>
+              <b>认领任务</b>
+              <span>先接一个初级任务</span>
+            </div>
+            <div class="step">
+              <span class="n">3</span>
+              <b>提交验收</b>
+              <span>AI 初审 + 企业终审</span>
+            </div>
+            <button class="pin">2</button>
+          </div>
+
+          <div class="sec-row" style="margin-top:18px">
+            <span class="l"><b>全部内容</b><span>4 个板块 · 每项一句说明</span></span>
+          </div>
+          <div data-a="p4-3">
+            <button class="pin" style="top:22px">3</button>
+            <div class="grow">
+              <span class="gi"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="8" r=".8" fill="currentColor"/></svg></span>
+              <span class="gt"><b>关于量潮</b><span>平台定位、合作高校与团队</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            <div class="grow">
+              <span class="gi b"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg></span>
+              <span class="gt"><b>新手入门</b><span>10 分钟走完你的第一单</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            <div class="grow">
+              <span class="gi o"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 0 1 4.85.8c0 1.7-2.45 2.3-2.45 3.8"/><circle cx="12" cy="17.2" r=".8" fill="currentColor"/></svg></span>
+              <span class="gt"><b>常见问题</b><span>交付标准、验收、报酬结算</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+            </div>
+            <div class="grow" data-a="p4-4">
+              <span class="gi p"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V7z"/><path d="m9 12 2 2 4-4"/></svg></span>
+              <span class="gt"><b>规则章程</b><span>任务规范、信用分与违约处理</span></span>
+              <span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span>
+              <button class="pin pin-top">4</button>
+            </div>
+          </div>
+
+          <div class="verbox" data-a="p4-5">
+            <span class="vl">版本 v0.3.1<span>最近更新：11-12 新增信用分说明</span></span>
+            <span style="font-size:10.5px;color:#8C9AAB;display:flex;align-items:center;gap:3px">更新日志
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg>
+            </span>
+            <button class="pin tr">5</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="tabbar" data-a="p4-6">
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8.5 8.5h7M8.5 12.5h7M8.5 16.5h4"/></svg>
+          任务
+        </span>
+        <span class="tab on">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H14v15h4.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+          指南
+        </span>
+        <span class="tab">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
+          个人
+        </span>
+        <button class="pin" style="left:10px;top:18px">6</button>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="rail-head"><b>功能标注</b><span>共 6 处 · 悬停联动</span></div>
+
+      <div class="rail-item" data-t="p4-1">
+        <span class="num">1</span>
+        <div class="rail-body">
+          <div class="rail-lab">指南搜索<em>按关键词直达</em></div>
+          <p class="rail-desc">内容超过 4 篇后，入口式卡片就不够用了；搜索框保证「我知道问题叫什么，就不必翻」。首版可隐藏。</p>
+          <p class="rail-fix"><b>优化：</b>原页面四个纯文字卡片，没有检索能力，也没有任何说明文字。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p4-2">
+        <span class="num">2</span>
+        <div class="rail-body">
+          <div class="rail-lab">新手三步<em>给路径，不给目录</em></div>
+          <p class="rail-desc">把「怎么开始」拆成注册认证 → 认领任务 → 提交验收三步，每步一句说明加预计耗时。</p>
+          <p class="rail-fix"><b>优化：</b>原页面只有四个入口，新用户看完仍然不知道第一步做什么——这是「指南」这类页面最常见的失效方式：只有目录，没有路径。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p4-3">
+        <span class="num">3</span>
+        <div class="rail-body">
+          <div class="rail-lab">内容列表<em>标题 + 一句说明</em></div>
+          <p class="rail-desc">四个板块统一为「图标 + 标题 + 一句说明 + 箭头」，字号行高一致，扫读节奏稳定。</p>
+          <p class="rail-fix"><b>优化：</b>原设计是「关于量潮」一张大竖卡 + 右侧两张小横卡，尺寸、圆角、内外边距全不一致，视觉层级混乱且暗示了不存在的优先级。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p4-4">
+        <span class="num">4</span>
+        <div class="rail-body">
+          <div class="rail-lab">规则章程<em>群规的正式化</em></div>
+          <p class="rail-desc">把原本散在群公告里的长文本升级为可读页面：任务规范、信用分规则、违约处理，支持站内检索与分享。</p>
+          <p class="rail-fix"><b>优化：</b>对应 Site 层「规则中枢」定位，原页面缺此项；这也是降低助教重复答疑成本的关键页面。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p4-5">
+        <span class="num">5</span>
+        <div class="rail-body">
+          <div class="rail-lab">版本与更新<em>底部固定</em></div>
+          <p class="rail-desc">版本号、最近更新摘要、更新日志入口合为一条；并列一条「联系助教」，把兜底出口放在同一视线区。</p>
+          <p class="rail-fix"><b>优化：</b>原「版本更新」是一个和内容卡片同等大小、同等样式的按钮，抢了主内容的注意力；改为弱化信息条。</p>
+        </div>
+      </div>
+
+      <div class="rail-item" data-t="p4-6">
+        <span class="num">6</span>
+        <div class="rail-body">
+          <div class="rail-lab">底部导航<em>与全局一致</em></div>
+          <p class="rail-desc">指南页高亮「指南」，三个 tab 的字号、图标、间距与其余页面完全一致。</p>
+          <p class="rail-fix"><b>优化：</b>四页共用同一个 tab 组件，避免各页微调导致的位置跳动。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 文案规范 ===== -->
+  <div class="sec" id="rules">
+    <div class="sec-head">
+      <div class="sec-title">Copywriting Rules</div>
+    </div>
+    <div class="page-head" style="margin-top:0;padding-top:0;border-top:none">
+      <h2>界面文案规范</h2>
+      <span class="goal">四个页面通用，写文案时直接对照</span>
+    </div>
+
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th style="width:110px">类型</th><th style="width:330px">写法</th><th>示例</th></tr></thead>
+        <tbody>
+          <tr><td>页面标题</td><td>名词，2–4 字，说明「这是什么」</td><td>任务大厅 / 任务库 / 个人 / 指南</td></tr>
+          <tr><td>功能标签</td><td>名词短语，≤6 字，不用行业黑话</td><td>岗位（不写「职类」）、难度（不写「等级」）</td></tr>
+          <tr><td>标签旁说明</td><td>补一句「它用来干什么」，≤12 字</td><td>岗位 · 决定做什么；难度 · 决定能不能做</td></tr>
+          <tr><td>按钮</td><td>动词开头，≤5 字，说清点完发生什么</td><td>一键认领 / 去打卡 / 提交验收（不写「确定」）</td></tr>
+          <tr><td>数据标签</td><td>带单位与口径</td><td>剩 2/5 名额；11-24 截止；按期完成率 92%</td></tr>
+          <tr><td>状态提示</td><td>说明现状 + 给下一步</td><td>暂无符合条件的任务 · 试试放宽难度</td></tr>
+          <tr><td>空状态</td><td>一句话解释 + 一个出口按钮</td><td>还没有接单 · 去任务大厅看看</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>注意</b>
+      <span>全站统一用「任务」而非混用「项目 / 订单 / 需求」；统一用「认领」而非「抢单 / 报名」；统一用「产出物」而非「作品 / 交付件」。同一概念一个词，是「简洁」最容易被忽略的一半。</span>
+    </div>
+
+    <!-- 状态设计 -->
+    <div class="sec-head" style="margin-top:44px">
+      <div class="sec-title">State Design</div>
+    </div>
+    <div class="page-head" style="margin-top:0;padding-top:0;border-top:none">
+      <h2>三类必须设计的状态</h2>
+      <span class="goal">当前线框图只画了「有内容」一种，另外三种才是新用户的高频路径</span>
+    </div>
+    <div class="cardgrid">
+      <div class="cd">
+        <b>空状态</b>
+        <p>筛选无结果 / 未接单 / 无发布。文案结构：一句解释 + 一个出口。<br><code>暂无符合条件的任务 · 试试放宽难度</code></p>
+      </div>
+      <div class="cd">
+        <b>加载状态</b>
+        <p>任务列表用骨架屏，保持卡片高度一致，避免加载完成后页面跳动；顶部简报用一行「AI 正在生成…」占位。</p>
+      </div>
+      <div class="cd">
+        <b>失败状态</b>
+        <p>网络失败给重试；认领失败要说明原因（名额已满 / 资质不符 / 需先完善资料），不能只说「操作失败」。</p>
+      </div>
+    </div>
+
+    <!-- 改版清单 -->
+    <div class="sec-head" style="margin-top:44px">
+      <div class="sec-title">Change List</div>
+    </div>
+    <div class="page-head" style="margin-top:0;padding-top:0;border-top:none">
+      <h2>7 项关键改版</h2>
+      <span class="goal">按「不改会直接影响转化」排序</span>
+    </div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th style="width:70px">优先级</th><th style="width:200px">问题</th><th>改法</th><th style="width:160px">预期收益</th></tr></thead>
+        <tbody>
+          <tr><td>P0</td><td>筛选看不出选中态</td><td>改为芯片组件，选中蓝框白底，增加「全部」默认项与结果条</td><td>降低筛不到任务的流失</td></tr>
+          <tr><td>P0</td><td>首页 AI 总结是一整段文字</td><td>结构化 3 条 + 两个行动按钮，超出折叠</td><td>简报从「读过」变「用上」</td></tr>
+          <tr><td>P0</td><td>卡片缺少决策信息</td><td>删浏览量/点赞，补报酬、名额、截止；卡片内直接认领</td><td>提升认领转化，少一次跳转</td></tr>
+          <tr><td>P1</td><td>四个页面标签无说明</td><td>标签旁统一补 ≤12 字用途说明</td><td>降低新用户理解成本</td></tr>
+          <tr><td>P1</td><td>个人页无数据、无待办</td><td>补接单/完成率/评分 + 我的接单/发布带数量</td><td>支撑 B 端人才画像</td></tr>
+          <tr><td>P1</td><td>指南只有目录没有路径</td><td>加「新手三步」路径条，统一内容列表样式</td><td>新用户能自己跑通第一单</td></tr>
+          <tr><td>P2</td><td>底部导航无图标、无选中态</td><td>统一 tab 组件：图标 + 文字 + 颜色 + 字重</td><td>降低迷路感</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>待确认</b>
+      <span>以下三点需要与业务方对齐后再定稿：① 报酬是否涉及结算与发票（影响卡片是否展示「税前/税后」）；② 企业是否需要在小程序内发布任务（决定第二个 tab 是否加「发布」入口）；③ 校方后台（Studio 层）与 C 端的账号体系是否共用一套 ID。</span>
+    </div>
+  </div>
+</div>
+
+<footer>
+  量潮 · 页面说明与 UX 优化方案 v0.3　|　作者：罗析芸　|　2026-11-17<br>
+  依据《量潮产品定位》与 4 张线框图重构；四个页面共用一套卡片、一套筛选、一套 tab 组件，说明文案可直接用于开发交底。
+</footer>
+
+<script>
+(function(){
+  var body = document.body;
+  var tgl = document.getElementById('annoToggle');
+  tgl.addEventListener('change', function(){
+    body.classList.toggle('anno', tgl.checked);
+  });
+
+  var items = Array.prototype.slice.call(document.querySelectorAll('.rail-item'));
+  function clear(){
+    items.forEach(function(i){ i.classList.remove('active'); });
+    document.querySelectorAll('.anno-hot').forEach(function(e){ e.classList.remove('anno-hot'); });
+  }
+  function activate(key){
+    clear();
+    var it = items.filter(function(i){ return i.dataset.t === key; })[0];
+    var el = document.querySelector('[data-a="' + key + '"]');
+    if(it) it.classList.add('active');
+    if(el) el.classList.add('anno-hot');
+  }
+  items.forEach(function(it){
+    var key = it.dataset.t;
+    it.addEventListener('mouseenter', function(){ activate(key); });
+    it.addEventListener('mouseleave', clear);
+  });
+  document.querySelectorAll('.pin').forEach(function(pin){
+    var host = pin.closest('[data-a]');
+    if(!host) return;
+    var key = host.dataset.a;
+    pin.addEventListener('click', function(e){
+      e.stopPropagation();
+      activate(key);
+      var it = items.filter(function(i){ return i.dataset.t === key; })[0];
+      if(it) it.scrollIntoView({block:'center', behavior:'smooth'});
+    });
+  });
+})();
+</script>
+</body>
+</html>

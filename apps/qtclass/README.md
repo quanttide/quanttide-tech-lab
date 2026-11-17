@@ -41,7 +41,16 @@
 ```bash
 uv sync
 uv run python apps/qtclass/src/workbench.py   # 启动工作台
-uv run pytest                                  # 集成测试（离屏）
+uv run pytest                                  # 集成测试（离屏，不触碰演示数据）
+```
+
+C 端任务端（lite，Taro 小程序）独立开发，不依赖 uv：
+
+```bash
+cd src/lite
+npm install --legacy-peer-deps
+npm run build:weapp      # 构建产物 dist/，微信开发者工具导入
+npm test                 # vitest：认领 / 筛选 / 排序
 ```
 
 无需任何配置。数据落在 `data/workbench.db`（SQLite，首次运行自动建库）；入群二维码为可选资产，放入 `src/assets/group-qrcode.png` 即在领任务面板展示。
@@ -55,6 +64,7 @@ qtclass/
 ├── data/              # 运行数据（SQLite + 交付物）
 ├── src/
 │   ├── store.py       # 河床存储：SQLite，状态迁移函数即状态机的执行器
-│   └── workbench.py   # 工作台 GUI：时间线主干 + 节点动作面板 + 内嵌问卷
+│   ├── workbench.py   # 工作台 GUI：时间线主干 + 节点动作面板 + 内嵌问卷
+│   └── lite/          # C 端任务端（Taro 小程序，按 dev-guide/lite.html 原型）
 └── tests/             # pytest：状态机 + 全旅程集成测试
 ```

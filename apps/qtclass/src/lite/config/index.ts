@@ -46,6 +46,11 @@ export default defineConfig<'webpack5'>(async (merge) => {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
       }
     },
+    h5: {
+      // GitHub Pages 挂在仓库子路径下（/quanttide-tech-lab/apps/...）：
+      // 资源必须是相对路径，绝对路径 /js/... 在子路径下会 404
+      publicPath: './'
+    },
   }
 
   if (process.env.NODE_ENV === 'development') {

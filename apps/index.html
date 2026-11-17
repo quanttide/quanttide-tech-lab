@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>量潮实验室 · 原型站</title>
+<style>
+:root{
+  --ink:#0D1B2E; --sub:#586A80; --muted:#8C9AAB;
+  --line:#E7EDF5; --bg:#F4F6FA;
+  --brand:#0F5BFF; --brand-soft:#EDF3FF; --ok:#12A66A;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.topbar{
+  height:56px; display:flex; align-items:center; padding:0 24px;
+  background:rgba(255,255,255,.9); border-bottom:1px solid var(--line);
+  position:sticky; top:0; backdrop-filter:blur(12px); z-index:10;
+}
+.brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px}
+.brand .dot{
+  width:22px; height:22px; border-radius:7px;
+  background:linear-gradient(135deg,var(--brand),#0A9DB0);
+}
+.brand small{font-weight:500; color:var(--muted); font-size:12px; margin-left:2px}
+.wrap{max-width:880px; margin:0 auto; padding:40px 24px 24px}
+h1{font-size:26px; letter-spacing:.01em}
+.lead{color:var(--sub); margin-top:8px; font-size:14px}
+.sec{margin-top:32px}
+.sec-head{
+  display:flex; align-items:baseline; gap:10px;
+  padding-bottom:10px; border-bottom:2px solid var(--ink);
+}
+.sec-head b{font-size:14px; letter-spacing:.02em}
+.sec-head span{font-size:12px; color:var(--muted)}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-top:16px}
+.card{
+  display:block; text-decoration:none; color:inherit;
+  background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px;
+  box-shadow:0 1px 2px rgba(13,27,46,.05); transition:.18s;
+}
+.card:hover{border-color:var(--brand); transform:translateY(-2px); box-shadow:0 8px 28px rgba(13,27,46,.09)}
+.tag{
+  display:inline-block; font-size:11px; font-weight:700; letter-spacing:.06em;
+  color:var(--brand); background:var(--brand-soft);
+  border-radius:6px; padding:3px 8px;
+}
+.tag.ok{color:#0B7A50; background:#E7F7F0}
+.card h2{font-size:16px; margin:12px 0 6px}
+.card p{font-size:13px; color:var(--sub); line-height:1.65}
+.card .go{display:inline-block; margin-top:14px; font-size:13px; font-weight:600; color:var(--brand)}
+.note{margin-top:28px; font-size:12.5px; color:var(--muted)}
+footer{
+  max-width:880px; margin:0 auto; padding:20px 24px 40px;
+  font-size:12px; color:var(--muted);
+  border-top:1px solid var(--line); margin-top:40px;
+}
+@media (max-width:560px){
+  .wrap{padding-top:28px}
+  h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="dot"></span>量潮 <small>实验室 · 原型站</small></div>
+  </header>
+
+  <main class="wrap">
+    <h1>原型与实现</h1>
+    <p class="lead">量潮科技实验室各应用的界面原型与可交互实现，从这里进入。</p>
+
+    <section class="sec">
+      <div class="sec-head">
+        <b>qtclass · 量潮课堂</b>
+        <span>学员任务端（lite）</span>
+      </div>
+      <div class="cards">
+        <a class="card" href="qtclass/docs/dev-guide/lite.html">
+          <span class="tag">原型稿</span>
+          <h2>页面说明与 UX 优化方案 v0.3</h2>
+          <p>任务大厅 / 任务库 / 个人 / 指南四页线框：27 处功能标注、7 项关键改版、界面文案规范与三类状态设计。</p>
+          <span class="go">打开原型 →</span>
+        </a>
+        <a class="card" href="qtclass/src/lite/dist/">
+          <span class="tag ok">可交互</span>
+          <h2>lite · C 端任务端（h5）</h2>
+          <p>按原型实现的可点版本：三页签导航、一键认领与名额状态、两排筛选与「更多」抽屉。</p>
+          <span class="go">打开实现 →</span>
+        </a>
+      </div>
+    </section>
+
+    <p class="note">数据为静态样例（含满额任务演示失败态）；后续应用的原型接入后在此追加。</p>
+  </main>
+
+  <footer>量潮实验室 · quanttide-tech-lab · <a href="https://github.com/quanttide/quanttide-tech-lab" style="color:var(--brand)">GitHub</a></footer>
+</body>
+</html>

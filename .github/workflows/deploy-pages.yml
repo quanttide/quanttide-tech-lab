@@ -1,0 +1,57 @@
+# 发布原型站：push main（apps/** 变更）时构建 lite h5，把 apps/ 内容部署到 GitHub Pages。
+# 站点根 = apps/ 内容（入口 apps/index.html → 站点根 URL），原型稿与 h5 产物原样保留。
+
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/qtclass/src/lite/package-lock.json
+
+      - name: Install & build lite h5
+        working-directory: apps/qtclass/src/lite
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build:h5
+
+      - name: Stage apps as site root
+        # 排除 node_modules；dist（h5 产物）在上一步刚构建，随目录一起进站
+        run: rsync -a --exclude node_modules apps/ _site/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

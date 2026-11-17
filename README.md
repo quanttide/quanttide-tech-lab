@@ -7,6 +7,13 @@
 | 目录 | 说明 |
 |------|------|
 | `docs/` | 实验文档 |
+| `apps/` | 应用实验（qtclass 等）；原型站入口 `apps/index.html` |
+
+## 原型站
+
+GitHub Pages：**https://quanttide.github.io/quanttide-tech-lab/**
+
+入口为 `apps/index.html`，聚合各应用的界面原型与可交互实现。push `apps/**` 时由 `.github/workflows/deploy-pages.yml` 自动构建（含 lite h5）并部署，站点根即 `apps/` 内容。
 
 ## 工作纪律
 

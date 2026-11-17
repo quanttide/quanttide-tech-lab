@@ -19,6 +19,10 @@ npm test            # vitest：认领状态机 / 筛选 / 排序
 
 `project.config.json` 用游客 appid（`touristappid`），开发者工具直接打开即可预览，无需注册 appid。
 
+## 上线
+
+实验室原型站（GitHub Pages）：**https://quanttide.github.io/quanttide-tech-lab/** ——可交互实现位于站内 `qtclass/src/lite/dist/`，与原型稿（`qtclass/docs/dev-guide/lite.html`）一起由入口页导航。push `apps/**` 时 CI 自动 `build:h5` 并部署；`h5.publicPath: './'` 保证资源在子路径下可用。
+
 ## 结构
 
 ```

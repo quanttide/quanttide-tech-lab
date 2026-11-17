@@ -10,9 +10,12 @@
 npm install --legacy-peer-deps   # vitest 的 vite 与 Taro 的 peer 约束冲突，按 Taro 生态惯例跳过
 npm run dev:weapp   # watch 构建，微信开发者工具导入 dist/
 npm run build:weapp # 一次性构建
+npm run dev:h5      # 浏览器本地预览（h5，Taro 开发服务器）
 npm run tsc         # 类型检查
 npm test            # vitest：认领状态机 / 筛选 / 排序
 ```
+
+无微信开发者工具时用 h5 端本地跑：`npm run build:h5` 后用任意静态服务器托管 `dist/`（默认路由为 hash，入口 `/#/`）。`dist/` 为两端共用，构建哪端就覆盖哪端。h5 端 Taro 路由器未实现 `tabBar.custom`（源码里是 TODO），页签栏由 `app.tsx` 手动补挂；weapp 端仍由框架在页签页挂载 `custom-tab-bar/`，两端共用同一组件与 `models/tab` 的选中态/显隐开关。
 
 `project.config.json` 用游客 appid（`touristappid`），开发者工具直接打开即可预览，无需注册 appid。
 

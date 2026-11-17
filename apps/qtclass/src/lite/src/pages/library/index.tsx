@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Input, Text, View } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import AppBar from '../../components/AppBar'
 import TaskCard from '../../components/TaskCard'
 import { ICONS } from '../../components/icons'
+import { syncSelectedFromRoute } from '../../models/tab'
 import {
   LEVELS,
   ROLES,
@@ -34,6 +35,9 @@ const MODES = [
 
 // 任务库（列表 / 筛选）：用两个维度把全部任务收敛到「能接的」，主行动 = 筛选
 function Library() {
+  // 压入页：回写路由态——页签栏在此隐藏（h5 端挂在 App 上，靠这个开关收敛）
+  useDidShow(() => syncSelectedFromRoute())
+
   const [keyword, setKeyword] = useState('')
   const [showSearch, setShowSearch] = useState(false)
   const [role, setRole] = useState<Role | '全部'>('全部')

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- 快照：团队原型稿 https://quanttide-class-works.app.workbuddy.host/?sharecode=GUCWGLVMLY 抄录于 2026-11-25；人名已脱敏（同学 A / 同学 B） -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>量潮课堂AI编程作品</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f6f7f9;
+    color: #1f2329;
+    line-height: 1.6;
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .hero {
+    background: linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 36px 32px;
+    box-shadow: 0 6px 20px rgba(43,108,176,.18);
+  }
+  .hero h1 { font-size: 27px; font-weight: 700; margin-bottom: 10px; }
+  .hero p { font-size: 15px; opacity: .95; max-width: 700px; }
+  .hero .tag {
+    display: inline-block; background: rgba(255,255,255,.2);
+    border-radius: 999px; padding: 3px 14px; font-size: 13px; margin-bottom: 14px;
+  }
+
+  .back {
+    display: inline-block; margin-bottom: 16px; padding: 7px 15px;
+    background: #fff; color: #2b6cb0; text-decoration: none;
+    border: 1px solid #cbd5e0; border-radius: 8px; font-size: 14px;
+  }
+  .back:hover { background: #f7fafc; border-color: #90b8e8; }
+
+  .steps {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    margin: 22px 0 30px;
+  }
+  .step {
+    background: #fff; border: 1px solid #e8ecf1; border-radius: 12px;
+    padding: 18px 22px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,.03);
+    text-decoration: none; color: inherit; cursor: pointer;
+    display: grid; grid-template-columns: 40px 1fr; align-items: center; column-gap: 16px;
+    transition: transform .15s, box-shadow .15s, border-color .15s;
+  }
+  .step:hover { transform: translateY(-2px); border-color: #90b8e8; box-shadow: 0 8px 20px rgba(43,108,176,.12); }
+  .step:hover .n { background: #3182ce; color: #fff; }
+  .step .n {
+    grid-row: 1 / span 3;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #ebf4ff; color: #2b6cb0; font-weight: 700; font-size: 15px;
+  }
+  .step h3 { grid-column: 2; font-size: 16px; margin-bottom: 4px; }
+  .step p { grid-column: 2; font-size: 13px; color: #646a73; }
+  .step .arrow { grid-column: 2; display: block; font-size: 12px; color: #3182ce; margin-top: 6px; }
+  .step.disabled { cursor: default; background: #fbfcfd; }
+  .step.disabled:hover { transform: none; border-color: #e8ecf1; box-shadow: 0 2px 8px rgba(0,0,0,.03); }
+  .step.disabled:hover .n { background: #ebf4ff; color: #2b6cb0; }
+  .step.disabled .n { background: #eef0f3; color: #9aa0a8; }
+  .step.disabled h3, .step.disabled p { color: #9aa0a8; }
+
+  .subhead { font-size: 15px; color: #2b6cb0; margin: 20px 0 10px; }
+  .section-sub { font-size: 13px; color: #8a9099; margin: 0 0 16px 12px; }
+
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card {
+    background: #fff; border: 1px solid #e8ecf1; border-radius: 12px;
+    padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.03);
+    display: flex; flex-direction: column;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.07); }
+  .card .label {
+    font-size: 12px; color: #2b6cb0; background: #ebf4ff;
+    border-radius: 6px; padding: 2px 9px; align-self: flex-start; margin-bottom: 10px;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 6px; }
+  .card p { font-size: 13px; color: #646a73; flex: 1; margin-bottom: 14px; }
+  .btn {
+    display: inline-block; text-align: center; text-decoration: none;
+    background: #3182ce; color: #fff !important; border-radius: 8px;
+    padding: 9px 14px; font-size: 14px; font-weight: 500;
+  }
+  .btn:hover { background: #2b6cb0; }
+  .btn.ghost { background: #fff; color: #2b6cb0 !important; border: 1px solid #cbd5e0; }
+  .btn.ghost:hover { background: #f7fafc; }
+  .card-links { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .note {
+    background: #fffaf2; border: 1px solid #f6dcae; border-radius: 12px;
+    padding: 18px 20px; margin-top: 28px; font-size: 14px; color: #7a5b26;
+  }
+  .note b { color: #5c430f; }
+  .foot { text-align: center; font-size: 12px; color: #9aa0a8; margin-top: 28px; }
+
+  .task-box {
+    background: #fff; border: 2px solid #3182ce; border-radius: 14px;
+    padding: 24px; margin: 20px 0;
+  }
+  .task-box h2 { font-size: 19px; color: #2b6cb0; margin-bottom: 12px; }
+  .task-lead { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+  .checklist { list-style: none; margin: 0; padding: 0; }
+  .checklist li {
+    position: relative; padding: 10px 0 10px 30px; border-top: 1px solid #eef1f5;
+    font-size: 14px; color: #3a3f47;
+  }
+  .checklist li:first-child { border-top: none; }
+  .checklist li::before {
+    content: "✓"; position: absolute; left: 0; top: 10px;
+    color: #3182ce; font-weight: 700;
+  }
+  .flow { display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0 6px; }
+  .flow .f {
+    flex: 1; min-width: 180px; background: #f7fafc; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 16px;
+  }
+  .flow .f .fn { font-size: 12px; color: #3182ce; font-weight: 700; margin-bottom: 6px; }
+  .flow .f h4 { font-size: 14px; margin-bottom: 4px; }
+  .flow .f p { font-size: 13px; color: #646a73; }
+
+  @media (max-width: 640px) {
+    .steps, .grid { grid-template-columns: 1fr; }
+    .hero { padding: 28px 22px; }
+    .hero h1 { font-size: 23px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 首页：三块导航 -->
+  <div id="home" class="view active">
+    <div class="hero">
+      <span class="tag">量潮课堂 · AI 编程</span>
+      <h1>量潮课堂AI编程作品</h1>
+      <p>这里汇集了课程官方作品和同学们做出来的作品。想了解课程、试玩游戏、看看别人做成什么样——从下面三个入口进。</p>
+    </div>
+
+    <div class="steps">
+      <a class="step" href="#official"><div class="n">1</div><h3>官方版作品</h3><p>原版游戏、宣传册与课程</p><span class="arrow">点这里进入 ↓</span></a>
+      <a class="step" href="#students"><div class="n">2</div><h3>学员作品</h3><p>同学 A、同学 B的作品</p><span class="arrow">点这里进入 ↓</span></a>
+      <a class="step" href="#guide"><div class="n">3</div><h3>自己做一遍</h3><p>动手指南 · 课程与交付要求</p><span class="arrow">点这里进入 ↓</span></a>
+    </div>
+  </div>
+
+  <!-- 后台一：官方版作品 -->
+  <div id="official" class="view">
+    <a class="back" href="#home">← 返回首页</a>
+    <div class="hero">
+      <span class="tag">官方版作品</span>
+      <h1>官方版 · 从原版开始</h1>
+      <p>先玩原版游戏、看看官方宣传册，再打开课程 Lite 对照任务书，看清每一步的要求。</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="label">原版游戏</span>
+        <h3>滁州夜市 · 串串摊</h3>
+        <p>官方游戏原版。先玩一遍，熟悉玩法和规则，再去看任务书理解每一步。</p>
+        <a class="btn" href="https://tycoon.game.quanttide.com" target="_blank" rel="noopener">试玩游戏</a>
+      </div>
+      <div class="card">
+        <span class="label">原版宣传册</span>
+        <h3>官方宣传册</h3>
+        <p>游戏的官方介绍页，看它是怎么被包装和呈现的，也是第 4 课的参照样板。</p>
+        <a class="btn" href="https://game.quanttide.com/tycoon" target="_blank" rel="noopener">查看宣传册</a>
+      </div>
+    </div>
+    <div class="foot">量潮课堂 · AI 编程作品</div>
+  </div>
+
+  <!-- 后台二：学员作品 -->
+  <div id="students" class="view">
+    <a class="back" href="#home">← 返回首页</a>
+    <div class="hero">
+      <span class="tag">学员作品</span>
+      <h1>同学们做出来的作品</h1>
+      <p>先试玩同学的版本找灵感，再看学习记录照着做。老同学的作品也欢迎试玩后留下反馈——你的意见就是他们改进的方向。</p>
+    </div>
+
+    <h2 class="subhead">▍同学 A</h2>
+    <p class="section-sub" style="margin-left:0;">5 个作品，从复刻到真实工具 · 完整学习记录见下方</p>
+    <div class="grid">
+      <div class="card">
+        <span class="label">工作一</span>
+        <h3>滁州夜市 · 串串摊（复刻版）</h3>
+        <p>照着官方版本复刻并上线：7 天经营、定价备货、三段街、周目奖励、吉祥物收集。</p>
+        <a class="btn" href="https://a0d8cbf05824feedb.app.workbuddy.host/?sharecode=OHGNKPSGWM" target="_blank" rel="noopener">试玩</a>
+      </div>
+      <div class="card">
+        <span class="label">工作二</span>
+        <h3>咖啡店版（加每日随机事件）</h3>
+        <p>换背景与 BGM、改时间体系，新增 21 个随机事件与节日特殊订单。</p>
+        <a class="btn" href="https://ac327c17616cb40c.app.workbuddy.host/?sharecode=OHGNKPSGWM" target="_blank" rel="noopener">试玩</a>
+      </div>
+      <div class="card">
+        <span class="label">工作三</span>
+        <h3>打工人游戏</h3>
+        <p>自定玩法与配乐，适配手机端，摸鱼与高压用不同音乐烘托。</p>
+        <a class="btn" href="https://a1ce713bcef763322.app.workbuddy.host/?sharecode=TKOYFB4NKT" target="_blank" rel="noopener">试玩</a>
+      </div>
+      <div class="card">
+        <span class="label">工作四</span>
+        <h3>宣传册与真人试玩反馈</h3>
+        <p>做了宣传册和海报，找 3 位真人试玩，收集到玩法与 bug 反馈再改进。</p>
+        <div class="card-links">
+          <a class="btn" href="https://a1ce713bcef763322.app.workbuddy.host/promo.html?sharecode=TKOYFB4NKT" target="_blank" rel="noopener">看宣传册</a>
+          <a class="btn ghost" href="https://a1ce713bcef763322.app.workbuddy.host/?sharecode=TKOYFB4NKT" target="_blank" rel="noopener">试玩新版</a>
+        </div>
+      </div>
+      <div class="card">
+        <span class="label">工作五</span>
+        <h3>门店经营看板</h3>
+        <p>把游戏里的经营界面抽出来，做成一个店主真会用的门店经营看板。</p>
+        <a class="btn" href="https://ac327c17616cb40c.app.workbuddy.host/?sharecode=OHGNKPSGWM" target="_blank" rel="noopener">查看</a>
+      </div>
+      <div class="card">
+        <span class="label">学习记录</span>
+        <h3>完整学习记录（5 个作品 + 心得）</h3>
+        <p>每一步怎么做、遇到什么问题、心得是什么，都写在这篇记录里。新人强烈建议先看。</p>
+        <a class="btn" href="https://mp.weixin.qq.com/s/jMNTSJe1K_UIIzDm7sXpSQ" target="_blank" rel="noopener">读学习记录</a>
+      </div>
+    </div>
+
+    <h2 class="subhead">▍同学 B</h2>
+    <p class="section-sub" style="margin-left:0;">正在迭代中，欢迎试玩给反馈</p>
+    <div class="grid">
+      <div class="card">
+        <span class="label">进行中</span>
+        <h3>串串摊改造</h3>
+        <p>"做了一个简单的请大家试玩，期待大家的反馈。"果总提了机制缺陷后正在修改，欢迎你去挑毛病。</p>
+        <a class="btn" href="https://a647ed4d70be19f19.app.workbuddy.host/?sharecode=VUIGBPXRKN" target="_blank" rel="noopener">试玩反馈</a>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>给新同学：</b>试玩时留意"如果是我，会怎么改"——加背景、改玩法、设计随机事件，方向由你定。AI 再能干，方向盘要在自己手里。
+      <br><b>给老同学：</b>你的作品有人试玩了，把反馈整理一下继续改进；有新版本随时发群里，这里会同步更新。
+    </div>
+    <div class="foot">量潮课堂 · AI 编程作品</div>
+  </div>
+
+  <!-- 后台三：自己做一遍（动手指南） -->
+  <div id="guide" class="view">
+    <a class="back" href="#home">← 返回首页</a>
+    <div class="hero">
+      <span class="tag">自己做一遍</span>
+      <h1>从 0 到 1，做出自己的作品</h1>
+      <p>不用怕没基础——跟着课程一步步做，先复刻、再创新，做出一个真正属于你的作品。</p>
+    </div>
+
+    <h2 class="subhead">▍第一步：打开课程，开始做</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="label">课程入口</span>
+        <h3>AI编程</h3>
+        <p>官方课程与任务书，从第一课开始，按顺序往下做。打开后照着任务书一步步来。</p>
+        <a class="btn" href="https://lite.class.quanttide.com/courses/vibe-coding" target="_blank" rel="noopener">开始学习</a>
+      </div>
+      <div class="card">
+        <span class="label">照着谁做</span>
+        <h3>同学 A的学习记录</h3>
+        <p>每一步怎么做、遇到什么问题都写在这里。新人先看一遍，照着走不容易卡住。</p>
+        <a class="btn" href="https://mp.weixin.qq.com/s/jMNTSJe1K_UIIzDm7sXpSQ" target="_blank" rel="noopener">读学习记录</a>
+      </div>
+    </div>
+
+    <h2 class="subhead">▍第二步：照这个方法做</h2>
+    <div class="flow">
+      <div class="f"><div class="fn">01 先复现</div><h4>照着官方版本做一遍</h4><p>先别急着改，完整照着做一遍，拿到第一个自己的链接。</p></div>
+      <div class="f"><div class="fn">02 再创新</div><h4>自己拿主意改</h4><p>加背景、改玩法、设计随机事件——方向由你定，AI 按你的想法改。</p></div>
+      <div class="f"><div class="fn">03 找反馈</div><h4>给别人试玩</h4><p>找不同背景的真人试玩，旁观者能发现你注意不到的问题。</p></div>
+    </div>
+
+    <div class="task-box">
+      <h2>▍第三步：完成后要交什么</h2>
+      <p class="task-lead">提交一份学习记录，并将作品发到群里。学习记录写清楚四点：</p>
+      <ul class="checklist">
+        <li><b>做了什么</b>——完成了哪个作品、做到哪一步；</li>
+        <li><b>遇到什么卡点</b>——哪里卡住了、什么问题最难搞；</li>
+        <li><b>怎么解决的</b>——自己想了什么办法、问了谁、AI 怎么帮的；</li>
+        <li><b>待完善的点在哪</b>——还有哪些不满意、下一步打算怎么改。</li>
+      </ul>
+      <p style="font-size:13px;color:#646a73;margin-top:14px;">
+        作品链接和学习记录一起发到群里。我们会看参与情况——<b>没有提交的学员会被淘汰</b>；积极参与、表现突出的，有机会进入实训基地继续深入。
+      </p>
+    </div>
+
+    <div class="foot">量潮课堂 · AI 编程作品</div>
+  </div>
+
+</div>
+
+<script>
+  function route() {
+    var h = location.hash.replace('#', '');
+    if (['home', 'official', 'students', 'guide'].indexOf(h) < 0) h = 'home';
+    var views = document.querySelectorAll('.view');
+    for (var i = 0; i < views.length; i++) {
+      views[i].classList.toggle('active', views[i].id === h);
+    }
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+</script>
+</body>
+</html>

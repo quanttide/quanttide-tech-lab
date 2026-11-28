@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<!-- 抄录自学员原型（群消息移交）：量潮课堂 Lite · 氛围局 / 新人视角（反转关）；原分享链接含账号标识，不录。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2a1a3e">
+<title>量潮课堂 Lite · 氛围局</title>
+<style>
+:root{
+  --ink:#3a271c;--paper:#fff6e4;--paper2:#f6e6c6;--deep:#2a1a3e;--deep2:#1b1229;
+  --gold:#ffc93c;--amber:#e8a53c;--red:#e9524a;--green:#3f9c63;--violet:#7a5aa8;
+  --muted:#8a7a6a;--line:rgba(58,39,28,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+body{
+  background:radial-gradient(1200px 700px at 50% -8%,#3b2754 0%,#22152f 45%,#150d1e 100%);
+  color:var(--ink);overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(circle at 12% 18%,rgba(255,201,60,.14),transparent 22%),
+             radial-gradient(circle at 88% 12%,rgba(255,201,60,.11),transparent 20%),
+             radial-gradient(circle at 78% 82%,rgba(233,82,74,.07),transparent 24%);
+}
+.phone{max-width:470px;margin:0 auto;padding:14px 12px 34px;position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.topbar .brand{color:#ffe6ad;font-size:13px;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.audio{display:flex;gap:6px}
+.abtn{border:1px solid rgba(255,230,173,.32);background:rgba(255,255,255,.06);color:#ffe6ad;border-radius:99px;font-size:11px;padding:5px 9px;cursor:pointer}
+.abtn:active{transform:scale(.95)}
+.scene{position:relative;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#241634,#332045 60%,#2a1a3e);border:2px solid #5a3f2c;box-shadow:0 12px 34px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,201,60,.16)}
+.scene svg{display:block;width:100%;height:auto}
+.scene .lantern{position:absolute;top:8%;width:30px;animation:sway 3.4s ease-in-out infinite}
+.scene .lantern.l1{left:9%}.scene .lantern.l2{right:9%;animation-delay:1.1s}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.card{background:linear-gradient(180deg,var(--paper),var(--paper2));border:2px solid #a97b4f;border-radius:14px;padding:12px 13px;margin:10px 0;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.card h3{margin:0 0 8px;font-size:14px}
+.muted{color:var(--muted);font-weight:400}
+.btn{border:2px solid #7a4a2c;background:linear-gradient(180deg,#ffd98a,#e8a53c);color:#3a271c;border-radius:11px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #7a4a2c;transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a4a2c}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn-big{display:block;width:100%;margin:12px 0 8px;border:0;border-radius:15px;padding:15px;font-size:20px;font-weight:900;letter-spacing:3px;color:#3a271c;cursor:pointer;background:linear-gradient(180deg,#ffd45e,#e08b2c);box-shadow:0 5px 0 #8a4a1c,0 12px 24px rgba(224,139,44,.3)}
+.btn-big:active{transform:translateY(3px);box-shadow:0 2px 0 #8a4a1c}
+.home-head{text-align:center;color:#ffe6ad;padding:10px 0 6px}
+.home-head .sign{font-size:26px;font-weight:900;letter-spacing:3px;text-shadow:0 3px 0 #7a4a2c,0 6px 14px rgba(0,0,0,.5)}
+.home-head .subtitle{font-size:12px;letter-spacing:4px;color:#e8b98a;margin-top:2px}
+.pill{display:inline-block;margin-top:8px;font-size:11px;background:rgba(255,201,60,.16);border:1px solid rgba(255,201,60,.4);color:#ffe6ad;border-radius:99px;padding:4px 10px}
+.stage-badge{background:linear-gradient(180deg,#3a2547,#2a1a3e);border:2px solid #7a5aa8;border-radius:14px;padding:11px 13px;color:#f3dfc4;font-size:12px;line-height:1.75;margin:10px 0}
+.stage-badge .st-top{font-size:13px;font-weight:800;color:#ffe6ad}
+.stage-badge .st-icon{float:left;font-size:22px;margin-right:8px}
+.stage-badge b{color:var(--gold)}
+.home-btns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.home-btns .btn{font-size:13px;padding:11px}
+.record,.keep-line{font-size:11px;color:#e8b98a;text-align:center;line-height:1.8}
+.keep-bar{height:7px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin:7px 0}
+.keep-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red))}
+.foot-note{text-align:center;font-size:10px;color:#a88f74;line-height:1.8;margin-top:10px}
+.hud{display:flex;gap:8px;justify-content:space-between;align-items:center;background:rgba(20,12,28,.72);border:1px solid rgba(255,201,60,.3);border-radius:11px;padding:8px 10px;color:#ffe6ad;font-size:12px;margin-bottom:9px;flex-wrap:wrap}
+.hud .day{font-weight:900;color:var(--gold)}
+.hud .combo{color:#ff9d6e}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:4px 0}
+.stat{background:#fff2d6;border:1px solid var(--line);border-radius:9px;padding:7px 5px;text-align:center}
+.stat .k{font-size:10px;color:var(--muted)}
+.stat .v{font-size:17px;font-weight:900;color:#b23a33;line-height:1.2}
+.stat .v.g{color:#2e7a4d}
+.mini-bar{height:6px;border-radius:99px;background:#e6d3ad;overflow:hidden;margin-top:5px}
+.mini-bar i{display:block;height:100%;border-radius:99px}
+.plan-title{font-size:13px;font-weight:800;margin:4px 0 7px}
+.plan-hint{font-size:10.5px;color:var(--muted);line-height:1.6;text-align:center}
+.intel-row{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.6;padding:6px 0;border-bottom:1px dashed var(--line)}
+.intel-row:last-child{border-bottom:0}
+.intel-row .ico{width:24px;height:24px;flex:0 0 24px;border-radius:7px;background:#efe0c0;display:grid;place-items:center;font-size:13px}
+.intel-row .who{display:inline-block;background:#e9d7b2;border-radius:5px;padding:0 5px;font-size:10px;color:#6a4a2c;margin-right:3px}
+.tag{border-radius:5px;padding:1px 5px;font-size:10px;font-weight:800}
+.tag-up{background:rgba(63,156,99,.18);color:#2e7a4d}.tag-down{background:rgba(233,82,74,.16);color:#b23a33}
+.clue-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.clue-btn{display:flex;flex-direction:column;align-items:center;gap:3px;border:2px solid #a97b4f;border-radius:10px;background:#fff3da;padding:8px 4px;cursor:pointer;color:var(--ink)}
+.clue-btn:active{transform:scale(.97)}
+.clue-btn.done{opacity:.55;background:#e9dcc2}
+.clue-btn .cb-ico{font-size:17px}.clue-btn .cb-name{font-size:12px;font-weight:800}.clue-btn .cb-cost{font-size:10px;color:#b23a33}
+.clue-btn[disabled]{opacity:.4;cursor:not-allowed}
+.clue-result{font-size:11px;line-height:1.6;background:rgba(63,156,99,.1);border-left:3px solid var(--green);padding:7px 9px;margin-top:7px;border-radius:0 8px 8px 0}
+.intel-purse{font-size:11px;color:#6a4a2c;margin-bottom:7px}
+.price-row{display:flex;gap:6px;justify-content:center;margin:8px 0;flex-wrap:wrap}
+.price-btn{border:2px solid #a97b4f;border-radius:9px;background:#fff3da;min-width:42px;height:38px;padding:0 8px;font-weight:800;cursor:pointer;color:var(--ink)}
+.price-btn.on{background:linear-gradient(180deg,#ffd45e,#e8a53c);border-color:#7a4a2c}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.act-card{border:2px solid #a97b4f;border-radius:10px;background:#fff3da;padding:8px;cursor:pointer;color:var(--ink);position:relative;transition:transform .08s,background .12s}
+.act-card:active{transform:scale(.98)}
+.act-card.sel{background:linear-gradient(180deg,#ffe08a,#f0b74e);border-color:#7a4a2c;box-shadow:inset 0 0 0 1px #fff6d8}
+.act-card.off{opacity:.5;cursor:not-allowed}
+.act-card .ac-top{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:800}
+.act-card .ac-ico{font-size:15px}
+.act-card .ac-grp{margin-left:auto;font-size:9px;color:#8a5a2c;background:#f0dfb8;border-radius:5px;padding:1px 4px}
+.act-card .ac-tag{font-size:10px;color:#b23a33;font-weight:800;margin-top:4px}
+.act-card .ac-desc{font-size:9.5px;color:var(--muted);line-height:1.5;margin-top:3px}
+.act-card .ac-cost{position:absolute;top:6px;right:6px;font-size:9px;color:#6a4a2c}
+.energy-dots{display:inline-flex;gap:3px;vertical-align:middle}
+.energy-dots i{width:9px;height:9px;border-radius:50%;background:#ffe6ad;border:1px solid #8a5a2c;display:inline-block}
+.energy-dots i.on{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+.pred-box{background:linear-gradient(180deg,#2f5d43,#234a35);border:2px solid #3f9c63;border-radius:12px;padding:12px;color:#eafbef;margin:10px 0}
+.pred-box .pb-head{display:flex;align-items:baseline;justify-content:space-between;font-size:12px;color:#bfe8cf}
+.pred-box .pb-big{font-size:34px;font-weight:900;color:#8ff0b4;line-height:1.1}
+.pred-box .pb-sub{font-size:11px;color:#cfeeda;margin:3px 0 8px}
+.pred-row{display:flex;justify-content:space-between;font-size:10.5px;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+.pred-row b{font-variant-numeric:tabular-nums}
+.pred-row.plus b{color:#9cf0bb}.pred-row.minus b{color:#ffb3a8}
+.pred-total{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-top:6px;border-top:1px solid rgba(255,255,255,.3);padding-top:6px}
+.reveal-title{text-align:center;color:#ffe6ad;font-size:19px;font-weight:900;margin:8px 0;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.reveal-numbers{text-align:center;color:#ffe6ad;font-size:14px;line-height:1.9;margin:8px 0}
+.reveal-numbers b{font-size:26px;color:var(--gold)}
+.guests{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:44px;align-items:center}
+.guest{width:26px;height:32px;border-radius:7px 7px 4px 4px;background:#fff0cf;border:1px solid #8a5a34;position:relative;animation:pop .28s ease-out;display:grid;place-items:center;font-size:12px}
+.guest::before{content:"";position:absolute;top:-5px;left:5px;right:5px;height:6px;border-radius:50% 50% 0 0;background:#7a4a2c}
+.guest.hot{background:#ffd98a}.guest.miss{background:#e6d4b4;opacity:.6}
+@keyframes pop{from{transform:scale(.2) translateY(-14px);opacity:0}to{transform:scale(1);opacity:1}}
+.result-card{background:linear-gradient(180deg,var(--paper),var(--paper2));border:2px solid #a97b4f;border-radius:14px;padding:14px;text-align:center}
+.result-card .big{font-size:28px;font-weight:900;color:#b23a33}
+.result-card .big.good{color:#2e7a4d}
+.result-card .line{font-size:12px;line-height:1.8;color:#6a4a2c;margin:5px 0}
+.result-card .medal{font-size:13px;font-weight:800;color:#a8781f}
+.diag-box{background:rgba(122,90,168,.1);border:1px dashed #a88cc9;border-radius:9px;padding:9px;margin-top:8px;font-size:11px;line-height:1.75;text-align:left;color:#5a3f7a}
+.goal-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.goal-row b{font-variant-numeric:tabular-nums}
+.goal-row.ok{color:#2e7a4d;font-weight:800}
+.mascot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mascot{background:#fff4dc;border:2px solid #a97b4f;border-radius:12px;padding:7px 4px;text-align:center;position:relative}
+.mascot.locked{filter:grayscale(1);opacity:.42}
+.mascot svg{width:100%;max-width:84px;height:auto;display:block;margin:0 auto}
+.mascot .nm{font-size:11px;font-weight:800}
+.mascot .kd{font-size:9px;color:var(--muted)}
+.mascot .sg{position:absolute;top:4px;right:5px;font-size:10px}
+.medal-row{display:flex;flex-wrap:wrap;gap:5px}
+.medal{font-size:11px;border-radius:99px;padding:4px 8px;background:rgba(255,201,60,.16);border:1px solid rgba(255,201,60,.4);color:#ffe6ad}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(140px);transition:.35s;background:#fff3d6;border:2px solid #7a4a2c;border-radius:12px;padding:10px 16px;font-size:12px;font-weight:700;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:88vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.mask{position:fixed;inset:0;background:rgba(12,8,18,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:40;backdrop-filter:blur(3px)}
+.mask.show{display:flex}
+.modal{background:linear-gradient(180deg,#3a2547,#241634);border:2px solid #7a5aa8;border-radius:18px;padding:20px;max-width:430px;width:100%;color:#f3dfc4;text-align:center;max-height:86vh;overflow:auto}
+.modal h2{font-size:21px;color:#ffe6ad;margin:0 0 8px}
+.modal p{font-size:12px;line-height:1.85;color:#e0c8a8;margin:0 0 14px}
+.modal svg{width:110px;height:110px}
+.modal .btn{margin:4px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.cf{position:absolute;width:8px;height:12px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2}}
+
+/* ===== 极简首屏 ===== */
+.focus{background:linear-gradient(180deg,#fff7e6,#f4e2bd);border:2px solid #a97b4f;border-radius:18px;padding:14px 14px 12px;margin:10px 0;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.focus-head{font-size:11px;color:var(--muted);letter-spacing:1px;text-align:center;margin-bottom:8px}
+.focus-goal{text-align:center;font-size:15px;font-weight:900;color:#5a3f2c;line-height:1.7;margin-bottom:14px}
+.focus-goal b{color:#2e7a4d}
+.focus-goal .lose{color:#b23a33}
+.meter{margin:12px 0}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:800;margin-bottom:5px}
+.meter-top .mv{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
+.meter-top .mv small{font-size:12px;color:var(--muted);font-weight:700}
+.meter-bar{height:13px;border-radius:99px;background:#e6d3ad;overflow:hidden;border:1px solid rgba(58,39,28,.14)}
+.meter-bar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+.meter.pat .mv{color:var(--green)}
+.meter.pat.warn .mv{color:var(--red);animation:pulseWarn 1s ease-in-out infinite}
+.meter.pat.warn .meter-top .lab{color:var(--red);font-weight:900}
+@keyframes pulseWarn{0%,100%{opacity:1}50%{opacity:.45}}
+/* ===== 体验优化：紧凑信息 + 清晰反馈 ===== */
+.pb-nums{display:flex;gap:9px;margin:7px 0}
+.pb-num{flex:1;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:7px 4px;text-align:center}
+.pb-num .pb-lbl{font-size:10px;color:#cfeeda;margin-top:1px}
+.pred-box .pb-big.up{color:#8ff0b4}.pred-box .pb-big.down{color:#ffb3a8}
+.pb-more{display:block;width:100%;margin-top:7px;border:1px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.06);color:#cfeeda;border-radius:8px;padding:6px;font-size:11px;cursor:pointer}
+.pb-tag{font-size:10px;color:#bfe8cf;background:rgba(255,255,255,.12);border-radius:99px;padding:2px 7px}
+.fb-duo{display:flex;gap:9px;margin-bottom:9px}
+.fb-cell{flex:1;border-radius:12px;padding:10px 6px;border:2px solid}
+.fb-cell.good{border-color:#3f9c63;background:rgba(63,156,99,.13);color:#2e7a4d}
+.fb-cell.bad{border-color:#e9524a;background:rgba(233,82,74,.11);color:#b23a33}
+.fb-cell .fb-num{font-size:30px;font-weight:900;line-height:1.1}
+.fb-cell .fb-lbl{font-size:11px;font-weight:800;margin-top:2px}
+.fb-stat{font-size:12px;color:#5a3f2c;line-height:1.7;margin:3px 0}
+.fb-stat b{color:#2e7a4d;font-size:14px}
+.fb-stat.sm{font-size:10.5px;color:#6a4a2c}
+.fb-box{background:rgba(122,90,168,.08);border:1px dashed #a88cc9;border-radius:9px;padding:8px 10px;margin-top:8px;text-align:left}
+.fb-item{font-size:11px;line-height:1.65;color:#5a3f7a;padding:2px 0}
+.fb-more{font-size:10px;color:#8a7a9a;margin-top:4px}
+.rv-exp{color:var(--gold);font-weight:900}
+/* ===== A+B：班规与骨干名册 ===== */
+.rule-entry{color:#7a5aa8;border-color:#c9b3d8;background:rgba(122,90,168,.1)}
+.rule-badge{font-size:10.5px;color:#5a3f7a;background:rgba(122,90,168,.1);border:1px dashed #a88cc9;border-radius:8px;padding:6px 9px;margin:2px 0;text-align:center}
+.rule-card{border-color:#a88cc9}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:6px}
+.rule-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:2px solid #a97b4f;border-radius:10px;background:#fff3da;padding:8px 9px;cursor:pointer;color:var(--ink);text-align:left}
+.rule-btn:active{transform:scale(.98)}
+.rule-btn .rb-ico{font-size:16px}
+.rule-btn .rb-name{font-size:12px;font-weight:800}
+.rule-btn .rb-tag{font-size:9.5px;color:#b23a33;font-weight:700}
+.lead-card{border-color:#c99a3d}
+.lead-row{display:flex;gap:6px;flex-wrap:wrap}
+.lead-btn{flex:1;min-width:66px;border:2px solid #a97b4f;border-radius:10px;background:#fff3da;padding:6px 4px;cursor:pointer;color:var(--ink);text-align:center;display:flex;flex-direction:column;gap:1px}
+.lead-btn.on{background:linear-gradient(180deg,#ffe08a,#f0b74e);border-color:#7a4a2c}
+.lead-btn b{font-size:12px}.lead-btn span{font-size:9px;color:#8a5a2c}
+.lead-btn small{font-size:9px;color:var(--muted)}
+.lead-note{font-size:10.5px;color:#6a4a2c;margin-top:7px;line-height:1.6}
+.warn-banner{background:rgba(233,82,74,.14);border:2px solid var(--red);border-radius:11px;padding:8px 10px;margin:6px 0;text-align:center;color:#b23a33;font-size:12px;font-weight:900;animation:pulseWarn 1.2s ease-in-out infinite}
+.student-focus{display:flex;align-items:center;gap:12px;background:#fff3da;border:2px solid #a97b4f;border-radius:14px;padding:10px 12px;margin:12px 0}
+.student-focus svg{width:72px;height:72px;flex:0 0 72px}
+.student-focus .sf-name{font-size:16px;font-weight:900;color:#5a3f2c}
+.student-focus .sf-kind{font-size:11px;color:var(--muted);margin-top:3px}
+.student-focus .sf-tag{display:inline-block;margin-top:6px;font-size:10px;font-weight:800;color:#2e7a4d;background:rgba(63,156,99,.12);border-radius:99px;padding:3px 8px}
+.main-cta{display:block;width:100%;border:0;border-radius:16px;padding:17px;font-size:21px;font-weight:900;letter-spacing:2px;color:#3a271c;cursor:pointer;background:linear-gradient(180deg,#ffd45e,#e08b2c);box-shadow:0 5px 0 #8a4a1c,0 12px 26px rgba(224,139,44,.35);margin:6px 0 4px}
+.main-cta:active{transform:translateY(3px);box-shadow:0 2px 0 #8a4a1c}
+.main-cta.done{background:linear-gradient(180deg,#bfe6c8,#6fbf88);box-shadow:0 5px 0 #3f7a52}
+.step-tip{font-size:11px;color:#6a4a2c;text-align:center;line-height:1.7;margin:8px 2px 2px}
+.step-tip b{color:#b23a33}
+.advance-link{display:block;width:100%;text-align:center;font-size:12px;font-weight:800;color:#7a5aa8;background:rgba(122,90,168,.08);border:1px dashed #a88cc9;border-radius:11px;padding:10px;margin-top:8px;cursor:pointer}
+.advance-link:active{transform:scale(.99)}
+.fold-detail{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}
+.fold-detail>.card{box-shadow:none}
+.milestone{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:800;padding:8px 10px;border-radius:10px;margin:6px 0}
+.milestone.lock{background:rgba(58,39,28,.06);color:var(--muted);border:1px dashed var(--line)}
+.milestone.live{background:rgba(255,201,60,.16);color:#8a5a1c;border:1px solid var(--gold)}
+.milestone .mi{font-size:15px}
+.mode-switch{display:flex;gap:6px;justify-content:center;margin:8px 0}
+.mode-switch button{border:1px solid rgba(255,230,173,.4);background:rgba(255,255,255,.06);color:#ffe6ad;border-radius:99px;font-size:11px;padding:5px 12px;cursor:pointer}
+.mode-switch button.on{background:var(--gold);color:#3a271c;border-color:var(--gold);font-weight:900}
+.tip-bubble{background:linear-gradient(180deg,#fff3d6,#f2dfb4);border:2px solid #c99a3d;border-radius:11px;padding:8px 12px;margin-bottom:10px;font-size:11px;line-height:1.7;color:#5a3f2c;text-align:center;cursor:pointer}
+.tip-bubble b{color:#b23a33}
+.tip-bubble span{color:#2e7a4d;font-weight:900}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="topbar">
+    <div class="brand">🌊 量潮课堂 · 氛围局</div>
+    <div class="audio"><button class="abtn" id="btnMusic">音乐：开</button><button class="abtn" id="btnSfx">音效：开</button></div>
+  </div>
+  <div id="app"></div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="mask" id="mask"><div class="modal" id="modal"></div></div>
+<script>
+(function(){
+'use strict';
+
+/* ==================== 常量 ==================== */
+var KEY='ltclass_atmosphere_v4';
+/* ==================== 学员卡 ==================== */
+function art(c1,c2,eye){
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="学员卡">'+
+  '<ellipse cx="60" cy="109" rx="33" ry="6" fill="#3a271c" opacity=".13"/>'+
+  '<circle cx="60" cy="60" r="54" fill="'+c2+'" stroke="#3a271c" stroke-opacity=".2" stroke-width="3"/>'+
+  '<circle cx="60" cy="60" r="49" fill="none" stroke="'+c1+'" stroke-width="2" stroke-dasharray="3 6"/>'+
+  '<path d="M32 52 Q32 24 60 24 Q88 24 88 52 L88 60 Q60 70 32 60 Z" fill="'+c1+'" stroke="#3a271c" stroke-width="3"/>'+
+  '<ellipse cx="48" cy="59" rx="7" ry="8.4" fill="#fffaf0" stroke="#3a271c" stroke-width="2.6"/>'+
+  '<circle cx="49" cy="60" r="4.3" fill="#3a271c"/><circle cx="46.4" cy="56.4" r="2" fill="#fff"/><circle cx="51" cy="62.6" r="1" fill="#fff" opacity=".8"/>'+
+  '<ellipse cx="72" cy="59" rx="7" ry="8.4" fill="#fffaf0" stroke="#3a271c" stroke-width="2.6"/>'+
+  '<circle cx="73" cy="60" r="4.3" fill="#3a271c"/><circle cx="70.4" cy="56.4" r="2" fill="#fff"/><circle cx="75" cy="62.6" r="1" fill="#fff" opacity=".8"/>'+
+  '<path d="M54 72 Q60 80 66 72" fill="none" stroke="#3a271c" stroke-width="2.8" stroke-linecap="round"/>'+
+  '<ellipse cx="41" cy="68" rx="6" ry="3.6" fill="#e9524a" opacity=".4"/><ellipse cx="79" cy="68" rx="6" ry="3.6" fill="#e9524a" opacity=".4"/>'+
+  '<ellipse cx="42" cy="32" rx="23" ry="9" fill="#fff" opacity=".22"/>'+eye+'</svg>';
+}
+function mascotArt(o){return art(o.c1,o.c2,o.eye||'');}
+var MASCOT_SETS=[
+  {theme:'第一批',students:[
+    {name:'阿灶',kind:'第一个交成品的人',dot:'灶',sign:'冷启动 · 第一盏火',words:'第一周你连门槛都不敢设高。现在你会先看群、再分配精力——班热了，氛围就算支起来了。',c1:'#ff8b3d',c2:'#fff0c9'},
+    {name:'阿灯',kind:'会等别人的人',dot:'灯',sign:'冷启动 · 认灯的人',words:'消息最杂的那周你没跟着跑。新人认的不是公告，是"还有人在等他"。',c1:'#e9524a',c2:'#ffe9d2'},
+    {name:'阿满',kind:'把节奏撑起来的人',dot:'满',sign:'冷启动 · 节奏',words:'那一周你没猛进人，先把老人稳住。没人空手回去——这条班往后记得你的节奏。',c1:'#e8a53c',c2:'#fff2cf'}
+  ]},
+  {theme:'五行',students:[
+    {name:'小木',kind:'扶着新人的人',dot:'木',sign:'氛围 · 会带人的',words:'他自己早交完了，却留下来把提示词讲给第二个人听。氛围就是从这种人开始的。',c1:'#3f9c63',c2:'#e6f5e4'},
+    {name:'小水',kind:'不催不弃的人',dot:'水',sign:'氛围 · 稳节奏',words:'连续几周他都在。新人看见熟悉的头像还在点评区，就敢把自己的成品发出来。',c1:'#42a7c9',c2:'#e4f4fa'},
+    {name:'小火',kind:'先交再拉人的人',dot:'火',sign:'氛围 · 发起人',words:'他先交，再拉三个人交。一个人带起一条线，这条线就是节奏。',c1:'#e86a3c',c2:'#fff0e2'}
+  ]},
+  {theme:'天气',students:[
+    {name:'晴晴',kind:'看人下门槛的人',dot:'晴',sign:'氛围 · 会设门槛',words:'她知道什么时候该严、什么时候该松。门槛不是数字，是对人的判断。',c1:'#f0b93c',c2:'#fff6d8'},
+    {name:'雨滴',kind:'认真核对的人',dot:'雨',sign:'氛围 · 不许编',words:'查不到的她写查不到。就因为有这种人，班里的成品才经得起逐条核对。',c1:'#5b86b8',c2:'#e8f0fa'},
+    {name:'小风',kind:'把消息带来的人',dot:'风',sign:'氛围 · 街坊',words:'她说的常有假，但你学会了反着看。消息不是答案，是线索。',c1:'#8bb9a8',c2:'#edf6f1'}
+  ]},
+  {theme:'带人',students:[
+    {name:'串串',kind:'带出一排人的人',dot:'串',sign:'规模化 · 会带人',words:'他不光自己交，还把旁边三个人的成品都过了一遍。规模化靠的就是这种人。',c1:'#c9803f',c2:'#fff0d4'},
+    {name:'毛肚',kind:'人少了也不断更的人',dot:'肚',sign:'规模化 · 稳得住',words:'人少了她也不断更。规模化最怕的不是热闹散场，是留下的那几个还愿意往前走。',c1:'#a6604a',c2:'#f7e7dc'},
+    {name:'灯笼',kind:'替你说话的人',dot:'灯',sign:'规模化 · 内推',words:'你帮她内推了。她说"是这班教会我怎么把东西做完"。这句话比招生文案值钱。',c1:'#e9524a',c2:'#ffe9d2'}
+  ]},
+  {theme:'长期',students:[
+    {name:'阿猫',kind:'蹲在点评区的人',dot:'猫',sign:'长期 · 夜猫子',words:'凌晨还在改成品。你不用催他，你只要别让点评区冷掉。',c1:'#7a5aa8',c2:'#efe7fa'},
+    {name:'阿狗',kind:'数过人头的人',dot:'狗',sign:'长期 · 老学员',words:'他报的数有偏差，但越到后面越准——因为他真的数过人头。',c1:'#b98a5a',c2:'#f5e9d8'},
+    {name:'阿雀',kind:'把门推开的人',dot:'雀',sign:'长期 · 转介绍',words:'他把朋友带进来了。新人一进门就看见有人在交成品，不用你解释氛围是什么。',c1:'#4f9e8c',c2:'#e4f4ef'}
+  ]},
+  {theme:'珍宝',students:[
+    {name:'金锅',kind:'把产出变成项目的人',dot:'金',sign:'长期 · 被真实使用',words:'"你做的东西真被用了"——这句话比任何激励都管用。',c1:'#e8a53c',c2:'#fff2cf'},
+    {name:'夜珠',kind:'攒下一届的人',dot:'珠',sign:'长期 · 飞轮',words:'她留下的成品成了下一届的样板。氛围不是活动，是可以被继承的东西。',c1:'#c9a2d6',c2:'#f4eafa'},
+    {name:'传灯',kind:'一直在的人',dot:'传',sign:'长期 · 传',words:'第几周目了她都还在。你已经不是在开一门课，是在养一条会自己往前走的街。',c1:'#ffc93c',c2:'#fff6de'}
+  ]}
+];
+MASCOT_SETS.forEach(function(set){set.students.forEach(function(o){o.art=mascotArt(o);});});
+function mascotId(cycle,stage){return (Math.max(1,cycle||1)-1)*3+stage;}
+function mascotById(id){var total=MASCOT_SETS.length*3;var i=((id%total)+total)%total;var set=MASCOT_SETS[Math.floor(i/3)];return set.students[i%3];}
+
+var TITLES=[
+  {name:'氛围大师',icon:'👑',desc:'期末节奏 ≥85 且优质学员 ≥18',test:function(s){return s.rhythm>=85&&s.elders>=18;}},
+  {name:'带人高手',icon:'🤝',desc:'单局带人周数 ≥8',test:function(s){return s.mentorWeeks>=8;}},
+  {name:'满班彩',icon:'🎆',desc:'交作业率 ≥80% 的周 ≥3',test:function(s){return s.highRateWeeks>=3;}},
+  {name:'没走一个',icon:'🫶',desc:'期末留存 100%',test:function(s){return s.retention>=0.999;}},
+  {name:'账是正的',icon:'🧾',desc:'经费始终为正',test:function(s){return s.cash>=0;}},
+  {name:'稳得住',icon:'🛡️',desc:'节奏连续 5 周 ≥70',test:function(s){return s.steadyWeeks>=5;}},
+  {name:'靠管理',icon:'🎯',desc:'实得交作业率与预期差 ≤5 个点的周 ≥4',test:function(s){return s.onTargetWeeks>=4;}},
+  {name:'全靠手感',icon:'🎲',desc:'带人周数 ≤2',test:function(s){return s.mentorWeeks<=2;}}
+];
+var COLLECTION=[
+  {icon:'🌶️',name:'红油底料',cond:'完成 1 局',ok:function(s){return s.plays>=1;}},
+  {icon:'🍢',name:'秘制毛肚',cond:'单局交作业率 ≥75%',ok:function(s){return s.maxRate>=0.75;}},
+  {icon:'🏮',name:'霓虹灯牌',cond:'单局节奏 ≥85',ok:function(s){return s.maxRhythm>=85;}},
+  {icon:'🥢',name:'老客图鉴',cond:'完成 3 局',ok:function(s){return s.plays>=3;}},
+  {icon:'🦀',name:'招牌项目',cond:'真实项目 ≥5',ok:function(s){return s.maxProjects>=5;}},
+  {icon:'🛺',name:'加长摊车',cond:'完成 5 局',ok:function(s){return s.plays>=5;}},
+  {icon:'👑',name:'氛围大师匾',cond:'拿下【氛围大师】',ok:function(s){return s.titles.indexOf('氛围大师')>=0;}},
+  {icon:'🎆',name:'结业烟花',cond:'拿下 3 个称号',ok:function(s){return s.titles.length>=3;}},
+  {icon:'🧧',name:'开张红包',cond:'单局口碑 ≥90',ok:function(s){return s.maxRep>=90;}},
+  {icon:'🔥',name:'回头客灯',cond:'连续通关 3 段',ok:function(s){return (s.streak||0)>=3;}}
+];
+
+/* ==================== 存档 / 工具 ==================== */
+function defaultSave(){return {cycle:1,stage:0,clears:0,mascots:[],best:0,bestTitle:'',todayKey:'',todayBest:0,
+  bestRhythm:0,coins:0,streak:0,totalWeeks:0,unlocked:[],titles:[],doneTutorial:false,stageBest:[0,0,0],
+  plays:0,maxRate:0,maxRhythm:0,maxProjects:0,maxRep:0};}
+var SAVE=defaultSave();
+function loadSave(){try{var raw=localStorage.getItem(KEY);if(raw){var d=JSON.parse(raw);SAVE=Object.assign(defaultSave(),d);
+  ['mascots','unlocked','titles','stageBest'].forEach(function(k){if(!Array.isArray(SAVE[k]))SAVE[k]=defaultSave()[k];});}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(SAVE));}catch(e){}}
+function normalizeSave(){SAVE.cycle=Math.max(1,SAVE.cycle);SAVE.stage=Math.max(0,Math.min(STAGES.length-1,SAVE.stage));
+  var ceil=Math.max(1,(SAVE.clears||0)+1);if(SAVE.cycle>ceil){SAVE.cycle=ceil;SAVE.stage=0;}
+  for(var c=1;c<=SAVE.cycle;c++)for(var st=0;st<(c<SAVE.cycle?STAGES.length:SAVE.stage+1);st++){var id=mascotId(c,st);if(SAVE.mascots.indexOf(id)<0)SAVE.mascots.push(id);}
+  SAVE.mascots.sort(function(a,b){return a-b;});save();}
+function $(id){return document.getElementById(id);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function hashStr(s){var h=1779033703^s.length;for(var i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return h>>>0;}
+function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+function yuan(n){return '¥'+Math.round(n).toLocaleString('zh-CN');}
+function pct(p){return Math.round(p*100)+'%';}
+
+/* ==================== 音效 ==================== */
+var actx=null,musicOn=true,sfxOn=true;
+function tone(freq,dur,type,vol,delay){if(!sfxOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  var o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime+(delay||0);
+  o.type=type||'sine';o.frequency.value=freq;g.gain.setValueAtTime(vol||.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur);}catch(e){}}
+function holler(f0,f1,dur,vol,delay){if(!sfxOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  var o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime+(delay||0);
+  o.type='sawtooth';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  g.gain.setValueAtTime(vol||.03,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  var f=actx.createBiquadFilter();f.type='lowpass';f.frequency.value=1200;o.connect(f);f.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur);}catch(e){}}
+var SFX={tick:function(){tone(680,.05,'square',.035);},open:function(){tone(170,.3,'triangle',.09);holler(392,784,.34,.034);},
+  good:function(){tone(660,.14,'sine',.05);tone(880,.16,'sine',.04,.08);},bad:function(){tone(180,.2,'sawtooth',.05);},
+  jackpot:function(){[523,659,784,1046].forEach(function(f,i){tone(f,.24,'triangle',.05,i*.09);});},
+  combo:function(n){tone(440+n*60,.12,'square',.04);},fanfare:function(){[392,523,659,784].forEach(function(f,i){tone(f,.4,'triangle',.05,i*.13);});}};
+var musicTimer=null;
+function musicTick(){if(!musicOn||!actx)return;var notes=[262,330,392,330,294,349,440,349];var f=notes[Math.floor(Math.random()*notes.length)];tone(f,.9,'sine',.012);}
+function startMusic(){if(musicTimer)clearInterval(musicTimer);musicTimer=setInterval(musicTick,2600);}
+
+/* ==================== 游戏状态 ==================== */
+var G=null,screen='home',revealToken=0,guestTimer=null;
+var DAYS=7,ENERGY=4,TH_MIN=2,TH_MAX=6,DEF_TH=3,FIXED=4000;
+
+/* 决策变量：三类动作，交作业率是它们系统性决定的 */
+var ACTS=[
+ {id:'screen', grp:'供给', icon:'🔍', name:'评审筛人', cost:25, en:1, tag:'优质率 +10%',
+  desc:'慢性子，回报滞后'},
+ {id:'enroll', grp:'供给', icon:'📣', name:'开放免费通道', cost:0, en:1, tag:'新人 +9 · 耐心 -4',
+  desc:'来人快，也更磨人'},
+ {id:'mentor', grp:'杠杆', icon:'🤝', name:'老人带新人', cost:15, en:1, tag:'交作业率 +28%',
+  desc:'新人是被老人带走的'},
+ {id:'show',   grp:'杠杆', icon:'🎬', name:'成品展 / 周复盘', cost:20, en:1, tag:'节奏 +5 · 耐心 +2',
+  desc:'被看见，才有人跟'},
+ {id:'project',grp:'维护', icon:'🧩', name:'给老人真实项目', cost:40, en:2, tag:'疲惫 -12 · 耐心 +3',
+  desc:'产出被用掉，才留人'},
+ {id:'rest',   grp:'维护', icon:'☕', name:'暂停招生休整', cost:0, en:1, tag:'疲惫 -10 · 耐心 +4',
+  desc:'让老人喘口气'}
+];
+var DIAG=[
+ {id:'count', icon:'查', name:'查名单', cost:10, desc:'看清本周会来多少新人——避免过载'},
+ {id:'motive',icon:'问', name:'问动机', cost:10, desc:'这批新人吃哪套门槛，设对有加成'},
+ {id:'load',  icon:'看', name:'看负荷', cost:8,  desc:'看清老人疲惫与过载，谁快掉了'}
+];
+var STAGES=[
+ {name:'冷启动班',icon:'巷',desc:'先攒出几个能带人的老学员，慢慢熬', enter:{rhythm:32,elders:3}},
+ {name:'氛围班',  icon:'班',desc:'节奏稳了，飞轮才转得起来',        enter:{rhythm:48,elders:6}},
+ {name:'规模化',  icon:'规',desc:'氛围能自己转起来了',              enter:{rhythm:58,elders:10}}
+];
+/* 每周诱惑：妥协短期得利，但磨掉耐心、伤氛围 */
+var TEMPTATIONS=[
+ {id:'paid', icon:'💰', title:'有人愿意付费插班', shortcut:'收下 · 现金 +¥8,000',
+  desc:'收下立刻有钱，但同班不同标准，氛围就被开了口子。',
+  pat:-12, rep:-3, cash:8000, over:2},
+ {id:'record', icon:'📼', title:'有人劝你改成录播课', shortcut:'改录播 · 耐心 +8',
+  desc:'省人力，但新人接不上老人的节奏。',
+  pat:8, rate:-0.12},
+ {id:'viral', icon:'📣', title:'渠道说能一次拉 30 人', shortcut:'拉进来 · 新人 +15',
+  desc:'班立刻热闹，但过载会压垮交作业率。',
+  pat:-8, nb:15, overExtra:6},
+ {id:'lower', icon:'🔓', title:'有人劝你把门槛降到最低', shortcut:'降门槛 · 人人可进',
+  desc:'谁都能进，但没人真动手。',
+  pat:-6, rate:-0.10},
+ {id:'cert', icon:'🎓', title:'合作方要你发"结业保证"', shortcut:'答应 · 口碑 +6 现金 +¥3,000',
+  desc:'短期好看，但这是你一直避开的那条线。',
+  pat:-10, rep:6, cash:3000}
+];
+
+/* ===== A+B：班规（制度资产）与骨干名册（组织能力） ===== */
+var RULES=[
+ {id:'must', icon:'📜', name:'成品必交制', tag:'优质 +8% · 新人 -2', desc:'进班先交成品——人少一点，留下的是真动手的。'},
+ {id:'same', icon:'⚖️', name:'同标准制',   tag:'妥协伤害减半',     desc:'不插班、不开特例。口子一开就收不回。'},
+ {id:'account', icon:'🤝', name:'带人责任制', tag:'带人 +15% · 疲惫 +3', desc:'带人计入骨干考核，他们更上心，也更累。'},
+ {id:'output', icon:'🧩', name:'真实产出制', tag:'流失 -1 · 现金 +¥2,000', desc:'成品真被用掉，人才留得住，班也养得活。'}
+];
+function ruleOn(id){return G&&G.rule===id;}
+function ruleById(id){return RULES.filter(function(r){return r.id===id;})[0];}
+var ELDER_NAMES=['阿灶','阿灯','阿满','小木','小水','小火','晴晴','雨滴','小风','串串','毛肚','灯笼','阿猫','阿狗','阿雀','金锅','夜珠','传灯'];
+var ELDER_STYLES=[{n:'严',care:6,loyal:-4},{n:'稳',care:0,loyal:4},{n:'松',care:-5,loyal:5}];
+function makeElder(i,rnd){
+  var st=ELDER_STYLES[Math.floor(rnd()*3)];
+  return {id:'e'+i,name:ELDER_NAMES[i%ELDER_NAMES.length],
+    care:clamp(Math.round(94+rnd()*14)+st.care,80,118),
+    loyal:clamp(Math.round(60+rnd()*22)+st.loyal,35,96),
+    style:st.n,drift:0};
+}
+function initRoster(n,seed){
+  var rnd=mulberry32(hashStr(seed+'|roster')),arr=[];
+  for(var i=0;i<n;i++)arr.push(makeElder(i,rnd));
+  return arr;
+}
+function syncElders(){G.elders=G.roster.length;}
+function elderScore(e){return (e.care/100)*(0.9+e.loyal*0.002)*(1-Math.min(0.3,e.drift));}
+function bestElder(){return G.roster.slice().sort(function(a,b){return elderScore(b)-elderScore(a);})[0]||null;}
+function getLead(){var e=G.roster.filter(function(x){return x.id===G.leadId;})[0];return e||bestElder();}
+function mentorMul(){var e=getLead();return e?clamp(elderScore(e),0.75,1.25):1;}
+
+function goalFor(stage,c){return Math.max(0,(STAGES[stage].enter.rhythm||0))+(stage*10);}
+
+/* 本周预测：交作业率是管理函数；耐心与飞轮一并可见 */
+function forecast(sel,th){
+  sel=sel||[];
+  var s=G,d=s.week[s.day],tmp=TEMPTATIONS[d.temptIdx],accepted=s.tempt==='accept',lead=getLead();
+  var nb=Math.max(1, 3+Math.floor(s.rep/30)
+    +(sel.indexOf('enroll')>=0?9:0)+(sel.indexOf('screen')>=0?2:0)
+    -(sel.indexOf('rest')>=0?5:0)-(th-DEF_TH)+(ruleOn('must')?-2:0)
+    +(accepted&&tmp.nb?tmp.nb:0));
+  var cap=Math.max(2,s.elders);
+  var over=Math.max(0,nb-cap)+(accepted&&tmp.overExtra?(ruleOn('same')?tmp.overExtra/2:tmp.overExtra):0);
+  var thFit=(th===d.bestLv?0.05:-0.035*Math.abs(th-d.bestLv));
+  var parts=[
+    {k:'班级节奏（'+Math.round(s.rhythm)+'）',v:s.rhythm*0.002},
+    {k:'优质率（'+pct(s.quality)+'）',v:s.quality*0.07},
+    {k:'老人带新人 · '+(lead?lead.name:'骨干')+'（决定性）',v:sel.indexOf('mentor')>=0?0.28*mentorMul()*(ruleOn('account')?1.15:1):0},
+    {k:'成品展 / 周复盘',v:sel.indexOf('show')>=0?0.04:0},
+    {k:'门槛设对（Lv'+th+'）',v:thFit},
+    {k:'新人过载（超 '+over+' 人）',v:-Math.min(0.45,over*0.045)},
+    {k:'老人疲惫（'+Math.round(s.fatigue)+'）',v:s.fatigue>60?-0.12:(s.fatigue>40?-0.05:0)},
+    {k:'门槛过高压意愿',v:-(th-DEF_TH)*0.025}
+  ];
+  if(accepted&&tmp.rate)parts.push({k:'妥协的代价（'+tmp.title+'）',v:ruleOn('same')?tmp.rate/2:tmp.rate});
+  var p=0.26;parts.forEach(function(x){p+=x.v;});p=clamp(p,0.10,0.94);
+  var hasMentor=sel.indexOf('mentor')>=0;
+  var capped=!hasMentor&&p>0.48;
+  if(capped){p=0.48;parts.push({k:'⚠ 没人带，交作业率封顶',v:0,cap:true});}
+  return {nb:nb,cap:cap,over:over,parts:parts,p:p,expected:Math.round(nb*p),capped:capped};
+}
+/* 耐心预测：经营本身磨人；猛放人、过载、走捷径扣；看到回报、做维护回 */
+function forecastPatience(sel,th){
+  var s=G,d=s.week[s.day],tmp=TEMPTATIONS[d.temptIdx],accepted=s.tempt==='accept';
+  var pat=-6;
+  sel.forEach(function(id){
+    if(id==='enroll')pat-=4;
+    if(id==='show')pat+=2;
+    if(id==='project')pat+=3;
+    if(id==='rest')pat+=4;
+  });
+  if(th>d.bestLv+1)pat-=3;
+  var f=forecast(sel,th);
+  if(f.over>0)pat-=f.over*2;
+  if(s.fatigue>60)pat-=3;
+  if(accepted&&tmp.pat)pat+=(ruleOn('same')&&tmp.pat<0?tmp.pat/2:tmp.pat);
+  return pat;
+}
+function rhythmMul(){return G.flywheel?1.6:0.55;}
+function signed(n){return (n>=0?'+':'')+n;}
+
+function makeWeek(seed,day){
+  var rnd=mulberry32(hashStr(seed+'|'+day+'|'+(G?G.cycle:SAVE.cycle)));
+  var rumorTrue=rnd()<0.7;
+  var rumorUp=(rumorTrue?1:-1)*(rnd()<.6?1:-1)>0;
+  var lines=['听说这周大家都卷起来了','群里说这周没人想动手','有人说门槛一高人就散了','老学员说这周会爆满'];
+  var bestLv=TH_MIN+Math.floor(rnd()*(TH_MAX-TH_MIN+1));
+  var elderLoad=Math.floor(rnd()*20);
+  return {rumorTrue:rumorTrue,rumorUp:rumorUp,rumorLine:lines[Math.floor(rnd()*lines.length)],
+    bestLv:bestLv,elderLoad:elderLoad,temptIdx:Math.floor(rnd()*TEMPTATIONS.length)};
+}
+function newGame(mode,seed){
+  var stage=clamp(SAVE.stage||0,0,STAGES.length-1),cyc=SAVE.cycle||1;
+  seed=seed||(mode==='daily'?todayKey():todayKey()+'-'+Math.floor(Math.random()*100000));
+  var init=STAGES[stage].enter;
+  G={mode:mode||'solo',seed:seed,stage:stage,cycle:cyc,day:0,
+     rhythm:Math.max(init.rhythm+6,36),elders:Math.max(init.elders+1,4),
+     fatigue:18,rep:58,cash:120000,quality:0.45,projects:0,
+     patience:100,patDelta:0,flywheel:false,tempt:null,
+     lowWeeks:0,sel:[],th:DEF_TH,diag:[],diagCash:30,
+     tutStep:0,showDetail:false,showPred:false,showDiag:false,
+     predict:0,lastActual:0,fail:null,mentorWeeks:0,highRateWeeks:0,
+     steadyWeeks:0,onTargetWeeks:0,retention:1,totalAdded:0,totalLost:0,
+     results:[],history:[],won:false,shareCode:'',
+     rule:null,showRules:false,leadId:null};
+  var elderN=Math.max(init.elders+1,4);
+  G.roster=initRoster(elderN,seed);syncElders();
+  G.week=[];for(var i=0;i<DAYS;i++)G.week.push(makeWeek(seed,i));
+  G.bestLv=G.week[0].bestLv;
+  G.predict=forecast(G.sel,G.th).p;
+  if(mode==='invite')G.shareCode=btoa(unescape(encodeURIComponent(JSON.stringify({s:seed}))));
+  SAVE.plays++;
+  setScreen('week');save();
+}
+
+/* ==================== 场景与页面 ==================== */
+function sceneHtml(open){
+  var steam=open?'<g class="steam"><path d="M150 44 q6 -10 0 -20" stroke="#fff" opacity=".5" fill="none"/><path d="M164 46 q6 -12 0 -22" stroke="#fff" opacity=".4" fill="none"/></g>':'';
+  return '<div class="scene"><svg viewBox="0 0 320 120" xmlns="http://www.w3.org/2000/svg">'+
+  '<rect width="320" height="120" fill="#2a1a3e"/>'+
+  '<g opacity=".5"><circle cx="40" cy="24" r="1.6" fill="#ffc93c"/><circle cx="92" cy="16" r="1" fill="#fff"/><circle cx="270" cy="28" r="1.4" fill="#ffc93c"/><circle cx="210" cy="12" r="1" fill="#fff"/></g>'+
+  '<rect x="0" y="92" width="320" height="28" fill="#1b1229"/>'+
+  '<rect x="18" y="34" width="284" height="60" rx="6" fill="#3a2547" stroke="#7a5aa8" stroke-width="2"/>'+
+  '<rect x="28" y="44" width="264" height="40" rx="4" fill="#241634"/>'+
+  '<g fill="#ffe6ad" opacity=".85"><circle cx="52" cy="64" r="6"/><circle cx="86" cy="64" r="6"/><circle cx="120" cy="64" r="6"/><circle cx="200" cy="64" r="6"/><circle cx="234" cy="64" r="6"/><circle cx="268" cy="64" r="6"/></g>'+
+  '<g stroke="#e8a53c" stroke-width="2"><line x1="160" y1="34" x2="160" y2="94"/></g>'+
+  '<text x="160" y="22" text-anchor="middle" fill="#ffc93c" font-size="11" font-weight="700">'+(open?'开讲中 · 逐个交成品':'点评区 · 等第一个人交成品')+'</text>'+
+  '<g class="lantern l1"><ellipse cx="0" cy="0" rx="10" ry="14" fill="#e9524a"/><text x="0" y="4" text-anchor="middle" fill="#ffe6ad" font-size="9">灯</text></g>'+
+  '<g class="lantern l2"><ellipse cx="0" cy="0" rx="10" ry="14" fill="#e8a53c"/><text x="0" y="4" text-anchor="middle" fill="#3a271c" font-size="9">班</text></g>'+
+  '</svg>'+steam+'</div>';
+}
+function bar(v,color){return '<div class="mini-bar"><i style="width:'+clamp(v,0,100)+'%;background:'+color+'"></i></div>';}
+function patColor(p){return p<30?'#e9524a':p<60?'#e8a53c':'#3f9c63';}
+function patienceCard(){
+  var p=G.patience;
+  return '<div class="card" style="padding:9px 12px;border-color:#c99a3d">'+
+    '<div class="plan-title" style="margin-bottom:4px">⏳ 经营者耐心 <span class="muted">'+Math.round(p)+' / 100 · 这局真正的代价</span></div>'+
+    '<div class="mini-bar" style="height:9px"><i style="width:'+clamp(p,0,100)+'%;background:'+patColor(p)+'"></i></div>'+
+    '<div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.6">'+
+    '猛放人、过载、走捷径磨耐心；看到回报、做维护、熬到自运转会回一点。归零就输。</div></div>';
+}
+function temptationCard(){
+  var d=G.week[G.day],tmp=TEMPTATIONS[d.temptIdx],acc=G.tempt==='accept',ref=G.tempt==='refuse';
+  var h='<div class="card" style="border-color:#c99a3d;background:linear-gradient(180deg,#fff6e4,#f3ddaf)">'+
+    '<div class="plan-title">⚖️ 本周的诱惑 <span class="muted">忍住，还是妥协？</span></div>'+
+    '<div style="font-size:12px;line-height:1.7;margin:4px 0 8px"><b>'+tmp.icon+' '+tmp.title+'</b><br>'+tmp.desc+'</div>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">'+
+    '<button class="btn" style="flex:1;min-width:120px;font-size:11px'+(ref?';background:linear-gradient(180deg,#bfe6c8,#7bc48f)':'')+'" data-act="tempt" data-v="refuse">忍住 · 按节奏来</button>'+
+    '<button class="btn" style="flex:1;min-width:120px;font-size:11px'+(acc?';background:linear-gradient(180deg,#ffc4b8,#e88a78)':'')+'" data-act="tempt" data-v="accept">'+tmp.shortcut+'</button>'+
+    '</div>';
+  if(acc)h+='<div class="clue-result" style="margin-top:8px;border-left-color:#c95a4a;background:rgba(233,82,74,.08)">妥协了：'+tmpEffect(tmp)+'；但耐心 '+signed(ruleOn('same')&&tmp.pat<0?tmp.pat/2:tmp.pat)+'、'+(tmp.rate?'交作业率被压 '+Math.round((ruleOn('same')?tmp.rate/2:tmp.rate)*100)+'%':'氛围被切开')+(ruleOn('same')?'（班规减半）':'')+'。</div>';
+  if(ref)h+='<div class="clue-result" style="margin-top:8px">忍住了。短期少赚，但氛围没被切开，耐心还在。</div>';
+  return h+'</div>';
+}
+function tmpEffect(tmp){
+  var a=[];
+  if(tmp.cash)a.push('现金 +¥'+tmp.cash.toLocaleString('zh-CN'));
+  if(tmp.rep)a.push('口碑 +'+tmp.rep);
+  if(tmp.nb)a.push('新人 +'+tmp.nb);
+  if(tmp.pat>0)a.push('耐心 +'+tmp.pat);
+  return a.join('、')||'省了事';
+}
+function renderHome(){
+  var cfg=STAGES[SAVE.stage]||STAGES[0],cyc=SAVE.cycle;
+  var prog=clamp(Math.round((SAVE.bestRhythm||0)),0,100);
+  var simple=SAVE.simple!==false;
+  return '<div class="home-head"><div class="sign">氛围局</div>'+
+    '<div class="subtitle">一步一步，把班带活</div></div>'+
+    '<div class="focus" style="padding:12px">'+
+      '<div class="focus-goal">氛围到 <b>'+(55+SAVE.stage*10)+'</b> 就稳了<br><span class="lose">耐心归零就输</span></div>'+
+      '<div class="step-tip">新人靠骨干学员的节奏带起来 · 靠耐心熬出来</div>'+
+    '</div>'+
+    '<button class="main-cta" data-act="start" data-mode="solo">'+(cyc>1?'开讲 · 第 '+cyc+' 轮':'开 讲 ！')+'</button>'+
+    (simple?'':
+      sceneHtml(false)+
+      '<div class="stage-badge"><span class="st-icon">'+cfg.icon+'</span><span class="st-top">第 '+cyc+' 轮 · '+cfg.name+'</span><br>'+
+      cfg.desc+'　最好氛围 <b>'+prog+'</b> · 收下学员 <b>'+(SAVE.mascots||[]).length+'</b> / 18</div>'+
+      '<div class="home-btns">'+
+      '<button class="btn" data-act="start" data-mode="daily">📅<br>今日挑战</button>'+
+      '<button class="btn" data-act="start" data-mode="invite">📤<br>邀好友</button>'+
+      '<button class="btn" data-act="start" data-mode="rival">👴<br>隔壁班</button>'+
+      '<button class="btn" data-act="collection">🏮<br>我的班</button></div>'+
+      '<div class="record">通关 '+SAVE.clears+' 段 · 连续 '+SAVE.streak+' 段 · 氛围币 '+yuan(SAVE.coins||0)+'</div>')+
+    '<div class="mode-switch">'+
+      '<button class="'+(simple?'on':'')+'" data-act="mode" data-v="simple">极简</button>'+
+      '<button class="'+(simple?'':'on')+'" data-act="mode" data-v="detail">详细</button></div>'+
+    (simple?'<button class="advance-link" data-act="showmore">更多玩法 ▸</button>':'');
+}
+/* 当前学员：优先一位待培养的新人，培养后指向骨干学员 */
+function focusStudent(){
+  var ids=[G.stage*2+1,G.stage*2+2,G.stage*2+3];
+  var id=ids[G.day%ids.length];
+  return mascotById(id);
+}
+function renderWeek(){
+  var d=G.week[G.day],cfg=STAGES[G.stage],f=forecast(G.sel,G.th),pp=forecastPatience(G.sel,G.th);
+  var simple=SAVE.simple!==false;
+  var target=55+G.stage*10;
+
+  /* ============ 极简首屏 ============ */
+  if(simple){
+    /* 展开详细后：只显示详细面板，隐藏极简首屏，避免内容重复 */
+    if(G.showDetail){
+      return '<button class="advance-link" data-act="fold">收起详细安排 ▴</button>'+
+        detailPanels(f,pp,d,cfg,usedInfo());
+    }
+    var hasMentor=G.sel.indexOf('mentor')>=0;
+    var stu=focusStudent();
+    var pat=G.patience,low=pat<30;
+    var h='';
+
+    /* 引导气泡：做一步教一步，一次只说一件 */
+    var step=G.tutStep||0;
+    var tips=[
+      '<b>第 1 步</b>：先看下面两条——绿色是氛围，到 '+target+' 就稳了；橙色是耐心，归零就输。',
+      '<b>第 2 步</b>：先只培养这 1 个学员。点下面的大按钮，让他交出第一个成品。',
+      '<b>第 3 步</b>：带出骨干学员后，展开详细安排，让他去带下一个，班就滚起来了。'
+    ];
+    if(step<3)h+='<div class="tip-bubble" data-act="tip" data-v="'+(step+1)+'">'+tips[step]+'　<span>知道了 ▸</span></div>';
+
+    h+='<div class="focus">'+
+      '<div class="focus-head">第 '+(G.day+1)+' / '+DAYS+' 周 · '+cfg.name+'</div>'+
+      '<div class="focus-goal">氛围到 <b>'+target+'</b> 就稳了<br><span class="lose">耐心归零就输</span></div>'+
+      /* 氛围 meter */
+      '<div class="meter"><div class="meter-top"><span class="lab">◉ 氛围值</span>'+
+        '<span class="mv" style="color:#2e7a4d">'+Math.round(G.rhythm)+'<small> / '+target+'</small></span></div>'+
+        '<div class="meter-bar"><i style="width:'+clamp(G.rhythm,0,100)+'%;background:linear-gradient(90deg,#7fd6a0,#3f9c63)"></i></div></div>'+
+      /* 耐心 meter */
+      '<div class="meter pat'+(low?' warn':'')+'"><div class="meter-top"><span class="lab">◷ 经营者耐心</span>'+
+        '<span class="mv">'+Math.round(pat)+'<small> / 100</small></span></div>'+
+        '<div class="meter-bar"><i style="width:'+clamp(pat,0,100)+'%;background:'+patColor(pat)+'"></i></div></div>'+
+      (low?'<div class="warn-banner">⚠ 耐心快耗尽！归零就输，别再猛放人、别走捷径</div>':'')+
+      '</div>';
+
+    /* 学员焦点卡：默认只显示 1 个 */
+    h+='<div class="student-focus">'+stu.art+
+      '<div><div class="sf-name">'+stu.name+'</div>'+
+      '<div class="sf-kind">'+stu.kind+'</div>'+
+      '<div class="sf-tag">'+(hasMentor?'✓ 已交成品 · 可带新人了':'待培养 · 交出第 1 个成品')+'</div></div></div>';
+
+    /* 唯一主按钮 */
+    h+= hasMentor
+      ? '<button class="main-cta done" data-act="nextstep">让他带新人 · 继续 ▸</button>'
+      : '<button class="main-cta" data-act="cultivate">培养当前学员</button>';
+
+    h+='<div class="step-tip">'+(hasMentor?'骨干学员就位。展开详细，让他带新人，班就滚起来了。':'先只带这一个人——新人靠骨干的节奏带起来。')+'</div>';
+
+    /* 里程碑：氛围接近目标时才出现的解锁式提示 */
+    if(G.rhythm>=target-18||G.flywheel){
+      h+='<div class="milestone '+(G.flywheel?'live':'lock')+'"><span class="mi">'+(G.flywheel?'🔥':'🔒')+'</span>'+
+        (G.flywheel?'班级已自运转：同样一个动作，现在能撬动更多氛围':'班级自运转：连续带人 '+G.mentorWeeks+'/3 周、氛围 '+Math.round(G.rhythm)+'/'+target+'（快解锁）')+'</div>';
+    }
+
+    h+=ruleCard();
+    /* 详细系统：默认折叠 */
+    h+='<button class="advance-link" data-act="fold">展开详细安排（门槛 / 诊断 / 本周诱惑）▸</button>';
+    return h+'<div class="foot-note">极简：先带一个人、忍住捷径。想深玩就展开详细安排。</div>';
+  }
+
+  /* ============ 详细模式（保留原有全量面板）============ */
+  return detailPanels(f,pp,d,cfg,usedInfo())+
+    '<div class="mode-switch"><button data-act="mode" data-v="simple">极简</button><button class="on" data-act="mode" data-v="detail">详细</button></div>';
+}
+function usedInfo(){
+  var used=0,usedCash=0;G.sel.forEach(function(k){var a=ACTS.filter(function(x){return x.id===k;})[0];if(a){used+=a.en;usedCash+=a.cost;}});
+  return {used:used,usedCash:usedCash};
+}
+function ruleCard(){
+  if(G.rule)return '<div class="rule-badge">📜 已立「'+ruleById(G.rule).name+'」 · '+ruleById(G.rule).tag+' · 每周生效</div>';
+  if(G.day!==0)return '';
+  if(!G.showRules)return '<button class="advance-link rule-entry" data-act="foldrules">📜 开局立一条班规（管整局）▸</button>';
+  var btns=RULES.map(function(r){
+    return '<button class="rule-btn" data-act="rule" data-id="'+r.id+'" title="'+r.desc+'">'+
+      '<span class="rb-ico">'+r.icon+'</span><span class="rb-name">'+r.name+'</span><span class="rb-tag">'+r.tag+'</span></button>';
+  }).join('');
+  return '<div class="card rule-card"><div class="plan-title">📜 立一条班规 <span class="muted">开局定一次，管整局</span></div>'+
+    '<div class="rule-grid">'+btns+'</div>'+
+    '<button class="advance-link" data-act="rule" data-id="none">先不立，边走边看 ▸</button></div>';
+}
+function leadCard(){
+  if(G.sel.indexOf('mentor')<0||!G.roster.length)return '';
+  var cur=getLead();if(!cur)return '';
+  var top=G.roster.slice().sort(function(a,b){return elderScore(b)-elderScore(a);}).slice(0,4);
+  var btns=top.map(function(e){
+    var on=e.id===cur.id;
+    return '<button class="lead-btn'+(on?' on':'')+'" data-act="lead" data-id="'+e.id+'">'+
+      '<b>'+e.name+'</b><span>'+e.style+'</span><small>质'+e.care+' 忠'+e.loyal+(e.drift>=0.5?' ⚠':'')+'</small></button>';
+  }).join('');
+  return '<div class="card lead-card"><div class="plan-title">🤝 谁去带新人 <span class="muted">质量×忠诚＝带人效果</span></div>'+
+    '<div class="lead-row">'+btns+'</div>'+
+    '<div class="lead-note">当前 <b>'+cur.name+'</b> · 效果 ×'+mentorMul().toFixed(2)+
+    (G.sel.indexOf('project')>=0?' · 本周会成长':'')+(cur.drift>=0.5?' · ⚠ 带歪风险高':'')+'</div></div>';
+}
+function detailPanels(f,pp,d,cfg,ui){
+  var used=ui.used,usedCash=ui.usedCash;
+  var hud='<div class="hud"><span class="day">第 '+(G.day+1)+'/'+DAYS+' 周</span>'+
+    '<span>氛围 <b>'+Math.round(G.rhythm)+'</b></span><span>耐心 <b style="color:'+patColor(G.patience)+'">'+Math.round(G.patience)+'</b></span>'+
+    '<span>骨干 '+G.elders+'</span><span>经费 '+yuan(G.cash)+'</span></div>';
+
+  var stats='<div class="card"><div class="plan-title">班级现状 <span class="muted">'+cfg.name+' · 氛围目标 '+(55+G.stage*10)+'</span></div>'+
+    '<div class="stat-grid">'+
+    '<div class="stat"><div class="k">氛围值</div><div class="v g">'+Math.round(G.rhythm)+'</div>'+bar(G.rhythm,'#3f9c63')+'</div>'+
+    '<div class="stat"><div class="k">骨干学员</div><div class="v">'+G.elders+'</div>'+bar(G.elders*5,'#e8a53c')+'</div>'+
+    '<div class="stat"><div class="k">本周新人</div><div class="v">'+f.nb+'</div>'+bar(f.nb*4,'#7a5aa8')+'</div>'+
+    '<div class="stat"><div class="k">学员疲惫</div><div class="v">'+(G.fatigue>40?'#':'')+Math.round(G.fatigue)+'</div>'+bar(G.fatigue,'#e9524a')+'</div>'+
+    '<div class="stat"><div class="k">优质率</div><div class="v">'+pct(G.quality)+'</div>'+bar(G.quality*100,'#42a7c9')+'</div>'+
+    '<div class="stat"><div class="k">自运转</div><div class="v" style="font-size:13px">'+(G.flywheel?'已转':'未转')+'</div>'+bar(G.flywheel?100:(G.mentorWeeks/3*100),'#ffc93c')+'</div>'+
+    '</div></div>';
+
+  var diagDone=G.diag.map(function(id){var c=DIAG.filter(function(x){return x.id===id;})[0];
+    var txt='';
+    if(id==='count')txt='本周会来 <b>'+f.nb+'</b> 位新人；一个骨干约带一位，承载 <b>'+f.cap+'</b> 人'+(f.over>0?'，<b style="color:#b23a33">过载 '+f.over+' 人</b>':'，带得过来')+'。';
+    if(id==='motive')txt='这批新人'+(d.bestLv>=5?'不挑活，门槛可以抬高到 <b>Lv'+d.bestLv+'</b>':'斤斤计较，门槛压在 <b>Lv'+d.bestLv+'</b> 才留得住人');
+    if(id==='load')txt='骨干疲惫 <b>'+Math.round(G.fatigue)+'</b>'+(G.fatigue>40?'，已经有人扛不住了':'，还能撑')+'；真实项目 <b>'+G.projects+'</b> 个。';
+    return '<div class="clue-result"><b>'+c.name+'</b>：'+txt+'</div>';
+  }).join('');
+  var clues=DIAG.map(function(c){var done=G.diag.indexOf(c.id)>=0,lock=done||G.diagCash<c.cost;
+    return '<button class="clue-btn'+(done?' done':'')+'" data-act="diag" data-id="'+c.id+'"'+(lock?' disabled':'')+'>'+
+      '<span class="cb-ico">'+c.icon+'</span><span class="cb-name">'+c.name+'</span><span class="cb-cost">'+(done?'已看':yuan(c.cost))+'</span></button>';
+  }).join('');
+  var diagCard='<div class="card"><div class="plan-title">班级诊断 <span class="muted">可选 · 经费 '+yuan(G.diagCash)+'</span></div>'+
+    (G.showDiag?'<div class="clue-row">'+clues+'</div>'+diagDone:'')+
+    '<button class="advance-link" data-act="folddiag">'+(G.showDiag?'收起诊断 ▴':'看情报（查名单 / 问动机 / 看负荷）▸')+'</button></div>';
+
+  var thRow='';for(var p=TH_MIN;p<=TH_MAX;p++)thRow+='<button class="price-btn'+(p===G.th?' on':'')+'" data-act="th" data-v="'+p+'">Lv'+p+'</button>';
+  var acts=ACTS.map(function(a){
+    var on=G.sel.indexOf(a.id)>=0;
+    var disable=!on&&(used+a.en>ENERGY||G.cash<a.cost);
+    return '<div class="act-card'+(on?' sel':'')+(disable?' off':'')+'" data-act="act" data-id="'+a.id+'" title="'+a.desc+'">'+
+      '<span class="ac-cost">'+(a.cost?yuan(a.cost):'免费')+'</span>'+
+      '<div class="ac-top"><span class="ac-ico">'+a.icon+'</span>'+a.name+'<span class="ac-grp">'+a.grp+'</span></div>'+
+      '<div class="ac-tag">'+a.tag+'</div></div>';
+  }).join('');
+  var plan='<div class="card"><div class="plan-title">本周安排 <span class="muted">精力 <span class="energy-dots">'+[0,1,2,3].map(function(i){return '<i class="'+(i<ENERGY-used?'on':'')+'"></i>';}).join('')+'</span> 剩 '+(ENERGY-used)+' 点 · 花 '+yuan(usedCash)+'</span></div>'+
+    '<div class="plan-hint" style="text-align:left;margin-bottom:6px">任务门槛（高门槛人少但质高，设对有加成）</div>'+
+    '<div class="price-row">'+thRow+'</div>'+
+    '<div class="act-grid">'+acts+'</div></div>';
+
+  var rows=f.parts.map(function(x){
+    if(x.cap)return '<div class="pred-row minus"><span>'+x.k+'</span><b>上限 48%</b></div>';
+    return '<div class="pred-row '+(x.v>=0?'plus':'minus')+'"><span>'+x.k+'</span><b>'+(x.v>=0?'+':'')+(x.v*100).toFixed(1)+'%</b></div>';
+  }).join('');
+  var pred='<div class="pred-box"><div class="pb-head"><span>按这套安排，预计交作业率</span><span class="pb-tag">可预测</span></div>'+
+    '<div class="pb-nums"><div class="pb-num"><div class="pb-big">'+pct(f.p)+'</div><div class="pb-lbl">预计交作业率</div></div>'+
+    '<div class="pb-num"><div class="pb-big '+(pp>=0?'up':'down')+'">'+signed(pp)+'</div><div class="pb-lbl">本周耐心</div></div></div>'+
+    '<div class="pb-sub">'+f.nb+' 位新人里，预计约 <b>'+f.expected+'</b> 人交出成品 · '+(G.flywheel?'自运转 ×1.6':'自运转未启动 ×0.55')+'</div>'+
+    '<button class="pb-more" data-act="foldpred">'+(G.showPred?'收起明细 ▴':'看算法明细 ▸')+'</button>'+
+    (G.showPred?rows+'<div class="pred-total"><span>基础 30% + 管理动作</span><span>'+pct(f.p)+'</span></div>':'')+'</div>';
+
+  return '<div class="fold-detail">'+hud+ruleCard()+stats+patienceCard()+temptationCard()+diagCard+plan+leadCard()+pred+
+    '<button class="btn-big" data-act="open">开 讲 ！</button>'+
+    '<div class="foot-note">开讲有随机，但期望由你的安排决定。结算看预期，成本是耐心。</div></div>';
+}
+function renderReveal(){
+  return '<div class="hud"><span class="day">第 '+(G.day+1)+'/'+DAYS+' 周</span><span>氛围 '+Math.round(G.rhythm)+'</span><span>耐心 '+Math.round(G.patience)+'</span><span>老人 '+G.elders+'</span></div>'+
+    '<div class="reveal-title" id="rvTitle">本周开讲…</div>'+sceneHtml(true)+
+    '<div class="reveal-numbers" id="rvNums"></div>'+
+    '<div class="guests" id="guests"></div><div id="rvCard"></div>';
+}
+function runReveal(){
+  var token=++revealToken,f=forecast(G.sel,G.th),d=G.week[G.day];
+  var title=$('rvTitle'),nums=$('rvNums'),card=$('rvCard'),guests=$('guests');
+  var n=clamp(f.nb,1,26),i=0,got=0;
+  title.innerHTML='按 Lv'+G.th+' 门槛，'+f.nb+' 位新人进班…';
+  function step(){
+    if(token!==revealToken||screen!=='reveal')return;
+    if(i<n){
+      var hit=Math.random()<f.p;
+      if(hit)got++;
+      var g=document.createElement('span');g.className='guest '+(hit?'hot':'miss');g.textContent=hit?'✓':'✗';
+      guests.appendChild(g);SFX.tick();i++;guestTimer=setTimeout(step,85);return;
+    }
+    setTimeout(function(){if(token===revealToken&&screen==='reveal')finish(f,got);},320);
+  }
+  setTimeout(step,260);
+}
+
+function finish(f,got){
+  var cfg=STAGES[G.stage],d=G.week[G.day],tmp=TEMPTATIONS[d.temptIdx];
+  var e=f.expected,actual=got,over=f.over,capped=f.capped;
+  var mentor=G.sel.indexOf('mentor')>=0,show=G.sel.indexOf('show')>=0,
+      screenA=G.sel.indexOf('screen')>=0,rest=G.sel.indexOf('rest')>=0,
+      project=G.sel.indexOf('project')>=0;
+  var accepted=G.tempt==='accept';
+
+  var actualRate=f.nb?actual/f.nb:0,gap=Math.abs(actualRate-f.p);
+
+  /* 飞轮：连续带人≥3周 + 节奏≥55 → 启动；之前按 0.55 倍熬，之后按 1.6 倍兑现 */
+  var justFly=false;
+  if(!G.flywheel&&G.mentorWeeks>=3&&G.rhythm>=55){G.flywheel=true;justFly=true;}
+  var mul=rhythmMul();
+
+  var lossRate=G.fatigue>60?0.22:G.fatigue>40?0.13:0.04;
+  var lost=Math.round(G.elders*lossRate);
+  if(ruleOn('output'))lost=Math.max(0,lost-1);
+  /* 流失：先走忠诚度最低的人——想留人，先看谁的心凉了 */
+  for(var li=0;li<lost&&G.roster.length>0;li++){
+    var wi=0;for(var lj=1;lj<G.roster.length;lj++)if(G.roster[lj].loyal<G.roster[wi].loyal)wi=lj;
+    G.roster.splice(wi,1);
+  }
+  var raw=e*0.30+(mentor?3:0)+(show?5:0)-lost*2.5-over*0.9-(G.fatigue>60?4:0);
+  var delta=Math.round(raw*mul);
+  G.rhythm=clamp(G.rhythm+delta,0,100);
+
+  var newElders=(mentor?Math.round(e*G.quality*0.55):Math.round(e*G.quality*0.18));
+  var rnd=mulberry32(hashStr(G.seed+'|new|'+G.day));
+  for(var ni=0;ni<newElders;ni++){
+    var ne=makeElder(G.roster.length+ni+(G.day+1)*100,rnd);
+    if(mentor)ne.care=clamp(ne.care+Math.round(G.quality*8),80,118);
+    if(over>0)ne.loyal=clamp(ne.loyal-over,35,96);
+    G.roster.push(ne);
+  }
+  syncElders();
+  /* 带班长：真实项目让他成长，高疲惫把他带歪 */
+  var lead=getLead(),leadEvent='';
+  if(mentor&&lead){
+    if(project){lead.care=clamp(lead.care+3,80,118);lead.loyal=clamp(lead.loyal+5,35,96);leadEvent='成长';}
+    if(G.fatigue>50){lead.drift=clamp(lead.drift+0.15,0,1);lead.loyal=clamp(lead.loyal-5,35,96);}
+    if(ruleOn('account')&&lead.drift>0)lead.drift=clamp(lead.drift-0.1,0,1);
+    if(lead.drift>=0.8){lead.drift=0.5;leadEvent='带歪';}
+  }
+  if(rest)G.roster.forEach(function(x){x.loyal=clamp(x.loyal+6,35,96);x.drift=clamp(x.drift-0.1,0,1);});
+  if(over>0)G.roster.forEach(function(x){x.loyal=clamp(x.loyal-1,35,96);});
+  if(screenA)G.quality=clamp(G.quality+0.10,0,1);
+  if(ruleOn('must'))G.quality=clamp(G.quality+0.08,0,1);
+  if(G.th===d.bestLv)G.quality=clamp(G.quality+0.05,0,1);
+  G.fatigue=clamp(G.fatigue+2+(mentor?8:0)+(ruleOn('account')?3:0)-(project?12:0)-(rest?10:0),0,100);
+  if(project)G.projects++;
+  G.rep=clamp(G.rep+(mentor?3.5:0)+(show?1.5:0)+(accepted&&tmp.rep?tmp.rep:0)-over*0.8-lost*0.6-(f.p<0.4?2:0),0,100);
+
+  /* 耐心：经营本身每周磨 6 点；动作 / 妥协 / 看到回报 / 班级自运转 增减 */
+  var pp=forecastPatience(G.sel,G.th);
+  if(delta>0)pp+=2;
+  if(justFly)pp+=15;
+  G.patience=clamp(G.patience+pp,0,100);G.patDelta=pp;
+
+  var spend=0;G.sel.forEach(function(id){var a=ACTS.filter(function(x){return x.id===id;})[0];if(a)spend+=a.cost;});
+  G.cash+=(accepted&&tmp.cash?tmp.cash:0)+G.projects*5000+(ruleOn('output')?2000:0)-FIXED-spend;
+  G.totalAdded=(G.totalAdded||0)+f.nb;G.totalLost=(G.totalLost||0)+lost;
+  G.retention=clamp(1-(G.totalLost/Math.max(1,G.totalAdded)),0,1);
+  if(mentor)G.mentorWeeks++;
+  if(f.p>=0.75)G.highRateWeeks++;
+  if(G.rhythm>=70)G.steadyWeeks++;
+  if(gap<=0.05)G.onTargetWeeks++;
+  if(G.rhythm<30)G.lowWeeks=(G.lowWeeks||0)+1;else G.lowWeeks=0;
+
+  var fail=null;
+  if(G.patience<=0)fail='你熬不住了。氛围是一步一步、一个人一个人带出来的——你推倒重来，班散了。';
+  else if(G.rhythm<30&&G.lowWeeks>=3)fail='节奏连续 3 周低于 30，群里只剩通知，集体学习散了。';
+  else if(G.elders<2)fail='已经没人能带新人了——优质免费学员是氛围的载体。';
+  else if(G.cash<0)fail='经费见底，班级停摆。';
+  G.fail=fail;
+
+  G.predict=f.p;G.lastActual=actualRate;
+  G.results.push({day:G.day,nb:f.nb,expected:e,actual:actual,p:f.p,delta:delta,th:G.th,lead:lead?lead.name:'',rule:G.rule||''});
+  G.history.push({w:G.day+1,rhythm:G.rhythm,rep:G.rep,p:f.p});
+
+  var diag=[];
+  if(justFly)diag.push('🔥 班级自运转起来了：连续 3 周带人、节奏站上 55。同样一个动作，现在能撬动 '+mul+' 倍节奏——前面那些周的熬，值了。');
+  else if(!G.flywheel)diag.push('自运转还没起：连续带人 '+G.mentorWeeks+'/3 周、节奏 '+Math.round(G.rhythm)+'/55。没起来前节奏只按 '+mul+' 倍兑现，这是最熬人的平台期。');
+  if(over>0)diag.push('新人 '+f.nb+'、老人 '+G.elders+' → 过载 '+over+'，交作业率被压低。');
+  if(capped)diag.push('没人带，交作业率被封在 48%——新人接不上老人的节奏。');
+  else if(!mentor)diag.push('这周没安排老人带人，少了 28 个点——新人是被老人带走的，不是被公告。');
+  if(accepted)diag.push('你接了「'+tmp.title+'」：短期得利，但耐心 '+signed(tmp.pat)+'、'+(tmp.rate?'交作业率被压 '+Math.round(tmp.rate*100)+'%':'氛围被切开')+'。');
+  if(leadEvent==='成长'&&lead)diag.push('🤝 '+lead.name+' 在真实项目里成长了（质量 '+lead.care+'）：用对人、给对活，带人越来越省力。');
+  if(leadEvent==='带歪'&&lead)diag.push('⚠ '+lead.name+' 疲惫到带歪新人（忠诚 '+lead.loyal+'）：换个人带，或给真实项目 / 休整。');
+  if(G.fatigue>40)diag.push('老人疲惫 '+Math.round(G.fatigue)+'，流失 '+lost+' 人；给真实项目或休整能留人。');
+  if(G.rule)diag.push('📜 班规「'+ruleById(G.rule).name+'」生效中：'+ruleById(G.rule).tag+'——规矩立下，这局每周都算数。');
+  diag.push('⏳ 耐心 '+signed(pp)+'（'+Math.round(G.patience)+'/100）——这是这局真正的成本。');
+  if(!diag.filter(function(x){return x.indexOf('带人')>=0;}).length&&!mentor)diag.push('再提醒一次：没带人，班级就永远自运转不起来。');
+
+  var good=delta>=0;
+  var nums=$('rvNums'),card=$('rvCard'),shown=clamp(f.nb,1,26);
+  nums.innerHTML='<span class="rv-exp">预计 '+pct(f.p)+'</span> · 实得 '+pct(actualRate)+'（'+actual+'/'+shown+' 人交）'+
+    '<div style="font-size:11px;color:#e8b98a">看可复现的期望，别被个体波动带偏</div>';
+  var keyDiag=diag.slice(0,4).map(function(x){
+    var ico=(x.indexOf('耐心')>=0?'⏳':(x.indexOf('过载')>=0||x.indexOf('封顶')>=0||x.indexOf('没安排')>=0||x.indexOf('没带人')>=0)?'⚠':'•');
+    return '<div class="fb-item">'+ico+' '+x.replace(/^🔥\s*/,'')+'</div>';
+  }).join('');
+  card.innerHTML='<div class="result-card">'+
+    '<div class="fb-duo"><div class="fb-cell '+(good?'good':'bad')+'"><div class="fb-num">'+(good?'+':'')+delta+'</div><div class="fb-lbl">◉ 氛围变化</div></div>'+
+    '<div class="fb-cell '+(pp>=0?'good':'bad')+'"><div class="fb-num">'+signed(pp)+'</div><div class="fb-lbl">⏳ 耐心变化</div></div></div>'+
+    '<div class="fb-stat">氛围 <b>'+Math.round(G.rhythm)+'</b> · 骨干 <b>'+G.elders+'</b>（新转 '+newElders+' / 流失 '+lost+'） · 耐心 <b>'+Math.round(G.patience)+'</b></div>'+
+    '<div class="fb-stat sm">'+(G.flywheel?'🔥 班级已自运转 ×1.6':'自运转 '+G.mentorWeeks+'/3 周 · 未启动')+' · '+(gap<=0.05?'实绩贴着预期，判断稳':'实绩偏离 '+pct(gap)+'（个体随机）')+(lead?' · 带班长 '+lead.name:'')+(G.rule?' · 📜'+ruleById(G.rule).name:'')+'</div>'+
+    '<div class="fb-box">'+keyDiag+(diag.length>4?'<div class="fb-more">另有 '+(diag.length-4)+' 条原因，下周继续调整</div>':'')+'</div>'+
+    (fail?'<div class="medal" style="color:#b23a33">'+fail+'</div>':'')+
+    '<button class="btn" style="margin-top:10px" data-act="nextWeek">'+(G.day>=DAYS-1?'看本周结局 →':'下一周 →')+'</button></div>';
+  if(justFly){SFX.fanfare();confetti(18);toast('🔥 班级自运转起来了！');}
+  else if(fail)SFX.bad();
+  else if(good)SFX.good();else SFX.tick();
+  save();
+}
+
+/* ==================== 结局：氛围值是唯一核心 ==================== */
+function stageGoals(){
+  var target=55+G.stage*10;
+  return [
+    {k:'氛围值（节奏）≥ '+target,core:true,ok:G.rhythm>=target,v:Math.round(G.rhythm)},
+    {k:'班级自运转（连续3周带人 + 氛围≥55）',core:true,ok:G.flywheel,v:G.flywheel?'已转':'未转'},
+    {k:'耐心没耗尽',core:true,ok:G.patience>0&&!G.fail,v:Math.round(G.patience)},
+    {k:'骨干学员（氛围的承载者）',ref:true,v:G.elders+' 人'},
+    {k:'交作业率（氛围的输入）',ref:true,v:pct(G.predict)},
+    {k:'口碑',ref:true,v:Math.round(G.rep)}
+  ];
+}
+function renderStageEnd(){
+  var cfg=STAGES[G.stage],goals=stageGoals();
+  var coreOk=goals.filter(function(x){return x.core&&x.ok;}).length;
+  var win=!G.fail&&coreOk===3;
+  var html='<div class="card"><div class="plan-title">'+cfg.name+' · 本周结局</div>'+
+    '<div class="line" style="font-size:11px;color:#6a4a2c;margin-bottom:6px">过关：氛围达标 + 班级自运转 + 耐心没耗尽（后三项仅供参考）。</div>';
+  goals.forEach(function(g){html+='<div class="goal-row '+(g.ok?'ok':'')+'"><span>'+(g.core?(g.ok?'✓ ':'✗ '):'· ')+g.k+(g.ref?'（参考）':'')+'</span><b>'+g.v+'</b></div>';});
+  html+='<div class="line" style="font-size:11px;color:#6a4a2c;margin-top:8px">核心达标 '+coreOk+' / 3 · 三项全达标即过段</div>';
+  if(G.fail)html+='<div class="medal" style="color:#b23a33">'+G.fail+'</div>';
+  if(win){
+    var id=mascotId(G.cycle,G.stage),o=mascotById(id);
+    html+='<div style="margin:10px 0;text-align:center">'+o.art+'</div><div class="line" style="text-align:center">收下学员 <b>'+o.name+'</b>（'+o.kind+'）——「'+o.words+'」</div>';
+    if(G.stage===STAGES.length-1)html+='<div class="medal">🎊 三段全通！进入下一周目，学员永久留班</div>';
+  }
+  html+='<button class="btn" style="width:100%;margin-top:10px" data-act="again">再来一局</button> <button class="btn" style="width:100%;margin-top:6px" data-act="home">回班里</button></div>';
+  return html;
+}
+function renderCollection(){
+  var cards=MASCOT_SETS.reduce(function(arr,set){return arr.concat(set.students);},[]);
+  var html='<div class="home-head"><div class="sign">我的班</div><div class="pill">收下的学员永久留班 · 跨周目继承</div></div>'+
+    '<div class="card"><div class="plan-title">镇班学员 <span class="muted">已收下 '+(SAVE.mascots||[]).length+' / '+cards.length+'</span></div><div class="mascot-grid">';
+  for(var i=0;i<cards.length;i++){
+    var got=(SAVE.mascots||[]).indexOf(i)>=0;
+    var set=MASCOT_SETS[Math.floor(i/3)],o=cards[i];
+    html+='<div class="mascot '+(got?'':'locked')+'">'+o.art+'<div class="nm">'+(got?o.name:'？？？')+'</div><div class="kd">'+(got?set.theme+' · '+o.kind:'未收下')+'</div></div>';
+  }
+  html+='</div></div>';
+  html+='<div class="card"><div class="plan-title">班次道具 <span class="muted">'+(SAVE.unlocked||[]).length+' / '+COLLECTION.length+'</span></div><div class="medal-row">';
+  COLLECTION.forEach(function(c,i){var got=(SAVE.unlocked||[]).indexOf(i)>=0;html+='<span class="medal" style="'+(got?'':'opacity:.35')+'">'+c.icon+' '+(got?c.name:'未解锁')+'</span>';});
+  html+='</div></div>';
+  html+='<div class="card"><div class="plan-title">称号</div><div class="medal-row">'+((SAVE.titles||[]).length?SAVE.titles.map(function(t){return '<span class="medal">'+t+'</span>';}).join(''):'<span class="muted">还没拿下称号</span>')+'</div></div>';
+  html+='<button class="btn" style="width:100%" data-act="home">回班里</button>';
+  return html;
+}
+
+/* ==================== 渲染 / 交互 ==================== */
+function render(keepScroll){
+  var app=$('app'),html,y=window.scrollY;
+  if(screen==='home')html=renderHome();
+  else if(screen==='week')html=renderWeek();
+  else if(screen==='reveal')html=renderReveal();
+  else if(screen==='result')html=renderStageEnd();
+  else if(screen==='collection')html=renderCollection();
+  else html=renderHome();
+  app.innerHTML=html;
+  if(screen==='reveal')runReveal();
+  window.scrollTo(0,keepScroll===false?0:y);
+}
+function setScreen(s){if(s!=='reveal')revealToken++;screen=s;render(false);}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function confetti(n){
+  var box=document.createElement('div');box.className='confetti';document.body.appendChild(box);
+  var colors=['#ffc93c','#e9524a','#3f9c63','#7a5aa8','#fff0cf'];
+  for(var i=0;i<n;i++){var d=document.createElement('i');d.className='cf';d.style.left=(Math.random()*100)+'vw';
+    d.style.background=colors[Math.floor(Math.random()*colors.length)];d.style.animationDuration=(1.4+Math.random()*1.4)+'s';
+    d.style.animationDelay=(Math.random()*.5)+'s';box.appendChild(d);}
+  setTimeout(function(){box.remove();},3400);
+}
+function commitAchievements(){
+  var s={plays:SAVE.plays,rhythm:G.rhythm,elders:G.elders,cash:G.cash,retention:G.retention,
+    mentorWeeks:Math.max(SAVE.mentorWeeks||0,G.mentorWeeks),highRateWeeks:G.highRateWeeks,
+    steadyWeeks:G.steadyWeeks,onTargetWeeks:G.onTargetWeeks,
+    maxRate:Math.max(SAVE.maxRate||0,G.predict),maxRhythm:Math.max(SAVE.maxRhythm||0,G.rhythm),
+    maxProjects:Math.max(SAVE.maxProjects||0,G.projects),maxRep:Math.max(SAVE.maxRep||0,G.rep),
+    titles:SAVE.titles||[],streak:SAVE.streak||0};
+  TITLES.forEach(function(t){if(s.titles.indexOf(t.name)<0&&t.test(s)){s.titles.push(t.name);toast('拿下称号【'+t.name+'】');SFX.fanfare();}});
+  SAVE.titles=s.titles;
+  COLLECTION.forEach(function(c,i){if((SAVE.unlocked||[]).indexOf(i)<0&&c.ok(s)){SAVE.unlocked.push(i);toast('解锁道具 '+c.icon+' '+c.name);}});
+  SAVE.maxRate=s.maxRate;SAVE.maxRhythm=s.maxRhythm;SAVE.maxProjects=s.maxProjects;SAVE.maxRep=s.maxRep;SAVE.mentorWeeks=s.mentorWeeks;
+  save();
+}
+function finishGame(){
+  var goals=stageGoals(),coreOk=goals.filter(function(x){return x.core&&x.ok;}).length;
+  var win=!G.fail&&coreOk===3;
+  var score=Math.round(G.rhythm*8+(G.flywheel?400:0)+G.patience*2+G.elders*18+G.predict*400+G.retention*500+G.rep*3);
+  if(score>(SAVE.best||0)){SAVE.best=score;SAVE.bestTitle=win?'过关':'未过关';}
+  SAVE.bestRhythm=Math.max(SAVE.bestRhythm||0,Math.round(G.rhythm));
+  if(G.mode==='daily'&&todayKey()===SAVE.todayKey)SAVE.todayBest=Math.max(SAVE.todayBest||0,score);
+  else if(G.mode==='daily'){SAVE.todayKey=todayKey();SAVE.todayBest=score;}
+  SAVE.totalWeeks=(SAVE.totalWeeks||0)+DAYS;
+  SAVE.coins=(SAVE.coins||0)+Math.max(0,Math.floor(G.predict*100));
+  SAVE.stageBest[G.stage]=Math.max(SAVE.stageBest[G.stage]||0,Math.round(G.rhythm));
+  if(win){
+    SAVE.streak=(SAVE.streak||0)+1;
+    SAVE.clears=Math.max(SAVE.clears||0,G.cycle);
+    var id=mascotId(G.cycle,G.stage);
+    if((SAVE.mascots||[]).indexOf(id)<0){SAVE.mascots.push(id);SAVE.mascots.sort(function(a,b){return a-b;});}
+    if(G.stage<STAGES.length-1){SAVE.stage=G.stage+1;}
+    else{SAVE.cycle=G.cycle+1;SAVE.stage=0;}
+    confetti(38);SFX.fanfare();
+  }else{SAVE.streak=0;if(G.stage>0)SAVE.stage=G.stage-1;}
+  if(G.day===0)SAVE.doneTutorial=true;
+  commitAchievements();save();setScreen('result');
+}
+function openModal(html){$('modal').innerHTML=html;$('mask').classList.add('show');}
+function closeModal(){$('mask').classList.remove('show');}
+
+$('app').addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]');if(!t)return;
+  var act=t.getAttribute('data-act');
+  if(act==='start'){SFX.open();newGame(t.getAttribute('data-mode'));return;}
+  if(act==='mode'){
+    SAVE.simple=t.getAttribute('data-v')==='simple';save();SFX.tick();render();return;
+  }
+  if(act==='showmore'){SAVE.simple=false;save();SFX.tick();render();return;}
+  if(act==='tip'){G.tutStep=+t.getAttribute('data-v');SFX.tick();render();return;}
+  if(act==='fold'){G.showDetail=!G.showDetail;SFX.tick();render(false);return;}
+  if(act==='foldpred'){G.showPred=!G.showPred;SFX.tick();render();return;}
+  if(act==='folddiag'){G.showDiag=!G.showDiag;SFX.tick();render();return;}
+  if(act==='foldrules'){G.showRules=!G.showRules;SFX.tick();render();return;}
+  if(act==='rule'){G.rule=t.getAttribute('data-id')==='none'?null:t.getAttribute('data-id');G.showRules=false;SFX.tick();toast(G.rule?'📜 班规已立，这局每周都算数':'先不立规矩，边走边看');render();return;}
+  if(act==='lead'){G.leadId=t.getAttribute('data-id');SFX.tick();render();return;}
+  if(act==='foldpred'){G.showPred=!G.showPred;SFX.tick();render();return;}
+  if(act==='folddiag'){G.showDiag=!G.showDiag;SFX.tick();render();return;}
+  if(act==='foldrules'){G.showRules=!G.showRules;SFX.tick();render();return;}
+  if(act==='rule'){G.rule=t.getAttribute('data-id')==='none'?null:t.getAttribute('data-id');G.showRules=false;SFX.tick();toast(G.rule?'📜 班规已立，这局每周都算数':'先不立规矩，边走边看');render();return;}
+  if(act==='lead'){G.leadId=t.getAttribute('data-id');SFX.tick();render();return;}
+  if(act==='cultivate'){
+    /* 一键培养当前学员 = 选中"老人带新人"这个决定性动作 */
+    if(G.sel.indexOf('mentor')<0){
+      var a=ACTS.filter(function(x){return x.id==='mentor';})[0];
+      var u=0;G.sel.forEach(function(k){var z=ACTS.filter(function(x){return x.id===k;})[0];if(z)u+=z.en;});
+      if(u+a.en<=ENERGY&&G.cash>=a.cost)G.sel.push('mentor');
+    }
+    G.tutStep=2;SAVE.doneTutorial=true;save();SFX.good();toast('✓ 骨干学员就位，他会带新人了');render();return;
+  }
+  if(act==='nextstep'){G.showDetail=true;G.tutStep=3;SFX.tick();render(false);return;}
+  if(act==='home'){SFX.tick();setScreen('home');return;}
+  if(act==='collection'){SFX.tick();setScreen('collection');return;}
+  if(act==='again'){SFX.open();newGame(G.mode);return;}
+  if(act==='tempt'){G.tempt=t.getAttribute('data-v');SFX.tick();render();return;}
+  if(act==='diag'){
+    var c=DIAG.filter(function(x){return x.id===t.getAttribute('data-id');})[0];
+    if(!c||G.diag.indexOf(c.id)>=0||G.diagCash<c.cost)return;
+    G.diagCash-=c.cost;G.diag.push(c.id);SFX.tick();render();return;
+  }
+  if(act==='th'){G.th=+t.getAttribute('data-v');SFX.tick();render();return;}
+  if(act==='act'){
+    var id=t.getAttribute('data-id'),on=G.sel.indexOf(id)>=0;
+    if(on){G.sel.splice(G.sel.indexOf(id),1);}
+    else{
+      var a=ACTS.filter(function(x){return x.id===id;})[0];
+      var used=0;G.sel.forEach(function(k){var z=ACTS.filter(function(x){return x.id===k;})[0];if(z)used+=z.en;});
+      if(used+a.en>ENERGY||G.cash<a.cost)return;
+      G.sel.push(id);
+    }
+    SFX.tick();render();return;
+  }
+  if(act==='open'){var f=forecast(G.sel,G.th);G.predict=f.p;SFX.open();setScreen('reveal');return;}
+  if(act==='nextWeek'){
+    if(G.fail||G.day>=DAYS-1){finishGame();return;}
+    G.day++;G.diag=[];G.diagCash+=10;G.sel=[];G.tempt=null;G.leadId=null;
+    G.week[G.day].bestLv=G.bestLv=G.week[G.day].bestLv;
+    SFX.tick();setScreen('week');return;
+  }
+});
+$('mask').addEventListener('click',function(e){if(e.target===$('mask'))closeModal();});
+$('btnMusic').onclick=function(){musicOn=!musicOn;this.textContent='音乐：'+(musicOn?'开':'关');if(musicOn&&!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();startMusic();}catch(e){}}};
+$('btnSfx').onclick=function(){sfxOn=!sfxOn;this.textContent='音效：'+(sfxOn?'开':'关');if(sfxOn)SFX.tick();};
+
+/* ==================== 启动 ==================== */
+loadSave();normalizeSave();
+try{if(!actx&&musicOn){actx=new (window.AudioContext||window.webkitAudioContext)();startMusic();}}catch(e){}
+render();
+})();
+
+</script>
+</body>
+</html>

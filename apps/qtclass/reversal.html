@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<!-- 抄录自学员原型（群消息移交）：量潮课堂 Lite · 氛围局 / 新人视角（反转关）；原分享链接含账号标识，不录。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#2a1a3e">
+<title>量潮课堂 · 新人视角（反转关）</title>
+<style>
+:root{
+  --ink:#3a271c;--paper:#fff6e4;--paper2:#f6e6c6;--deep:#2a1a3e;--deep2:#1b1229;
+  --gold:#ffc93c;--amber:#e8a53c;--red:#e9524a;--green:#3f9c63;--violet:#7a5aa8;
+  --muted:#8a7a6a;--line:rgba(58,39,28,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+body{
+  background:radial-gradient(1200px 700px at 50% -8%,#3b2754 0%,#22152f 45%,#150d1e 100%);
+  color:var(--ink);overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+  background:radial-gradient(circle at 12% 18%,rgba(255,201,60,.14),transparent 22%),
+             radial-gradient(circle at 88% 12%,rgba(255,201,60,.11),transparent 20%),
+             radial-gradient(circle at 78% 82%,rgba(233,82,74,.07),transparent 24%);
+}
+.phone{max-width:470px;margin:0 auto;padding:14px 12px 34px;position:relative;z-index:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.topbar .brand{color:#ffe6ad;font-size:13px;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.audio{display:flex;gap:6px}
+.abtn{border:1px solid rgba(255,230,173,.32);background:rgba(255,255,255,.06);color:#ffe6ad;border-radius:99px;font-size:11px;padding:5px 9px;cursor:pointer}
+.card{background:linear-gradient(180deg,var(--paper),var(--paper2));border:2px solid #a97b4f;border-radius:14px;padding:12px 13px;margin:10px 0;box-shadow:0 6px 16px rgba(0,0,0,.22)}
+.card h3{margin:0 0 8px;font-size:14px}
+.muted{color:var(--muted);font-weight:400}
+.btn{border:2px solid #7a4a2c;background:linear-gradient(180deg,#ffd98a,#e8a53c);color:#3a271c;border-radius:11px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #7a4a2c;transition:transform .08s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #7a4a2c}
+.btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn-big{display:block;width:100%;margin:12px 0 8px;border:0;border-radius:15px;padding:15px;font-size:19px;font-weight:900;letter-spacing:2px;color:#3a271c;cursor:pointer;background:linear-gradient(180deg,#ffd45e,#e08b2c);box-shadow:0 5px 0 #8a4a1c,0 12px 24px rgba(224,139,44,.3)}
+.btn-big:active{transform:translateY(3px);box-shadow:0 2px 0 #8a4a1c}
+.home-head{text-align:center;color:#ffe6ad;padding:10px 0 6px}
+.home-head .sign{font-size:25px;font-weight:900;letter-spacing:2px;text-shadow:0 3px 0 #7a4a2c,0 6px 14px rgba(0,0,0,.5)}
+.home-head .subtitle{font-size:12px;letter-spacing:3px;color:#e8b98a;margin-top:4px}
+.pill{display:inline-block;margin-top:8px;font-size:11px;background:rgba(255,201,60,.16);border:1px solid rgba(255,201,60,.4);color:#ffe6ad;border-radius:99px;padding:4px 10px}
+.foot-note{text-align:center;font-size:10px;color:#a88f74;line-height:1.8;margin-top:10px}
+.hud{display:flex;gap:8px;justify-content:space-between;align-items:center;background:rgba(20,12,28,.72);border:1px solid rgba(255,201,60,.3);border-radius:11px;padding:8px 10px;color:#ffe6ad;font-size:12px;margin-bottom:9px;flex-wrap:wrap}
+.hud .day{font-weight:900;color:var(--gold)}
+.mini-bar{height:6px;border-radius:99px;background:#e6d3ad;overflow:hidden;margin-top:5px}
+.mini-bar i{display:block;height:100%;border-radius:99px}
+.plan-title{font-size:13px;font-weight:800;margin:4px 0 7px}
+.tag{border-radius:5px;padding:1px 5px;font-size:10px;font-weight:800}
+.tag-up{background:rgba(63,156,99,.18);color:#2e7a4d}.tag-down{background:rgba(233,82,74,.16);color:#b23a33}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(140px);transition:.35s;background:#fff3d6;border:2px solid #7a4a2c;border-radius:12px;padding:10px 16px;font-size:12px;font-weight:700;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:88vw;text-align:center}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.mask{position:fixed;inset:0;background:rgba(12,8,18,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:40;backdrop-filter:blur(3px)}
+.mask.show{display:flex}
+.modal{background:linear-gradient(180deg,#3a2547,#241634);border:2px solid #7a5aa8;border-radius:18px;padding:20px;max-width:430px;width:100%;color:#f3dfc4;text-align:center;max-height:86vh;overflow:auto}
+.modal h2{font-size:21px;color:#ffe6ad;margin:0 0 8px}
+.modal p{font-size:12px;line-height:1.85;color:#e0c8a8;margin:0 0 14px}
+.modal .btn{margin:4px}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.cf{position:absolute;width:8px;height:12px;top:-20px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2}}
+
+/* ===== 反转关专属 ===== */
+.twist-badge{display:inline-block;background:linear-gradient(180deg,#7a5aa8,#5a3f7a);border:1px solid #b79ad6;color:#fff3d6;border-radius:99px;font-size:11px;font-weight:900;letter-spacing:1px;padding:4px 11px;margin-top:9px}
+.intro-quote{background:rgba(255,255,255,.06);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;padding:9px 12px;color:#f3dfc4;font-size:12px;line-height:1.85;margin:12px 0}
+.intro-quote b{color:#ffd45e}
+.quiz-q{font-size:12px;font-weight:800;margin:12px 0 7px;color:#5a3f2c}
+.quiz-opts{display:flex;gap:6px;flex-wrap:wrap}
+.quiz-opt{flex:1;min-width:88px;border:2px solid #a97b4f;border-radius:10px;background:#fff3da;padding:9px 5px;font-size:11px;font-weight:800;cursor:pointer;color:var(--ink);text-align:center}
+.quiz-opt.on{background:linear-gradient(180deg,#ffd45e,#e8a53c);border-color:#7a4a2c}
+.save-hit{background:rgba(63,156,99,.12);border:1px solid #3f9c63;border-radius:11px;padding:10px 12px;margin:10px 0;font-size:11px;line-height:1.8;color:#2e7a4d}
+.save-hit b{color:#1f6b40}
+.save-hit .row{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(63,156,99,.25);padding:2px 0}
+.me-panel{display:flex;gap:12px;background:linear-gradient(180deg,#fff6e4,#f4e2bd);border:2px solid #a97b4f;border-radius:14px;padding:11px 12px;margin:10px 0;align-items:center}
+.me-panel svg{width:76px;height:76px;flex:0 0 76px}
+.me-panel .mn{font-size:16px;font-weight:900;color:#5a3f2c}
+.me-panel .mk{font-size:10px;color:var(--muted);margin-top:2px}
+.stat2{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:9px 0 0}
+.stat2 .s{background:#fff2d6;border:1px solid var(--line);border-radius:9px;padding:7px 4px;text-align:center}
+.stat2 .k{font-size:10px;color:var(--muted)}
+.stat2 .v{font-size:18px;font-weight:900;line-height:1.2}
+.meter{margin:11px 0}
+.meter-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;font-weight:800;margin-bottom:5px;color:#ffe6ad}
+.meter-top .mv{font-size:21px;font-weight:900;font-variant-numeric:tabular-nums}
+.meter-top .mv small{font-size:11px;color:#c9a2d6;font-weight:700}
+.meter-bar{height:12px;border-radius:99px;background:#e6d3ad;overflow:hidden;border:1px solid rgba(58,39,28,.14)}
+.meter-bar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+.meter.warn .mv{color:var(--red);animation:pulseWarn 1s ease-in-out infinite}
+@keyframes pulseWarn{0%,100%{opacity:1}50%{opacity:.45}}
+.warn-banner{background:rgba(233,82,74,.14);border:2px solid var(--red);border-radius:11px;padding:8px 10px;margin:6px 0;text-align:center;color:#b23a33;font-size:12px;font-weight:900;animation:pulseWarn 1.2s ease-in-out infinite}
+/* 群聊 */
+.chat-wrap{background:linear-gradient(180deg,#241634,#2f1e40);border:2px solid #7a5aa8;border-radius:13px;padding:11px;margin:10px 0;color:#f3dfc4}
+.chat-head{font-size:11px;color:#ffe6ad;font-weight:900;margin-bottom:8px;letter-spacing:1px}
+.bubble{font-size:11px;line-height:1.65;background:rgba(255,255,255,.08);border:1px solid rgba(255,230,173,.18);border-radius:10px;padding:7px 9px;margin:5px 0;color:#f0dcc0}
+.bubble .who{display:inline-block;background:rgba(255,201,60,.2);color:#ffd45e;border-radius:5px;padding:0 5px;font-size:10px;font-weight:800;margin-right:4px}
+.bubble.sys{background:rgba(122,90,168,.2);border-style:dashed;color:#e0c8a8;font-size:10.5px}
+.bubble.me{background:rgba(63,156,99,.16);border-color:rgba(143,240,180,.35);color:#c8f0d6}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.sig{background:rgba(255,255,255,.07);border:1px solid rgba(255,230,173,.2);border-radius:9px;padding:7px 8px;font-size:11px;color:#f0dcc0}
+.sig b{display:block;color:#ffd45e;font-size:13px;margin-top:2px}
+.sig.bad b{color:#ff9d8e}.sig.good b{color:#8ff0b4}
+/* 决定 */
+.decision{border:2px solid #a97b4f;border-radius:12px;background:#fff3da;padding:10px 11px;margin:8px 0;cursor:pointer;color:var(--ink);position:relative}
+.decision.sel{background:linear-gradient(180deg,#ffe08a,#f0b74e);border-color:#7a4a2c;box-shadow:inset 0 0 0 1px #fff6d8}
+.decision.off{opacity:.5;cursor:not-allowed}
+.decision .dt{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:900}
+.decision .dt .di{font-size:16px}
+.decision .dt .dk{margin-left:auto;font-size:9px;color:#8a5a2c;background:#f0dfb8;border-radius:5px;padding:1px 5px}
+.decision .dd{font-size:10px;color:var(--muted);line-height:1.6;margin-top:4px}
+.decision .flag{position:absolute;top:9px;right:9px;font-size:15px;opacity:.25}
+.decision.sel .flag{opacity:1}
+.chance{background:linear-gradient(180deg,#2f5d43,#234a35);border:2px solid #3f9c63;border-radius:12px;padding:11px;color:#eafbef;margin:10px 0}
+.chance .ch{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:#bfe8cf}
+.chance .cb{font-size:32px;font-weight:900;color:#8ff0b4;line-height:1.1;margin-top:3px}
+.chance .cb.down{color:#ffb3a8}
+.chance .cs{font-size:10.5px;color:#cfeeda;line-height:1.6;margin:5px 0 7px}
+.crow{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+.crow b{font-variant-numeric:tabular-nums}
+.crow.plus b{color:#9cf0bb}.crow.minus b{color:#ffb3a8}.crow.cap b{color:#ffb3a8}
+.cmore{display:block;width:100%;border:1px dashed rgba(255,255,255,.35);background:rgba(255,255,255,.06);color:#cfeeda;border-radius:8px;padding:6px;font-size:11px;cursor:pointer;margin-top:7px}
+/* 开奖 */
+.guests{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;min-height:42px;align-items:center}
+.guest{width:26px;height:32px;border-radius:7px 7px 4px 4px;background:#fff0cf;border:1px solid #8a5a34;position:relative;animation:pop .28s ease-out;display:grid;place-items:center;font-size:12px}
+.guest::before{content:"";position:absolute;top:-5px;left:5px;right:5px;height:6px;border-radius:50% 50% 0 0;background:#7a4a2c}
+.guest.hot{background:#ffd98a}.guest.miss{background:#e6d4b4;opacity:.6}
+.guest.me-guest{background:#8ff0b4;border-color:#2e7a4d;box-shadow:0 0 10px #8ff0b4}
+@keyframes pop{from{transform:scale(.2) translateY(-14px);opacity:0}to{transform:scale(1);opacity:1}}
+.reveal-title{text-align:center;color:#ffe6ad;font-size:18px;font-weight:900;margin:8px 0;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+/* 结局 */
+.mirror{background:linear-gradient(180deg,#3a2547,#241634);border:2px solid #7a5aa8;border-radius:14px;padding:13px;margin:10px 0;color:#f3dfc4}
+.mirror h3{margin:0 0 8px;font-size:15px;color:#ffe6ad;text-align:center}
+.mrow{display:flex;gap:9px;align-items:flex-start;font-size:11px;line-height:1.7;padding:7px 0;border-bottom:1px dashed rgba(255,230,173,.18)}
+.mrow:last-child{border-bottom:0}
+.mrow .mi{font-size:15px;flex:0 0 18px}
+.mrow .ml{flex:1}
+.mrow .ml b{color:#ffd45e}
+.mrow .ml .arrow{color:#b79ad6;font-weight:900}
+.final-line{text-align:center;font-size:14px;font-weight:900;color:#ffe6ad;line-height:1.9;margin:12px 4px}
+.final-line em{font-style:normal;color:#ff9d6e}
+.share-box{background:#fff3d6;border:2px dashed #a97b4f;border-radius:11px;padding:11px;font-size:11px;line-height:1.85;color:#5a3f2c;white-space:pre-wrap}
+.advance-link{display:block;width:100%;text-align:center;font-size:12px;font-weight:800;color:#7a5aa8;background:rgba(122,90,168,.08);border:1px dashed #a88cc9;border-radius:11px;padding:10px;margin-top:8px;cursor:pointer}
+.step-tip{font-size:11px;color:#6a4a2c;text-align:center;line-height:1.7;margin:8px 2px 2px}
+.step-tip b{color:#b23a33}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="topbar">
+    <div class="brand">🌊 量潮课堂 · 新人视角</div>
+    <div class="audio"><button class="abtn" id="btnMusic">音乐：开</button><button class="abtn" id="btnSfx">音效：开</button></div>
+  </div>
+  <div id="app"></div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="mask" id="mask"><div class="modal" id="modal"></div></div>
+<script>
+(function(){
+'use strict';
+
+/* ==================== 工具 ==================== */
+var ORIGIN_KEY='ltclass_atmosphere_v4';
+function $(id){return document.getElementById(id);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function pct(p){return Math.round(p*100)+'%';}
+function signed(n){return (n>=0?'+':'')+n;}
+function yuan(n){return '¥'+Math.round(n).toLocaleString('zh-CN');}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function hashStr(s){var h=1779033703^s.length;for(var i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return h>>>0;}
+function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+
+/* ==================== 学员卡（我） ==================== */
+var EYE={
+  calm:'',
+  sweat:'<path d="M99 36 q5 9 0 13 q-5 -4 0 -13z" fill="#7ec8e3" stroke="#3a271c" stroke-width="1.6"/>',
+  sad:'<path d="M66 68 q3 8 6 0" fill="none" stroke="#5b86b8" stroke-width="2"/><path d="M74 70 q2 6 4 0" fill="none" stroke="#5b86b8" stroke-width="1.6"/><path d="M48 74 q4 10 8 0" fill="none" stroke="#3a271c" stroke-width="2.6" stroke-linecap="round" transform="translate(0,4) scale(1,-1) translate(0,-150)"/>',
+  happy:'<path d="M50 74 q10 11 20 0" fill="none" stroke="#3a271c" stroke-width="3" stroke-linecap="round"/><path d="M98 30 l2 5 5 1 -5 2 -2 5 -2 -5 -5 -2 5 -1z" fill="#ffc93c"/>'
+};
+function art(c1,c2,eye){
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="我的学员卡">'+
+  '<ellipse cx="60" cy="109" rx="33" ry="6" fill="#3a271c" opacity=".13"/>'+
+  '<circle cx="60" cy="60" r="54" fill="'+c2+'" stroke="#3a271c" stroke-opacity=".2" stroke-width="3"/>'+
+  '<circle cx="60" cy="60" r="49" fill="none" stroke="'+c1+'" stroke-width="2" stroke-dasharray="3 6"/>'+
+  '<path d="M32 52 Q32 24 60 24 Q88 24 88 52 L88 60 Q60 70 32 60 Z" fill="'+c1+'" stroke="#3a271c" stroke-width="3"/>'+
+  '<ellipse cx="48" cy="59" rx="7" ry="8.4" fill="#fffaf0" stroke="#3a271c" stroke-width="2.6"/>'+
+  '<circle cx="49" cy="60" r="4.3" fill="#3a271c"/><circle cx="46.4" cy="56.4" r="2" fill="#fff"/><circle cx="51" cy="62.6" r="1" fill="#fff" opacity=".8"/>'+
+  '<ellipse cx="72" cy="59" rx="7" ry="8.4" fill="#fffaf0" stroke="#3a271c" stroke-width="2.6"/>'+
+  '<circle cx="73" cy="60" r="4.3" fill="#3a271c"/><circle cx="70.4" cy="56.4" r="2" fill="#fff"/><circle cx="75" cy="62.6" r="1" fill="#fff" opacity=".8"/>'+
+  '<path d="M54 72 Q60 78 66 72" fill="none" stroke="#3a271c" stroke-width="2.8" stroke-linecap="round"/>'+
+  '<ellipse cx="41" cy="68" rx="6" ry="3.6" fill="#e9524a" opacity=".4"/><ellipse cx="79" cy="68" rx="6" ry="3.6" fill="#e9524a" opacity=".4"/>'+
+  '<ellipse cx="42" cy="32" rx="23" ry="9" fill="#fff" opacity=".22"/>'+(eye||'')+'</svg>';
+}
+function myArt(){var m=myMood();return art(m.c1,m.c2,m.eye);}
+function myMood(){
+  if(!G)return {c1:'#7a5aa8',c2:'#efe7fa',eye:EYE.calm};
+  if(G.confidence>=68&&G.products>0)return {c1:'#3f9c63',c2:'#e6f5e4',eye:EYE.happy};
+  if(G.confidence<35)return {c1:'#b98a5a',c2:'#f5e9d8',eye:EYE.sad};
+  if(G.stamina<40)return {c1:'#e8a53c',c2:'#fff2cf',eye:EYE.sweat};
+  return {c1:'#7a5aa8',c2:'#efe7fa',eye:EYE.calm};
+}
+
+/* ==================== 音效 ==================== */
+var actx=null,musicOn=true,sfxOn=true;
+function tone(freq,dur,type,vol,delay){if(!sfxOn)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  var o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime+(delay||0);
+  o.type=type||'sine';o.frequency.value=freq;g.gain.setValueAtTime(vol||.05,t);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur);}catch(e){}}
+var SFX={
+  tick:function(){tone(680,.05,'square',.035);},
+  open:function(){tone(170,.3,'triangle',.09);tone(392,.34,'sine',.03,.05);},
+  good:function(){tone(660,.14,'sine',.05);tone(880,.16,'sine',.04,.08);},
+  bad:function(){tone(180,.2,'sawtooth',.05);},
+  fanfare:function(){[392,523,659,784].forEach(function(f,i){tone(f,.4,'triangle',.05,i*.13);});}
+};
+var musicTimer=null;
+function musicTick(){if(!musicOn||!actx)return;var notes=[262,330,392,330,294,349,440,349];tone(notes[Math.floor(Math.random()*notes.length)],.9,'sine',.012);}
+function startMusic(){if(musicTimer)clearInterval(musicTimer);musicTimer=setInterval(musicTick,2600);}
+
+/* ==================== 班主画像（存档联动） ==================== */
+function readOrigin(){
+  try{var raw=localStorage.getItem(ORIGIN_KEY);if(raw)return JSON.parse(raw);}catch(e){}
+  return null;
+}
+var DEFAULT_OWNER={mentorRate:.5,temptRate:.4,warmth:.5,label:'典型班主',fromSave:false,origin:null};
+function ownerFromSave(sv){
+  var plays=Math.max(1,sv.plays||1);
+  var mentorRate=clamp(((sv.mentorWeeks||0)/(plays*3))*0.9+0.12,0.08,0.96);
+  var warmth=clamp((sv.bestRhythm||0)/88,0.1,0.96);
+  var temptRate=clamp(1-((sv.maxRep||58)/100)*0.55-((sv.titles||[]).length)*0.06,0.08,0.9);
+  return {mentorRate:mentorRate,warmth:warmth,temptRate:temptRate,label:'你自己（原版战绩）',fromSave:true,origin:sv};
+}
+
+/* ==================== 常量（与原版同源） ==================== */
+var DAYS=7,TH_MIN=2,TH_MAX=6,DEF_TH=3;
+var TEMPTATIONS=[
+ {id:'paid',icon:'💰',title:'有人愿意付费插班',shortcut:'交钱插队 · 我不用等了',
+  desc:'你只要补一笔钱，就能跳过排队。但同班不同标准，你所在的氛围被开了口子。',pat:12},
+ {id:'record',icon:'📼',title:'有人劝你改成录播课',shortcut:'改看录播 · 省点力气',
+  desc:'不用跟着直播赶了。可你从此接不上身边人的节奏。',pat:8,rate:-0.12},
+ {id:'viral',icon:'📣',title:'渠道说能一次拉 30 人',shortcut:'跟着热闹进去 · 人真多',
+  desc:'班一下热闹了，可没人顾得上你。',pat:-8,nb:15,overExtra:6},
+ {id:'lower',icon:'🔓',title:'有人劝你把门槛降到最低',shortcut:'零门槛 · 谁都能进',
+  desc:'谁都能进，但没人真动手。你身边也没人真开始。',pat:-6,rate:-0.10},
+ {id:'cert',icon:'🎓',title:'合作方要你发「结业保证」',shortcut:'买个保证 · 口碑好看',
+  desc:'简历上好看，但那是你一直绕开的那条线。',pat:10}
+];
+var RUMORS=['听说这周大家都卷起来了','群里说这周没人想动手','有人说门槛一高人就散了','老学员说这周会爆满'];
+var NAMES=['小满','阿灯','串串','雨滴','晴晴','毛肚','小风','阿雀'];
+
+/* ==================== 游戏状态 ==================== */
+var G=null,screen='intro',guestTimer=null,revealToken=0,OWNER=DEFAULT_OWNER,quiz={mentor:null,tempt:null,warm:null};
+
+function makeWeek(i,seed){
+  var rnd=mulberry32(hashStr(seed+'|'+i+'|newbie'));
+  var gate=TH_MIN+Math.floor(rnd()*(TH_MAX-TH_MIN+1));
+  var bestLv=TH_MIN+Math.floor(rnd()*(TH_MAX-TH_MIN+1));
+  var rumorTrue=rnd()<0.7;
+  var rumorUp=((rumorTrue?1:-1)*(rnd()<.6?1:-1))>0;
+  var hasMentor=rnd()<clamp(OWNER.mentorRate+(i>=4?0.08:0),0,1);
+  var over=0;
+  if(rnd()<OWNER.temptRate*0.8)over=3+Math.floor(rnd()*4);
+  var show=rnd()<OWNER.warmth*0.85;
+  var temptIdx=Math.floor(rnd()*TEMPTATIONS.length);
+  if(rnd()<OWNER.temptRate)temptIdx=Math.floor(rnd()*TEMPTATIONS.length);
+  var rhythm=Math.round(28+OWNER.warmth*52+(rnd()-.5)*10);
+  var nb=3+Math.floor(OWNER.warmth*5)+(over>0?Math.round(over/2):0);
+  return {gate:gate,bestLv:bestLv,rumorTrue:rumorTrue,rumorUp:rumorUp,
+    rumorLine:RUMORS[Math.floor(rnd()*RUMORS.length)],
+    hasMentor:hasMentor,over:over,show:show,temptIdx:temptIdx,rhythm:clamp(rhythm,10,95),nb:nb,
+    elderName:NAMES[Math.floor(rnd()*NAMES.length)]};
+}
+function newGame(){
+  var seed=todayKey()+'-'+Math.floor(Math.random()*100000);
+  G={seed:seed,day:0,confidence:42,stamina:100,products:0,payForward:0,
+     sel:[],showDetail:false,last:null,log:[],fail:null,won:false,
+     totalMentor:0,totalOver:0,totalTempt:0,totalShow:0,noMentorWeeks:0};
+  G.week=[];for(var i=0;i<DAYS;i++)G.week.push(makeWeek(i,seed));
+  SFX.open();setScreen('week');
+}
+
+/* ===== 核心公式：与原版 forecast 同源，只是作用对象换成「我」 ===== */
+function submitChance(){
+  var d=G.week[G.day],s=G;
+  var seek=s.sel.indexOf('seek')>=0;
+  var hasMentor=d.hasMentor&&seek;
+  var gate=d.gate;
+  var parts=[
+    {k:'班级氛围（'+warmText(d.rhythm)+'）',v:d.rhythm*0.002},
+    {k:'我的信心（'+Math.round(s.confidence)+'）',v:(s.confidence-42)*0.004},
+    {k:'有人带我（决定性）',v:hasMentor?0.28:0},
+    {k:'门槛设对（Lv'+gate+'）',v:gate===d.bestLv?0.05:-0.035*Math.abs(gate-d.bestLv)},
+    {k:'我太累了（'+Math.round(s.stamina)+'）',v:s.stamina<40?-0.12:(s.stamina>60?0.02:0)},
+    {k:'身边太挤（过载 '+d.over+'）',v:-Math.min(0.45,d.over*0.045)}
+  ];
+  if(s.sel.indexOf('tempt')>=0&&TEMPTATIONS[d.temptIdx].rate)parts.push({k:'妥协的代价（'+TEMPTATIONS[d.temptIdx].title+'）',v:TEMPTATIONS[d.temptIdx].rate});
+  var p=0.26;parts.forEach(function(x){p+=x.v;});p=clamp(p,0.05,0.94);
+  var capped=!hasMentor&&p>0.48;
+  if(capped){p=0.48;parts.push({k:'⚠ 没人带，我最多只能做到 48%',cap:true});}
+  return {p:p,parts:parts,hasMentor:hasMentor,capped:capped,seek:seek};
+}
+function warmText(r){return r>=70?'热起来了':r>=50?'有人开始交了':r>=35?'有点冷':'冷清';}
+
+/* ==================== 渲染 ==================== */
+function render(keepScroll){
+  var app=$('app'),html,y=window.scrollY;
+  if(screen==='intro')html=renderIntro();
+  else if(screen==='week')html=renderWeek();
+  else if(screen==='reveal')html=renderReveal();
+  else if(screen==='end')html=renderEnd();
+  app.innerHTML=html;
+  if(screen==='reveal')runReveal();
+  window.scrollTo(0,keepScroll===false?0:y);
+}
+function setScreen(s){if(s!=='reveal')revealToken++;screen=s;render(false);}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+function confetti(n){
+  var box=document.createElement('div');box.className='confetti';document.body.appendChild(box);
+  var colors=['#ffc93c','#e9524a','#3f9c63','#7a5aa8','#fff0cf'];
+  for(var i=0;i<n;i++){var d=document.createElement('i');d.className='cf';d.style.left=(Math.random()*100)+'vw';
+    d.style.background=colors[Math.floor(Math.random()*colors.length)];d.style.animationDuration=(1.4+Math.random()*1.4)+'s';
+    d.style.animationDelay=(Math.random()*.5)+'s';box.appendChild(d);}
+  setTimeout(function(){box.remove();},3400);
+}
+
+function renderIntro(){
+  var sv=readOrigin();
+  var h='<div class="home-head"><div class="sign">新人视角</div>'+
+    '<div class="subtitle">同一套系统，这次你站在另一边</div><div class="twist-badge">🔄 反转关</div></div>';
+  h+='<div class="intro-quote">你是这周进班的<b>新人</b>。<br>你看不到班主的账本，只能看到公告、群聊，和身边有没有人愿意带你。<br>你唯一能决定的，是<b>自己要不要交出成品</b>——以及，还留不留下来。</div>';
+  if(sv&&sv.plays>0){
+    OWNER=ownerFromSave(sv);
+    h+='<div class="save-hit"><b>✓ 读到了你在原版的战绩</b><div class="row"><span>你带人（周）</span><b>'+(sv.mentorWeeks||0)+'</b></div>'+
+      '<div class="row"><span>你带出的最好氛围</span><b>'+(sv.bestRhythm||0)+'</b></div>'+
+      '<div class="row"><span>你开局的局数</span><b>'+(sv.plays||0)+'</b></div>'+
+      '<div style="margin-top:7px">你作为新人会遇到什么，<b>由你当初的决定生成</b>。这不是随机，是回声。</div></div>';
+  }else{
+    h+='<div class="card"><div class="plan-title">先告诉我：你原来是哪种班主？<span class="muted">（决定你将遭遇的班）</span></div>'+
+      quizBlock('mentor','你会不会点「老人带新人」？',[['每周都点',0.85],['偶尔点',0.5],['基本不点',0.1]])+
+      quizBlock('tempt','面对「付费插班 / 一次拉 30 人」，你会？',[['都忍住',0.12],['看情况',0.45],['常妥协',0.85]])+
+      quizBlock('warm','你一般能把氛围带到？',[['85 以上',0.92],['60 左右',0.6],['没到过',0.22]])+
+      '</div>';
+  }
+  h+='<button class="btn-big" data-act="enter">进 班 看 看 ▸</button>'+
+    '<div class="foot-note">提示：这一关里，「有人带我」不再是百分比加成，而是一个人有没有留下来陪你。</div>';
+  return h;
+}
+function quizBlock(key,q,opts){
+  return '<div class="quiz-q">'+q+'</div><div class="quiz-opts">'+opts.map(function(o){
+    return '<div class="quiz-opt'+(quiz[key]===o[1]?' on':'')+'" data-act="quiz" data-k="'+key+'" data-v="'+o[1]+'">'+o[0]+'</div>';
+  }).join('')+'</div>';
+}
+
+function renderWeek(){
+  var d=G.week[G.day],f=submitChance(),ch=f.p;
+  var h='<div class="hud"><span class="day">第 '+(G.day+1)+' / '+DAYS+' 周</span><span>我交出成品 <b style="color:#8ff0b4">'+G.products+'</b> 个</span><span>班主：'+OWNER.label+'</span></div>';
+  /* 我 */
+  h+='<div class="me-panel">'+myArt()+'<div><div class="mn">我 · 本周新人</div>'+
+    '<div class="mk">'+(G.products>0?'已经交出过成品':'还没敢交出第一个成品')+'</div>'+
+    '<div style="font-size:10px;color:#6a4a2c;margin-top:6px">'+myMoodLine()+'</div></div></div>';
+  h+='<div class="meter"><div class="meter-top"><span>◉ 我的信心</span><span class="mv" style="color:#2e7a4d">'+Math.round(G.confidence)+'<small>/100</small></span></div>'+
+    '<div class="meter-bar"><i style="width:'+clamp(G.confidence,0,100)+'%;background:linear-gradient(90deg,#7fd6a0,#3f9c63)"></i></div></div>';
+  h+='<div class="meter'+(G.stamina<35?' warn':'')+'"><div class="meter-top"><span>⏳ 我还撑不撑得住</span><span class="mv" style="color:'+(G.stamina<35?'#e9524a':'#b23a33')+'">'+Math.round(G.stamina)+'<small>/100</small></span></div>'+
+    '<div class="meter-bar"><i style="width:'+clamp(G.stamina,0,100)+'%;background:'+patColor(G.stamina)+'"></i></div></div>';
+  if(G.stamina<35)h+='<div class="warn-banner">⚠ 快撑不住了。归零你就退班——不是你不努力，是这个班没接住你。</div>';
+  /* 我看到的班 */
+  h+='<div class="chat-wrap"><div class="chat-head">📱 我看到的班（我看不到班主的账本）</div>'+
+    '<div class="bubble"><span class="who">公告</span>本周任务门槛 Lv'+d.gate+'。高门槛人少，低门槛人多。</div>'+
+    '<div class="bubble"><span class="who">群聊 · 街坊</span>'+d.rumorLine+'　<span class="muted">（'+ (d.rumorTrue?'这句是真的':'这句是假的') +'，但你现在不知道）</span></div>'+
+    (d.hasMentor?'<div class="bubble"><span class="who">'+d.elderName+'</span>我交完了，你要不要我帮你看看？</div>'
+      :'<div class="bubble sys">群里问了一圈「有人能带带我吗」，没人回。</div>')+
+    (d.show?'<div class="bubble"><span class="who">成品展</span>本周有人把成品贴出来了，点评区有人看。</div>':'')+
+    '<div class="signal-grid">'+
+      '<div class="sig '+(d.hasMentor?'good':'bad')+'">有人愿意带我<b>'+(d.hasMentor?'有 · '+d.elderName:'没有')+'</b></div>'+
+      '<div class="sig">班里的温度<b>'+warmText(d.rhythm)+' '+d.rhythm+'</b></div>'+
+      '<div class="sig '+(d.over>0?'bad':'')+'">身边挤了多少人<b>'+(d.over>0?'过载 '+d.over+' 人':'带得过来')+'</b></div>'+
+      '<div class="sig">这周要交的门槛<b>Lv'+d.gate+'（'+(d.gate===d.bestLv?'刚好合适':'不太对')+'）</b></div>'+
+    '</div></div>';
+  /* 本周决定 */
+  h+='<div class="card"><div class="plan-title">这周，我要做什么？<span class="muted">可多选</span></div>';
+  h+=decision('seek','🤝','去认识一个老学员',d.hasMentor?'班里有 '+d.elderName+' 愿意带':'问了三个人，都说自己也在赶',d.hasMentor?'决定了你能否被带':'系统没安排人带你——你想被带也找不到');
+  h+=decision('submit','✍️','交出我的成品','按下面这套概率判定成败','信心低于 35 就不敢点提交');
+  var tmp=TEMPTATIONS[d.temptIdx];
+  h+=decision('tempt',tmp.icon,tmp.shortcut,tmp.desc,'短期省力，但氛围被切开');
+  if(G.products>0&&G.day>=3)h+=decision('pay','🌱','去带一个刚来的人','你被带过，现在轮到你','心力 -8 · 信心 +12 · 传承 +1');
+  h+='</div>';
+  /* 概率 */
+  var why;
+  if(!d.hasMentor)why='⚠ 没人带我——概率从一开始就低，上限只有 48%。';
+  else if(!f.seek)why='班里有人愿意带，可我没去认识他。那 +28% 我没拿到。';
+  else if(d.over>0)why='⚠ 身边过载 '+d.over+' 人，把本来就低的概率又压了一截。';
+  else if(d.gate!==d.bestLv)why='⚠ 门槛没设对（Lv'+d.gate+'），我还得跨这道坎。';
+  else why='这套公式，和你当班主时看到的交作业率公式一模一样。';
+  var rows=f.parts.map(function(x){
+    if(x.cap)return '<div class="crow cap"><span>'+x.k+'</span><b>上限 48%</b></div>';
+    return '<div class="crow '+(x.v>=0?'plus':'minus')+'"><span>'+x.k+'</span><b>'+(x.v>=0?'+':'')+(x.v*100).toFixed(1)+'%</b></div>';
+  }).join('');
+  h+='<div class="chance"><div class="ch"><span>如果我去找人带、并交出成品</span><span class="pill" style="margin:0">同一套公式</span></div>'+
+    '<div class="cb'+(f.capped?' down':'')+'">'+pct(ch)+'</div>'+
+    '<div class="cs">'+why+'</div>'+
+    '<button class="cmore" data-act="fold">'+(G.showDetail?'收起算法明细 ▴':'看这套公式怎么算的 ▸')+'</button>'+
+    (G.showDetail?rows+'<div class="crow" style="border-top:1px solid rgba(255,255,255,.3);font-weight:800"><span>基础 26% + 上面这些</span><b>'+pct(ch)+'</b></div>':'')+
+    '</div>';
+  h+='<button class="btn-big" data-act="open">度 过 这 周 ▸</button>'+
+    '<div class="step-tip">'+(f.capped?'注意：这里不是「班没人带」，是<b>没人带我</b>。':'被带过的人，才知道那 28 个点代表什么。')+'</div>';
+  return h;
+}
+function patColor(p){return p<30?'#e9524a':p<60?'#e8a53c':'#3f9c63';}
+function myMoodLine(){
+  if(G.confidence>=68&&G.products>0)return '我开始相信，这里有人真的在看。';
+  if(G.confidence<35)return '我盯着提交按钮，又关掉了。';
+  if(G.stamina<40)return '有点累。每周都在磨人。';
+  return '我还不确定，但我想试试。';
+}
+function decision(id,ico,name,desc,warn){
+  var on=G.sel.indexOf(id)>=0;
+  var dis=(id==='submit'&&G.confidence<35)||(id==='pay'&&G.stamina<10);
+  return '<div class="decision'+(on?' sel':'')+(dis?' off':'')+'" data-act="pick" data-id="'+id+'">'+
+    '<span class="flag">'+(on?'✓':'○')+'</span>'+
+    '<div class="dt"><span class="di">'+ico+'</span>'+name+'<span class="dk">'+(id==='seek'||id==='submit'?'关键':id==='pay'?'传承':'取舍')+'</span></div>'+
+    '<div class="dd">'+desc+'<br><span style="color:#b23a33">'+warn+'</span></div></div>';
+}
+
+function renderReveal(){
+  return '<div class="hud"><span class="day">第 '+(G.day+1)+' / '+DAYS+' 周</span><span>我 '+Math.round(G.confidence)+'</span><span>还撑得住 '+Math.round(G.stamina)+'</span></div>'+
+    '<div class="reveal-title" id="rvTitle">本周开讲…</div>'+
+    '<div class="chat-wrap"><div class="chat-head">点评区</div><div class="guests" id="guests"></div></div>'+
+    '<div id="rvCard"></div>';
+}
+function runReveal(){
+  var token=++revealToken,f=submitChance(),d=G.week[G.day];
+  var title=$('rvTitle'),guests=$('guests'),card=$('rvCard');
+  var n=clamp(d.nb,1,20),i=0,got=0;
+  title.textContent='按 Lv'+d.gate+' 门槛，'+d.nb+' 位新人进班…';
+  function step(){
+    if(token!==revealToken||screen!=='reveal')return;
+    if(i<n){
+      var hit=Math.random()<f.p;
+      if(hit)got++;
+      var g=document.createElement('span');g.className='guest '+(hit?'hot':'miss');g.textContent=hit?'✓':'✗';
+      guests.appendChild(g);SFX.tick();i++;guestTimer=setTimeout(step,80);return;
+    }
+    setTimeout(function(){if(token===revealToken&&screen==='reveal')finish(f);},320);
+  }
+  setTimeout(step,240);
+}
+
+function finish(f){
+  var d=G.week[G.day],tmp=TEMPTATIONS[d.temptIdx],s=G;
+  var seek=s.sel.indexOf('seek')>=0,submit=s.sel.indexOf('submit')>=0,
+      tempt=s.sel.indexOf('tempt')>=0,pay=s.sel.indexOf('pay')>=0;
+  var note=[];
+  /* 找人带 */
+  if(seek){
+    if(d.hasMentor){s.confidence+=6;note.push('🤝 '+d.elderName+' 真的留下来带我了。信心 +6');}
+    else{s.confidence-=4;note.push('🤝 我问了三个人，都说自己也在赶。信心 -4');}
+  }
+  /* 交成品 */
+  var hit=false;
+  if(submit){
+    hit=Math.random()<f.p;
+    if(hit){s.products++;s.confidence+=15;s.stamina=clamp(s.stamina+5,0,100);note.push('✍️ 我交出成品了！'+(f.capped?'（在被封顶的概率里，我居然过了）':''));SFX.good();}
+    else{s.confidence-=12;s.stamina=clamp(s.stamina-8,0,100);note.push('✍️ 我没交出来。信心 -12，心力 -8');SFX.bad();}
+  }else{s.confidence-=5;s.stamina=clamp(s.stamina-3,0,100);note.push('我没敢交。信心 -5');}
+  /* 诱惑 */
+  if(tempt){
+    s.stamina=clamp(s.stamina+(tmp.pat||8),0,100);s.confidence-=10;s.totalTempt++;
+    note.push(tmp.icon+' 我接了「'+tmp.title+'」。省了力气，但氛围被切开：信心 -10');
+  }
+  /* 传承 */
+  if(pay){s.stamina=clamp(s.stamina-8,0,100);s.confidence+=12;s.payForward++;note.push('🌱 我带了一个比我更新的人。心力 -8，信心 +12——我成了那个曾经没出现的人。');}
+  /* 摩擦 */
+  s.stamina=clamp(s.stamina-6,0,100);
+  if(d.over>0){s.stamina=clamp(s.stamina-d.over*2,0,100);note.push('⚠ 身边过载 '+d.over+' 人，没人顾得上我，心力 -'+(d.over*2));}
+  if(d.show)s.totalShow++;
+  if(seek&&d.hasMentor)s.totalMentor++;
+  if(d.over>0)s.totalOver++;
+  if(!d.hasMentor)s.noMentorWeeks++;
+  s.confidence=clamp(s.confidence,0,100);
+  /* 失败 */
+  var fail=null;
+  if(s.stamina<=0)fail='你退班了。<br>不是你不努力，是这个班没接住你。';
+  else if(s.confidence<=8&&s.products===0)fail='你再也没敢点开那个提交按钮。<br>门槛还在那儿，你只是不敢了。';
+  s.fail=fail;
+  s.log.push({week:G.day+1,mentor:seek&&d.hasMentor,noMentor:!d.hasMentor,over:d.over,
+    tempt:tempt,show:d.show,submit:submit,hit:hit,gate:d.gate,cap:f.capped,
+    conf:Math.round(s.confidence),sta:Math.round(s.stamina)});
+  s.last={hit:hit,submit:submit,notes:note,p:f.p,cap:f.capped};
+  /* 卡片 */
+  var card=$('rvCard'),shown=clamp(d.nb,1,20);
+  var good=hit&&submit;
+  var whyR=f.hasMentor?('有 '+d.elderName+' 带我，+28% 真的落在我身上'):(d.hasMentor?'班里有人愿意带，可我没去认识他':'⚠ 没人带我，概率被压住');
+  card.innerHTML='<div class="card"><div style="text-align:center;font-size:18px;font-weight:900;color:'+(good?'#2e7a4d':'#b23a33')+'">'+
+    (good?'✓ 我交出成品了':(submit?'✗ 我没交出来':'— 这周我没敢交'))+'</div>'+
+    '<div style="font-size:11px;color:#6a4a2c;line-height:1.7;margin:8px 0;text-align:center">按 <b>'+pct(f.p)+'</b> 判定 · '+whyR+'</div>'+
+    '<div class="stat2"><div class="s"><div class="k">我的信心</div><div class="v g">'+Math.round(s.confidence)+'</div></div>'+
+    '<div class="s"><div class="k">还撑得住</div><div class="v" style="color:'+patColor(s.stamina)+'">'+Math.round(s.stamina)+'</div></div>'+
+    '<div class="s"><div class="k">交出成品</div><div class="v">'+s.products+'</div></div></div>'+
+    '<div style="margin-top:10px;border-top:1px dashed var(--line);padding-top:8px">'+
+    note.map(function(x){return '<div style="font-size:11px;line-height:1.75;color:#5a3f2c;padding:2px 0">'+x+'</div>';}).join('')+'</div>'+
+    (fail?'<div style="color:#b23a33;font-weight:900;text-align:center;font-size:13px;margin-top:10px">'+fail+'</div>':'')+
+    '<button class="btn" style="width:100%;margin-top:11px" data-act="nextWeek">'+(G.day>=DAYS-1?'看结局 →':'下一周 →')+'</button></div>';
+  if(good||s.payForward>0)SFX.fanfare();
+  saveFlash();
+}
+function saveFlash(){try{localStorage.setItem('ltclass_newbie_last',JSON.stringify({at:Date.now(),conf:G.confidence,sta:G.stamina,prod:G.products}));}catch(e){}}
+
+function renderEnd(){
+  var s=G,won=!s.fail&&s.products>0;
+  var h='<div class="home-head"><div class="sign">'+(won?'我留下来了':'我走了')+'</div>'+
+    '<div class="subtitle">'+(won?'不只是运气——有人带了我':'不是我不努力')+'</div></div>';
+  h+='<div class="card"><div class="stat2"><div class="s"><div class="k">交出成品</div><div class="v g">'+s.products+'</div></div>'+
+    '<div class="s"><div class="k">最终信心</div><div class="v g">'+Math.round(s.confidence)+'</div></div>'+
+    '<div class="s"><div class="k">传承（带过人）</div><div class="v">'+s.payForward+'</div></div></div></div>';
+  /* 镜子 */
+  h+='<div class="mirror"><h3>🪞 镜子：你经历的，是你施加的</h3>';
+  var m=[];
+  if(s.noMentorWeeks>0)m.push(['🤝','你作为班主有 <b>'+s.noMentorWeeks+' 周</b>没安排「老人带新人」。','→ 我有 '+s.noMentorWeeks+' 周问遍了群，没人回来带我。就算别的都做对，<b>上限也只有 48%</b>。']);
+  else m.push(['🤝','你当初每周都点「老人带新人」。','→ 我身边一直有人。那 <b>+28%</b> 落在我身上，就是有人肯留下来。']);
+  if(s.totalOver>0)m.push(['📣','你当初点开「一次拉 30 人」。','→ 我身边过载过 '+s.totalOver+' 周。<b>人越多，越没人顾得上我。</b>']);
+  if(s.totalTempt>0)m.push(['💰','你当初接过 '+s.totalTempt+' 次「妥协的捷径」。','→ 我接过同样的捷径，短暂省力，<b>氛围被开了一道口子</b>。']);
+  if(s.totalShow>0)m.push(['🎬','你当初坚持做「成品展 / 周复盘」。','→ 我贴出成品时有人看。<b>被看见，才有人敢继续。</b>']);
+  if(s.products>0)m.push(['✍️','你当初设的每一道门槛、忍住的每一次诱惑。','→ 我终于交出了 <b>'+s.products+' 个成品</b>。原来那不是数字，是一个人做完了。']);
+  else m.push(['✍️','你当初算的「交作业率」。','→ 我就是那个没交上的人。<b>那一格百分比，是我。</b>']);
+  if(s.payForward>0)m.push(['🌱','你说过「氛围靠骨干传下去」。','→ 我被带起来后，也去带了 '+s.payForward+' 个人。<b>这条街，是自己往前走的。</b>']);
+  m.forEach(function(x){h+='<div class="mrow"><span class="mi">'+x[0]+'</span><div class="ml">'+x[1]+'<br><span class="arrow">'+x[2]+'</span></div></div>';});
+  h+='</div>';
+  h+='<div class="final-line">'+(won?'同一套系统。<br>站在另一边，才知道你当初那 <em>15 点精力</em>，<br>挡住的是一个想交成品的人。':'同一套系统。<br>站在另一边，才知道那句<em>「新人靠骨干带起来」</em>，<br>不是在讲管理，是在讲我。')+'</div>';
+  /* 分享卡 */
+  var share='【量潮课堂 · 新人视角】\n我是第'+(G.day+1)+'批新人。'+
+    (s.noMentorWeeks>0?('有'+s.noMentorWeeks+'周没人带我。'):'一直有人带我。')+
+    (s.products>0?('我交出了'+s.products+'个成品，留下来了。'):('我没交出成品，走了。'))+
+    (s.payForward>0?'后来我也去带了人。':'')+
+    '\n同一套系统，反过来看——那个被数字挡住的人，是我。';
+  h+='<div class="share-box" id="shareBox">'+share+'</div>'+
+    '<button class="btn" style="width:100%;margin-top:8px" data-act="copy">📋 复制战绩卡</button>'+
+    '<button class="btn-big" data-act="again">再当一次新人 ↻</button>'+
+    '<button class="advance-link" data-act="intro">回到开头</button>';
+  return h;
+}
+
+/* ==================== 交互 ==================== */
+$('app').addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]');if(!t)return;
+  var act=t.getAttribute('data-act');
+  if(act==='quiz'){
+    var k=t.getAttribute('data-k'),v=+t.getAttribute('data-v');quiz[k]=v;SFX.tick();render();return;
+  }
+  if(act==='enter'){
+    if(!readOrigin()||!readOrigin().plays){
+      if(quiz.mentor===null||quiz.tempt===null||quiz.warm===null){toast('先回答 3 个问题，决定你会遇到什么样的班');return;}
+      OWNER={mentorRate:quiz.mentor,temptRate:quiz.tempt,warmth:quiz.warm,label:'你选择的班主',fromSave:false,origin:null};
+    }
+    newGame();return;
+  }
+  if(act==='fold'){G.showDetail=!G.showDetail;SFX.tick();render();return;}
+  if(act==='pick'){
+    var id=t.getAttribute('data-id');
+    if((id==='submit'&&G.confidence<35)||(id==='pay'&&G.stamina<10)){toast(id==='submit'?'信心太低，我不敢点提交':'太累了，带不动别人');return;}
+    var i=G.sel.indexOf(id);
+    if(i>=0)G.sel.splice(i,1);else G.sel.push(id);
+    SFX.tick();render();return;
+  }
+  if(act==='open'){SFX.open();setScreen('reveal');return;}
+  if(act==='nextWeek'){
+    if(G.fail||G.day>=DAYS-1){endGame();return;}
+    G.day++;G.sel=[];G.last=null;SFX.tick();setScreen('week');return;
+  }
+  if(act==='copy'){
+    var txt=$('shareBox').textContent;
+    try{navigator.clipboard.writeText(txt).then(function(){toast('✓ 战绩卡已复制');},function(){toast('复制失败，请手动选中');});}
+    catch(e){toast('复制失败，请手动选中');}
+    return;
+  }
+  if(act==='again'){SFX.open();newGame();return;}
+  if(act==='intro'){OWNER=DEFAULT_OWNER;quiz={mentor:null,tempt:null,warm:null};SFX.tick();setScreen('intro');return;}
+});
+function endGame(){
+  if(!G.fail&&G.products>0&&G.payForward>0)confetti(28);
+  SFX.fanfare();setScreen('end');
+}
+$('mask').addEventListener('click',function(e){if(e.target===$('mask'))$('mask').classList.remove('show');});
+$('btnMusic').onclick=function(){musicOn=!musicOn;this.textContent='音乐：'+(musicOn?'开':'关');if(musicOn&&!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)();startMusic();}catch(e){}}};
+$('btnSfx').onclick=function(){sfxOn=!sfxOn;this.textContent='音效：'+(sfxOn?'开':'关');if(sfxOn)SFX.tick();};
+
+/* ==================== 启动 ==================== */
+try{if(!actx&&musicOn){actx=new (window.AudioContext||window.webkitAudioContext)();startMusic();}}catch(e){}
+render();
+})();
+</script>
+</body>
+</html>

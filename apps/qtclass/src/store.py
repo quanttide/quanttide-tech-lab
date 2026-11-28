@@ -102,58 +102,6 @@ def _update(name: str, **fields) -> tuple[bool, str]:
     return True, ''
 
 
-
-# 评审判定线：达到即达标（实验参数，验收标准见 ../ROADMAP.md）
-REVIEW_PASS = 0.70
-REQUIRED_SURVEY = ['self_position', 'source', 'research', 'expectation',
-                   'leave_responsibility']
-
-
-def judge(app: dict) -> dict:
-    """评审判定：逐项拆开摆出来，看的人能自己加总出结论。
-
-    只用库内真实字段，无随机数——同一份数据任何时候判定一致。
-    返回 {'parts': [(标签, 贡献)], 'rate': 0..1, 'passed': bool}
-    """
-    parts = []
-
-    # 交付要件：没有交付物就没有评审
-    has_delivery = bool((app.get('delivery_json') or '').strip())
-    parts.append(('交付已提交' if has_delivery else '交付未提交',
-                  0.45 if has_delivery else 0.0))
-
-    # 问卷要件：五道必填逐题计
-    answers = {}
-    raw = app.get('survey_json')
-    if raw:
-        try:
-            answers = json.loads(raw)
-        except (TypeError, ValueError):
-            answers = {}
-    filled = sum(1 for k in REQUIRED_SURVEY if str(answers.get(k, '')).strip())
-    parts.append((f'问卷要件 {filled}/{len(REQUIRED_SURVEY)}',
-                  round(0.30 * filled / len(REQUIRED_SURVEY), 2)))
-
-    # 报名信息：学校与意向课程
-    info = sum(1 for k in ('school', 'course') if str(app.get(k) or '').strip())
-    parts.append(('报名信息完整' if info == 2 else f'报名信息 {info}/2',
-                  0.10 if info == 2 else 0.05 * info))
-
-    # 问卷时效：报名到问卷 7 天内（旅程规则：超时转休眠）
-    timely = 0.0
-    if app.get('applied_at') and app.get('survey_at'):
-        try:
-            applied = datetime.fromisoformat(app['applied_at'])
-            surveyed = datetime.fromisoformat(app['survey_at'])
-            timely = 0.15 if (surveyed - applied).total_seconds() <= 7 * 86400 else 0.0
-        except ValueError:
-            timely = 0.0
-    parts.append(('问卷 7 天内完成' if timely else '问卷超 7 天', timely))
-
-    rate = round(sum(v for _, v in parts), 2)
-    return {'parts': parts, 'rate': rate, 'passed': rate >= REVIEW_PASS}
-
-
 def get_application(name: str) -> dict | None:
     init()
     with _lock, _conn() as c:

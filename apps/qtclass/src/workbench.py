@@ -52,10 +52,6 @@ QLabel#muted, QLabel#fieldLabel {{ color: {MUTED}; font-size: 12px;
     background: transparent; border: none; }}
 QLabel#desc {{ color: #595959; font-size: 13px; background: transparent;
     border: none; }}
-QLabel#bignum {{ font-size: 34px; font-weight: 700; background: transparent;
-    border: none; }}
-QLabel#numcap {{ color: {MUTED}; font-size: 12px; background: transparent;
-    border: none; }}
 QLabel#message {{ background: transparent; border: none; }}
 QPushButton#primary {{ background: {PRIMARY}; color: white; border: none;
     border-radius: 8px; padding: 12px 16px; font-size: 14px; font-weight: 600; }}
@@ -122,16 +118,6 @@ STAGE_DETAIL = {
     5: ('已入册 🎉',
         '资格已生效，欢迎加入实训基地——之后的培养（实训、实习）在基地进行。',
         []),
-}
-
-# 班主视角：同一份数据换主语——状态与数字不变，人称换成观察
-OWNER_DESC = {
-    0: '他已报名，等他交问卷；7 天没动，资格转休眠。',
-    1: '问卷已完成、凭证已发；看他有没有领到任务。',
-    2: '任务进行中；卡不卡、要不要推一把，看交付。',
-    3: '交付已进评审；判定明细与他看到的完全一致，结论出来即可入册。',
-    4: '判定已定档，免费学员资格待确认。',
-    5: '已入册，进入基地培养。',
 }
 
 # 准入问卷（内嵌表单；只问动机，身份信息由报名承载，不重复收集）
@@ -241,8 +227,6 @@ class WorkbenchWindow(QMainWindow):
         self.setWindowTitle('量潮课堂工作台')
         self.resize(820, 680)
         self._my_name = ''
-        self._owner_view = False
-        self._cur_stage = -1
         self._submitting = False
         self._build()
         self._show_form()  # 初始：报名节点动作 = 报名表单
@@ -272,13 +256,6 @@ class WorkbenchWindow(QMainWindow):
         btn.clicked.connect(self._on_query)
         hlay.addWidget(self.query_name)
         hlay.addWidget(btn)
-        self.owner_btn = QPushButton('班主视角')
-        self.owner_btn.setObjectName('ghost')
-        self.owner_btn.setCheckable(True)
-        self.owner_btn.setToolTip('同一份数据换主语：只读观察')
-        self.owner_btn.setCursor(Qt.PointingHandCursor)
-        self.owner_btn.toggled.connect(self._on_owner_toggle)
-        hlay.addWidget(self.owner_btn)
         layout.addWidget(header)
 
         # 主干（时间线）+ 详情面板
@@ -385,15 +362,10 @@ class WorkbenchWindow(QMainWindow):
     # ---- 详情面板：考核各节点动作 ----
     def _show_stage(self, stage: int, note: str = ''):
         clear_layout(self.detail)
-        self._cur_stage = stage
         self.assessment.set_stage(STAGE_ASSESSMENT.get(stage, stage))
 
         heading, desc, actions = STAGE_DETAIL.get(
             stage, (ASSESSMENT[stage], '联系课堂确认当前状态。', []))
-        if self._owner_view:
-            desc = OWNER_DESC.get(stage, desc)
-            note = (f'班主视角 · 只读 · 观察对象：{self._my_name}'
-                    if self._my_name else '班主视角 · 只读')
         self.detail.addWidget(QLabel(heading, objectName='h2'))
         self.detail.addSpacing(2)
         d = QLabel(desc, objectName='desc')
@@ -403,57 +375,6 @@ class WorkbenchWindow(QMainWindow):
             n = QLabel(note, objectName='muted')
             n.setWordWrap(True)
             self.detail.addWidget(n)
-
-        # 实验一：评审判定卡——两个大数字 + 默认收起的逐项明细
-        if stage == 3 and self._my_name:
-            app3 = store.get_application(self._my_name)
-            if app3 and (app3.get('delivery_json') or '').strip():
-                j = store.judge(app3)
-                row = QHBoxLayout()
-                row.setSpacing(28)
-                for value, caption, color in (
-                        (f"{j['rate'] * 100:.0f}%", '判定率',
-                         DONE if j['passed'] else DANGER),
-                        (f"{store.REVIEW_PASS * 100:.0f}%", '达标线', TEXT)):
-                    cell = QVBoxLayout()
-                    cell.setSpacing(0)
-                    num = QLabel(value)
-                    num.setObjectName('bignum')
-                    num.setStyleSheet(f'color: {color};')
-                    cap = QLabel(caption)
-                    cap.setObjectName('numcap')
-                    cell.addWidget(num)
-                    cell.addWidget(cap)
-                    row.addLayout(cell)
-                row.addStretch()
-                self.detail.addSpacing(6)
-                self.detail.addLayout(row)
-                verdict = ('\u2713 判定达标，待双人评审确认' if j['passed']
-                           else f"\u2717 距达标还差 "
-                                f"{(store.REVIEW_PASS - j['rate']) * 100:.0f} 个百分点")
-                v = QLabel(verdict, objectName='desc')
-                v.setWordWrap(True)
-                self.detail.addWidget(v)
-                det = QLabel(
-                    '\n'.join(f"{label}  {'+' if val >= 0 else ''}{val:.2f}"
-                              for label, val in j['parts'])
-                    + f"\n—— 逐项加总 {j['rate']:.2f}"
-                      f"（达标线 {store.REVIEW_PASS:.2f}）；只用库内字段，"
-                      '同一份数据判定一致',
-                    objectName='muted')
-                det.setWordWrap(True)
-                det.setVisible(False)
-                det_btn = QPushButton('逐项明细 \u25b8', objectName='ghost')
-                det_btn.setCursor(Qt.PointingHandCursor)
-
-                def _toggle_detail():
-                    det.setVisible(not det.isVisible())
-                    det_btn.setText('收起明细 \u25b4' if det.isVisible()
-                                   else '逐项明细 \u25b8')
-
-                det_btn.clicked.connect(_toggle_detail)
-                self.detail.addWidget(det_btn)
-                self.detail.addWidget(det)
 
         # 进群凭证附带：问卷完成后二维码直接附在领任务面板（可选资产，缺省占位）
         if stage == 1:
@@ -470,10 +391,7 @@ class WorkbenchWindow(QMainWindow):
                     'src/assets/ 即在此展示）', objectName='muted'))
 
         self.detail.addSpacing(10)
-        if self._owner_view and actions:
-            self.detail.addWidget(QLabel(
-                '只读视角：动作由学员本人完成。', objectName='muted'))
-        for text, kind, arg in ([] if self._owner_view else actions):
+        for text, kind, arg in actions:
             b = QPushButton(text, objectName='primary' if kind == 'survey' else 'ghost')
             b.setCursor(Qt.PointingHandCursor)
             b.setMinimumWidth(220)
@@ -583,19 +501,6 @@ class WorkbenchWindow(QMainWindow):
             return
         self._show_stage(1)
         self._set_msg('✓ 问卷已收到，进群凭证已发放')
-
-    def _on_owner_toggle(self, on: bool):
-        self._owner_view = on
-        if not self._my_name:
-            return
-        app = store.get_application(self._my_name)
-        if app is None:
-            return
-        stage = STATUS_STAGE.get(app['status'], 0)
-        if stage == 0 and not on:
-            self._show_survey(app)
-        else:
-            self._show_stage(stage)
 
     def _on_query(self):
         name = self.query_name.text().strip()

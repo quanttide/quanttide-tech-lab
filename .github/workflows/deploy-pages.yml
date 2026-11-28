@@ -38,9 +38,23 @@ jobs:
           npm ci --legacy-peer-deps
           npm run build:h5
 
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Build studio web (Flutter)
+        working-directory: apps/qtclass/src/studio
+        run: |
+          flutter pub get
+          flutter test
+          flutter build web --release --base-href "/quanttide-tech-lab/qtclass/src/studio/"
+
       - name: Stage apps as site root
-        # 排除 node_modules；dist（h5 产物）在上一步刚构建，随目录一起进站
-        run: rsync -a --exclude node_modules apps/ _site/
+        # 排除 node_modules；dist（h5 产物）与 studio web 产物随目录一起进站
+        run: |
+          rsync -a --exclude node_modules apps/ _site/
+          rsync -a apps/qtclass/src/studio/build/web/ _site/qtclass/src/studio/
 
       - uses: actions/upload-pages-artifact@v3
         with:

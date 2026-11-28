@@ -5,68 +5,63 @@ import 'package:studio_lab/main.dart';
 
 void main() {
   Future<void> pumpApp(WidgetTester tester) async {
+    // 高视口：整周的场景、安排、投影、提交按钮同屏可见（列表不折叠）
+    tester.view.physicalSize = const Size(800, 2600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
     await tester.pumpWidget(const LabApp());
   }
 
-  testWidgets('判定卡：两个大数字与结论', (tester) async {
-    await pumpApp(tester);
-    expect(find.text('判定率'), findsOneWidget);
-    expect(find.text('达标线'), findsOneWidget);
-    expect(find.text('100%'), findsOneWidget, reason: '判定率');
-    expect(find.text('70%'), findsOneWidget, reason: '达标线');
-    expect(find.textContaining('判定达标'), findsOneWidget);
-  });
-
-  testWidgets('明细默认收起，点开可复算', (tester) async {
-    await pumpApp(tester);
-    expect(find.textContaining('逐项加总'), findsNothing);
-
-    await tester.tap(find.text('逐项明细 ▸'));
-    await tester.pumpAndSettle();
-    expect(find.textContaining('逐项加总'), findsOneWidget);
-
-    // 可复算：明细里逐条贡献（形如「交付已提交  +0.45」）加总 == 判定率
-    final partLines = tester
+  String bigNumber(WidgetTester tester) {
+    return tester
         .widgetList<Text>(find.byType(Text))
         .map((t) => t.data ?? '')
-        .where((d) => RegExp(r'[+-]\d\.\d{2}$').hasMatch(d))
-        .toList();
-    expect(partLines, hasLength(4));
-    final sum = partLines
-        .map((l) => double.parse(l.split(' ').last))
-        .fold<double>(0, (s, v) => s + v);
-    expect(sum, closeTo(demoRecords[0].judge!.rate, 1e-9));
+        .firstWhere((d) => RegExp(r'^\d+%$').hasMatch(d),
+            orElse: () => '');
+  }
+
+  testWidgets('选择在前：撤掉带人，投影立刻变、带人行消失', (tester) async {
+    await pumpApp(tester);
+    expect(find.textContaining('（决定性）'), findsOneWidget,
+        reason: '默认带人，投影必须有带人行');
+    expect(find.textContaining('〔带人〕'), findsOneWidget,
+        reason: '带人行必须标注来源动作');
+    final before = bigNumber(tester);
+    expect(before, isNotEmpty);
+
+    await tester.tap(find.text('老人带新人 · 交作业率 +28%'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('（决定性）'), findsNothing);
+    expect(bigNumber(tester), isNot(before), reason: '改选择投影必变');
   });
 
-  testWidgets('班主视角：换主语不换数字', (tester) async {
+  testWidgets('提交 → 揭示 → 这一周的代价与进账', (tester) async {
     await pumpApp(tester);
-    expect(find.text('100%'), findsOneWidget);
-    expect(find.text('70%'), findsOneWidget);
-    expect(find.textContaining('报名学员：'), findsOneWidget);
-
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.textContaining('提交本周安排'));
+    await tester.pump(const Duration(seconds: 12));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('班主视角 · 只读'), findsOneWidget);
-    expect(find.textContaining('报名学员：'), findsNothing);
-    expect(find.text('100%'), findsOneWidget, reason: '两个视角数字一致');
-    expect(find.text('70%'), findsOneWidget, reason: '两个视角数字一致');
-    expect(find.textContaining('判定达标'), findsOneWidget);
+    expect(find.textContaining('实际交作业率'), findsOneWidget);
+    expect(find.textContaining('名册'), findsOneWidget);
+    expect(find.text('下一周（第 2 周）'), findsOneWidget);
   });
 
-  testWidgets('班主视角：有动作的阶段隐去动作', (tester) async {
+  testWidgets('真反转：学员处境逐项来自主管选择', (tester) async {
     await pumpApp(tester);
-    await tester.tap(find.text('任务进行中学员'));
+    // 先玩一周（默认选择：带人 + 门槛 Lv3）
+    await tester.tap(find.textContaining('提交本周安排'));
+    await tester.pump(const Duration(seconds: 12));
     await tester.pumpAndSettle();
-    expect(find.text('提交交付物'), findsOneWidget);
 
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.text('切到学员的一周 →'));
     await tester.pumpAndSettle();
-    expect(find.text('提交交付物'), findsNothing);
-    expect(find.textContaining('只读视角'), findsOneWidget);
 
-    await tester.tap(find.byType(Switch));
-    await tester.pumpAndSettle();
-    expect(find.text('提交交付物'), findsOneWidget);
+    expect(find.textContaining('逐项来自班主这一周的选择'), findsOneWidget);
+    expect(find.textContaining('带人：有（'), findsOneWidget,
+        reason: '学员看到的带人 == 班主选了带人');
+    expect(find.textContaining('门槛 Lv3（最佳'), findsOneWidget,
+        reason: '学员的门槛 == 班主设的 Lv3');
+    expect(find.textContaining('交成品的把握'), findsOneWidget);
   });
 }
